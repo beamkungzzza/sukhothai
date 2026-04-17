@@ -1,0 +1,1131 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import { initializeApp } from 'firebase/app';
+import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from 'firebase/auth';
+import { 
+  getFirestore, collection, doc, setDoc, onSnapshot, addDoc, deleteDoc, updateDoc 
+} from 'firebase/firestore';
+import { 
+  Trophy, Medal, Calendar, Newspaper, UserPlus, FolderOpen, Users, MessageSquare, 
+  Settings, LogOut, Edit2, Plus, Trash2, X, ChevronRight, Clock, MapPin, CheckCircle,
+  Menu, Lock, Star, Heart, ExternalLink, Shield, CheckSquare, Square
+} from 'lucide-react';
+
+// ============================================================================
+// 1. FIREBASE INITIALIZATION (Strict Rules Applied)
+// ============================================================================
+const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'sukhothai-app-id';
+
+// Helper for DB paths
+const getPublicCollection = (colName) => collection(db, 'artifacts', appId, 'public', 'data', colName);
+const getPublicDoc = (colName, docId) => doc(db, 'artifacts', appId, 'public', 'data', colName, docId);
+
+// ============================================================================
+// 2. THEME CONSTANTS
+// ============================================================================
+const THEME = {
+  bg: 'bg-[#FDF8F8]',
+  primary: 'bg-[#FF4D94]',
+  primaryText: 'text-[#FF4D94]',
+  secondary: 'bg-[#FCE4EC]',
+  secondaryText: 'text-[#FCE4EC]',
+  textDark: 'text-[#2D3436]',
+  borderPrimary: 'border-[#FF4D94]',
+  gradient: 'bg-gradient-to-r from-[#FF4D94] to-[#FF8EAF]'
+};
+
+// ============================================================================
+// 3. MAIN APP COMPONENT
+// ============================================================================
+export default function App() {
+  const [user, setUser] = useState(null);
+  const [currentAdmin, setCurrentAdmin] = useState(null);
+  const [currentTab, setCurrentTab] = useState('home');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+  const [showAdminLogin, setShowAdminLogin] = useState(false);
+
+  // Data States
+  const [config, setConfig] = useState({
+    targetDate: new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+    scores: { total: 0 },
+    sportScores: [
+      { id: '1', name: 'กีฬา', score: 0, createdAt: Date.now() - 3000 },
+      { id: '2', name: 'เชียร์', score: 0, createdAt: Date.now() - 2000 },
+      { id: '3', name: 'พาเหรด', score: 0, createdAt: Date.now() - 1000 }
+    ],
+    medals: { gold: 0, silver: 0, bronze: 0 }
+  });
+  const [announcements, setAnnouncements] = useState([]);
+  const [news, setNews] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [resources, setResources] = useState([]);
+  const [team, setTeam] = useState([]);
+  const [registerLinks, setRegisterLinks] = useState([]);
+  const [adminUsers, setAdminUsers] = useState([]);
+  const [isAdminManagerOpen, setIsAdminManagerOpen] = useState(false);
+
+  // Auth Effect
+  useEffect(() => {
+    const initAuth = async () => {
+      try {
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+      } catch (error) {
+        console.error("Auth error:", error);
+      }
+    };
+    initAuth();
+
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) setIsReady(true);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // Data Fetching Effect (Strict DB Rules)
+  useEffect(() => {
+    if (!user) return;
+
+    const unsubConfig = onSnapshot(getPublicDoc('settings', 'main'), (docSnap) => {
+      if (docSnap.exists()) setConfig(docSnap.data());
+      else setDoc(getPublicDoc('settings', 'main'), config);
+    }, (err) => console.error(err));
+
+    const unsubAnnouncements = onSnapshot(getPublicCollection('announcements'), (snapshot) => {
+      const data = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+      setAnnouncements(data.sort((a, b) => b.createdAt - a.createdAt));
+    }, (err) => console.error(err));
+
+    const unsubNews = onSnapshot(getPublicCollection('news'), (snapshot) => {
+      const data = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+      setNews(data.sort((a, b) => b.createdAt - a.createdAt));
+    }, (err) => console.error(err));
+
+    const unsubEvents = onSnapshot(getPublicCollection('events'), (snapshot) => {
+      const data = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+      setEvents(data.sort((a, b) => new Date(a.date) - new Date(b.date)));
+    }, (err) => console.error(err));
+
+    const unsubResources = onSnapshot(getPublicCollection('resources'), (snapshot) => {
+      setResources(snapshot.docs.map(d => ({ id: d.id, ...d.data() })));
+    }, (err) => console.error(err));
+
+    const unsubTeam = onSnapshot(getPublicCollection('team'), (snapshot) => {
+      setTeam(snapshot.docs.map(d => ({ id: d.id, ...d.data() })));
+    }, (err) => console.error(err));
+
+    const unsubRegisterLinks = onSnapshot(getPublicCollection('registerLinks'), (snapshot) => {
+      setRegisterLinks(snapshot.docs.map(d => ({ id: d.id, ...d.data() })));
+    }, (err) => console.error(err));
+
+    const unsubAdminUsers = onSnapshot(getPublicCollection('admin_users'), (snapshot) => {
+      if (snapshot.empty) {
+        // สร้างบัญชีผู้ดูแลระบบหลัก (Super Admin) เริ่มต้น
+        addDoc(getPublicCollection('admin_users'), {
+          username: 'admin',
+          password: 'admin123',
+          name: 'ผู้ดูแลระบบหลัก',
+          role: 'superadmin',
+          createdAt: Date.now()
+        });
+      } else {
+        setAdminUsers(snapshot.docs.map(d => ({ id: d.id, ...d.data() })));
+      }
+    }, (err) => console.error(err));
+
+    return () => {
+      unsubConfig(); unsubAnnouncements(); unsubNews();
+      unsubEvents(); unsubResources(); unsubTeam(); unsubRegisterLinks(); unsubAdminUsers();
+    };
+  }, [user]);
+
+  if (!isReady) {
+    return (
+      <div className={`min-h-screen ${THEME.bg} flex items-center justify-center`}>
+        <div className={`animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 ${THEME.borderPrimary}`}></div>
+      </div>
+    );
+  }
+
+  const navigate = (tab) => {
+    setCurrentTab(tab);
+    setIsMobileMenuOpen(false);
+    window.scrollTo(0, 0);
+  };
+
+  const navItems = [
+    { id: 'home', label: 'หน้าแรก', icon: Trophy },
+    { id: 'schedule', label: 'กิจกรรม', icon: Calendar },
+    { id: 'register', label: 'รับสมัคร', icon: UserPlus },
+    { id: 'resources', label: 'คลังข้อมูล', icon: FolderOpen },
+    { id: 'team', label: 'ทีมงาน', icon: Users },
+    { id: 'feedback', label: 'แจ้งปัญหา', icon: MessageSquare },
+  ];
+
+  return (
+    <div className={`min-h-screen ${THEME.bg} font-sans text-gray-800`}>
+      <style>{`
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        .glass-panel { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+      `}</style>
+
+      {/* Navigation */}
+      <nav className={`fixed top-0 w-full z-50 glass-panel shadow-sm`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16">
+            <div className="flex items-center cursor-pointer" onClick={() => navigate('home')}>
+              <div className={`w-10 h-10 rounded-full ${THEME.gradient} flex items-center justify-center text-white font-bold text-xl shadow-lg animate-float`}>
+                S
+              </div>
+              <span className={`ml-3 font-extrabold text-2xl ${THEME.primaryText} tracking-wider`}>
+                SUKHOTHAI
+              </span>
+            </div>
+            
+            {/* Desktop Nav */}
+            <div className="hidden lg:flex items-center space-x-1">
+              {navItems.map(item => (
+                <button
+                  key={item.id}
+                  onClick={() => navigate(item.id)}
+                  className={`px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-1.5
+                    ${currentTab === item.id 
+                      ? `${THEME.primary} text-white shadow-md transform scale-105` 
+                      : 'text-gray-600 hover:bg-pink-50 hover:text-pink-600'}`}
+                >
+                  <item.icon size={16} />
+                  {item.label}
+                </button>
+              ))}
+              {currentAdmin && (
+                <div className="ml-2 px-3 py-1 bg-gray-800 text-yellow-400 rounded-full text-xs font-bold flex items-center gap-1 shadow-inner">
+                  <Star size={12} /> {currentAdmin.role === 'superadmin' ? 'SUPER ADMIN' : 'ADMIN'}
+                </div>
+              )}
+            </div>
+
+            {/* Mobile menu button */}
+            <div className="lg:hidden flex items-center">
+              <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 text-pink-600">
+                {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Nav Dropdown */}
+        {isMobileMenuOpen && (
+          <div className="lg:hidden glass-panel absolute w-full border-t border-pink-100 shadow-xl max-h-[80vh] overflow-y-auto">
+            <div className="px-2 pt-2 pb-4 space-y-1">
+              {navItems.map(item => (
+                <button
+                  key={item.id}
+                  onClick={() => navigate(item.id)}
+                  className={`w-full text-left px-4 py-3 rounded-xl text-base font-medium flex items-center gap-3 transition-colors
+                    ${currentTab === item.id ? `${THEME.primary} text-white` : 'text-gray-700 hover:bg-pink-50'}`}
+                >
+                  <item.icon size={20} />
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </nav>
+
+      {/* Main Content Area */}
+      <main className="pt-20 pb-16 min-h-[calc(100vh-4rem)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          {currentTab === 'home' && (
+            <HomeView 
+              config={config} 
+              announcements={announcements} 
+              currentAdmin={currentAdmin} 
+              navigate={navigate} 
+              registerLinks={registerLinks}
+            />
+          )}
+          {currentTab === 'schedule' && (
+            <ScheduleView events={events} news={news} currentAdmin={currentAdmin} />
+          )}
+          {currentTab === 'register' && (
+            <RegisterView links={registerLinks} currentAdmin={currentAdmin} />
+          )}
+          {currentTab === 'resources' && (
+            <ResourcesView resources={resources} currentAdmin={currentAdmin} />
+          )}
+          {currentTab === 'team' && (
+            <TeamView team={team} currentAdmin={currentAdmin} />
+          )}
+          {currentTab === 'feedback' && (
+            <FeedbackView />
+          )}
+        </div>
+      </main>
+
+      {/* Footer & Admin Trigger */}
+      <footer className="bg-white border-t border-pink-100 py-8 text-center text-sm text-gray-500">
+        <div className="flex justify-center items-center gap-2 mb-4">
+          <Heart size={16} className="text-pink-400 animate-pulse" />
+          <span className="font-semibold text-gray-700">SUKHOTHAI HOUSE TEAM</span>
+        </div>
+        <p>© 2026 ระบบประชาสัมพันธ์คณะสีสุโขทัย</p>
+        
+        {/* Secret Admin Login */}
+        <div className="mt-6 flex justify-center">
+          {!currentAdmin ? (
+            <button 
+              onClick={() => setShowAdminLogin(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-600 rounded-full hover:bg-pink-100 hover:text-pink-600 transition-colors text-sm font-medium shadow-sm border border-gray-200"
+            >
+              <Lock size={14} /> เข้าสู่ระบบผู้ดูแล (Admin Login)
+            </button>
+          ) : (
+            <div className="flex gap-3">
+              {currentAdmin.role === 'superadmin' && (
+                <button 
+                  onClick={() => setIsAdminManagerOpen(true)}
+                  className="flex items-center gap-1 text-blue-500 hover:text-blue-700 transition-colors bg-blue-50 px-4 py-2 rounded-full text-sm font-medium shadow-sm border border-blue-100"
+                >
+                  <Shield size={14} /> จัดการแอดมิน
+                </button>
+              )}
+              <button 
+                onClick={() => setCurrentAdmin(null)}
+                className="flex items-center gap-1 text-red-400 hover:text-red-600 transition-colors bg-red-50 px-4 py-2 rounded-full text-sm font-medium shadow-sm border border-red-100"
+              >
+                <LogOut size={14} /> ออกจากระบบ
+              </button>
+            </div>
+          )}
+        </div>
+      </footer>
+
+      {/* Custom Admin Login Modal */}
+      {showAdminLogin && (
+        <AdminLoginModal 
+          adminUsers={adminUsers}
+          onClose={() => setShowAdminLogin(false)} 
+          onSuccess={(adminData) => {
+            setCurrentAdmin(adminData);
+            setShowAdminLogin(false);
+          }} 
+        />
+      )}
+
+      {/* Admin Manager Modal */}
+      {currentAdmin?.role === 'superadmin' && isAdminManagerOpen && (
+        <AdminManagerModal 
+          adminUsers={adminUsers}
+          onClose={() => setIsAdminManagerOpen(false)}
+        />
+      )}
+    </div>
+  );
+}
+
+// ============================================================================
+// VIEWS COMPONENTS
+// ============================================================================
+
+// --- 1. HOME VIEW ---
+function HomeView({ config, announcements, currentAdmin, navigate, registerLinks }) {
+  const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
+  const [isAnnounceModalOpen, setIsAnnounceModalOpen] = useState(false);
+  const [timeLeft, setTimeLeft] = useState({ d: 0, h: 0, m: 0, s: 0 });
+  const canEdit = currentAdmin?.role === 'superadmin' || currentAdmin?.permissions?.home;
+  
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const target = new Date(config.targetDate).getTime();
+      const now = new Date().getTime();
+      const difference = target - now;
+
+      if (difference > 0) {
+        setTimeLeft({
+          d: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          h: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          m: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+          s: Math.floor((difference % (1000 * 60)) / 1000)
+        });
+      } else {
+        setTimeLeft({ d: 0, h: 0, m: 0, s: 0 });
+      }
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [config.targetDate]);
+
+  return (
+    <div className="space-y-8 animate-in fade-in duration-500">
+      {/* Hero Banner */}
+      <div className={`relative overflow-hidden rounded-3xl ${THEME.gradient} shadow-2xl p-8 md:p-12 text-white flex flex-col items-center justify-center text-center min-h-[400px]`}>
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
+           <div className="absolute -top-20 -left-20 w-64 h-64 bg-white rounded-full blur-3xl"></div>
+           <div className="absolute bottom-10 right-10 w-48 h-48 bg-white rounded-full blur-2xl"></div>
+        </div>
+        <div className="relative z-10 space-y-6">
+          <h2 className="text-xl md:text-2xl font-semibold tracking-widest text-pink-100 uppercase">Welcome to</h2>
+          <h1 className="text-6xl md:text-8xl font-black tracking-tight drop-shadow-lg">SUKHOTHAI</h1>
+          <p className="text-lg md:text-xl text-pink-50 max-w-2xl mx-auto font-light">คณะสีชมพู มุ่งมั่น สร้างสรรค์ สามัคคี มีน้ำใจนักกีฬา</p>
+          <div className="pt-8">
+            <h3 className="text-sm uppercase tracking-widest mb-4 text-pink-200">นับถอยหลังสู่วันกีฬาสี</h3>
+            <div className="flex justify-center gap-3 md:gap-6">
+              {[
+                { label: 'วัน', value: timeLeft.d },
+                { label: 'ชั่วโมง', value: timeLeft.h },
+                { label: 'นาที', value: timeLeft.m },
+                { label: 'วินาที', value: timeLeft.s }
+              ].map((time, i) => (
+                <div key={i} className="flex flex-col items-center">
+                  <div className="bg-white/20 backdrop-blur-md rounded-2xl w-16 h-16 md:w-24 md:h-24 flex items-center justify-center border border-white/30 shadow-lg">
+                    <span className="text-3xl md:text-5xl font-bold">{time.value.toString().padStart(2, '0')}</span>
+                  </div>
+                  <span className="mt-2 text-xs md:text-sm text-pink-100">{time.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        {canEdit && <button onClick={() => setIsConfigModalOpen(true)} className="absolute top-4 right-4 bg-white/30 hover:bg-white/50 backdrop-blur-md text-white p-2 rounded-full transition-all"><Settings size={20} /></button>}
+      </div>
+
+      {/* Dashboard Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="glass-panel p-6 rounded-3xl shadow-lg border-t-4 border-pink-400 relative overflow-hidden group">
+          <div className="absolute -right-6 -top-6 text-pink-100 group-hover:scale-110 transition-transform duration-500"><Trophy size={120} strokeWidth={1} /></div>
+          <div className="relative z-10">
+            <h3 className="text-lg font-bold text-gray-700 flex items-center gap-2"><Trophy className="text-yellow-500" size={24} /> คะแนนรวม</h3>
+            <div className="text-6xl font-black text-pink-500 mt-4 drop-shadow-md">{(config.scores?.total || 0).toLocaleString()}</div>
+            <div className="flex flex-wrap gap-4 mt-4 text-sm text-gray-600 font-medium">
+              {(config.sportScores || [])
+                .sort((a, b) => b.createdAt - a.createdAt)
+                .slice(0, 4)
+                .map(sport => (
+                  <span key={sport.id}>{sport.name}: <span className="text-pink-600">{sport.score}</span></span>
+              ))}
+              {(!config.sportScores || config.sportScores.length === 0) && (
+                <span className="text-gray-400">ยังไม่มีข้อมูลคะแนนแยกประเภท</span>
+              )}
+            </div>
+          </div>
+          {canEdit && <AdminEditBtn onClick={() => setIsConfigModalOpen(true)} />}
+        </div>
+
+        <div className="glass-panel p-6 rounded-3xl shadow-lg md:col-span-2 relative">
+          <h3 className="text-lg font-bold text-gray-700 flex items-center gap-2 mb-6"><Medal className="text-pink-500" size={24} /> สรุปเหรียญรางวัล</h3>
+          <div className="grid grid-cols-3 gap-4 text-center">
+            <div className="bg-gradient-to-b from-yellow-50 to-yellow-100 p-4 rounded-2xl border border-yellow-200 shadow-sm">
+              <div className="w-12 h-12 mx-auto bg-yellow-400 rounded-full flex items-center justify-center border-4 border-yellow-200 shadow-inner mb-2"><span className="text-white font-bold">ทอง</span></div>
+              <div className="text-3xl font-black text-yellow-600">{config.medals.gold}</div>
+            </div>
+            <div className="bg-gradient-to-b from-gray-50 to-gray-200 p-4 rounded-2xl border border-gray-300 shadow-sm">
+              <div className="w-12 h-12 mx-auto bg-gray-400 rounded-full flex items-center justify-center border-4 border-gray-200 shadow-inner mb-2"><span className="text-white font-bold">เงิน</span></div>
+              <div className="text-3xl font-black text-gray-600">{config.medals.silver}</div>
+            </div>
+            <div className="bg-gradient-to-b from-orange-50 to-orange-100 p-4 rounded-2xl border border-orange-200 shadow-sm">
+               <div className="w-12 h-12 mx-auto bg-orange-400 rounded-full flex items-center justify-center border-4 border-orange-200 shadow-inner mb-2"><span className="text-white font-bold">ทองแดง</span></div>
+              <div className="text-3xl font-black text-orange-600">{config.medals.bronze}</div>
+            </div>
+          </div>
+          {canEdit && <AdminEditBtn onClick={() => setIsConfigModalOpen(true)} />}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="glass-panel rounded-3xl p-6 shadow-lg border border-pink-100 relative">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+              <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>ประกาศด่วน
+            </h3>
+            {canEdit && <button onClick={() => setIsAnnounceModalOpen(true)} className="text-pink-500 hover:bg-pink-100 p-2 rounded-full transition-colors"><Plus size={20} /></button>}
+          </div>
+          
+          <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+            {announcements.length === 0 ? (
+              <p className="text-gray-500 text-center py-4 italic">ยังไม่มีประกาศในขณะนี้</p>
+            ) : (
+              announcements.map((ann) => (
+                <div key={ann.id} className="bg-white p-4 rounded-2xl shadow-sm border-l-4 border-pink-500 flex justify-between items-start group">
+                  <div>
+                    <span className="text-xs text-pink-400 font-semibold mb-1 block">{new Date(ann.createdAt).toLocaleDateString('th-TH')}</span>
+                    <p className="text-gray-700">{ann.text}</p>
+                  </div>
+                  {canEdit && <button onClick={() => deleteDoc(getPublicDoc('announcements', ann.id))} className="text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={16} /></button>}
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-xl font-bold text-gray-800 px-2 flex justify-between items-center">
+            <span>🔥 เปิดรับสมัครด่วน!</span>
+            <button onClick={() => navigate('register')} className="text-sm text-pink-600 font-semibold hover:underline flex items-center">ดูทั้งหมด <ChevronRight size={16} /></button>
+          </h3>
+          <div className="grid grid-cols-2 gap-4">
+            {registerLinks && registerLinks.length > 0 ? (
+              registerLinks.slice(0, 4).map((link, idx) => {
+                const colors = ['bg-blue-500', 'bg-green-500', 'bg-pink-500', 'bg-purple-500'];
+                const color = colors[idx % colors.length];
+                return (
+                  <div key={link.id} onClick={() => window.open(link.url, '_blank')} className="bg-white rounded-2xl p-5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer border border-pink-50 group overflow-hidden relative">
+                    <div className={`absolute -right-4 -bottom-4 w-16 h-16 rounded-full opacity-10 ${color} group-hover:scale-150 transition-transform duration-500`}></div>
+                    <UserPlus className={`${color.replace('bg-', 'text-')} mb-3`} size={28} />
+                    <h4 className="font-bold text-gray-800 group-hover:text-pink-600 transition-colors line-clamp-1">{link.title}</h4>
+                    {link.adminName ? <p className="text-xs text-gray-500 mt-1 truncate">ผู้ดูแล: {link.adminName}</p> : <p className="text-xs text-gray-500 mt-1">คลิกเพื่อกรอกฟอร์ม</p>}
+                  </div>
+                )
+              })
+            ) : (
+              <div className="col-span-2 text-center py-8 text-gray-400 bg-white rounded-2xl border border-dashed border-gray-200">ยังไม่มีการเปิดรับสมัคร</div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {canEdit && isConfigModalOpen && <ConfigModal config={config} onClose={() => setIsConfigModalOpen(false)} />}
+      {canEdit && isAnnounceModalOpen && <AnnouncementModal onClose={() => setIsAnnounceModalOpen(false)} />}
+    </div>
+  );
+}
+
+// --- 2. SCHEDULE & NEWS VIEW ---
+function ScheduleView({ events, news, currentAdmin }) {
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+  const [isNewsModalOpen, setIsNewsModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('events');
+  const canEdit = currentAdmin?.role === 'superadmin' || currentAdmin?.permissions?.schedule;
+
+  return (
+    <div className="space-y-6 animate-in fade-in">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+        <h2 className="text-3xl font-black text-gray-800 flex items-center gap-3">
+          <Calendar className="text-pink-500" size={32} /> กิจกรรมและข่าวสาร
+        </h2>
+        <div className="flex bg-white rounded-full p-1 shadow-sm border border-pink-100">
+          <button onClick={() => setActiveTab('events')} className={`px-6 py-2 rounded-full text-sm font-bold transition-colors ${activeTab === 'events' ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-pink-50'}`}>ตารางกิจกรรม</button>
+          <button onClick={() => setActiveTab('news')} className={`px-6 py-2 rounded-full text-sm font-bold transition-colors ${activeTab === 'news' ? 'bg-pink-500 text-white' : 'text-gray-500 hover:bg-pink-50'}`}>ข่าวสาร</button>
+        </div>
+      </div>
+
+      {activeTab === 'events' && (
+        <div className="space-y-4">
+          {canEdit && (
+             <button onClick={() => setIsEventModalOpen(true)} className="w-full py-4 border-2 border-dashed border-pink-300 rounded-2xl text-pink-500 font-bold hover:bg-pink-50 transition-colors flex items-center justify-center gap-2">
+               <Plus size={20} /> เพิ่มตารางกิจกรรมใหม่
+             </button>
+          )}
+          <div className="grid gap-4">
+            {events.length === 0 && !canEdit ? (
+              <div className="text-center py-12 text-gray-500 glass-panel rounded-3xl">ยังไม่มีกำหนดการกิจกรรม</div>
+            ) : (
+              events.map((event) => {
+                const eventDate = new Date(event.date);
+                const isPast = eventDate < new Date();
+                return (
+                  <div key={event.id} className={`bg-white p-5 rounded-2xl shadow-sm border-l-8 flex flex-col md:flex-row gap-6 relative group ${isPast ? 'border-gray-300 opacity-70' : 'border-pink-500'}`}>
+                    <div className="flex-shrink-0 text-center min-w-[100px] border-b md:border-b-0 md:border-r border-gray-100 pb-4 md:pb-0 md:pr-6 flex flex-col justify-center">
+                      <span className="text-sm font-bold text-pink-500 uppercase">{eventDate.toLocaleDateString('th-TH', { month: 'short' })}</span>
+                      <span className="text-3xl font-black text-gray-800">{eventDate.getDate()}</span>
+                      <span className="text-xs text-gray-500">{eventDate.toLocaleDateString('th-TH', { year: 'numeric' })}</span>
+                    </div>
+                    <div className="flex-grow">
+                      <div className="flex justify-between items-start">
+                        <h4 className={`text-lg font-bold ${isPast ? 'text-gray-600' : 'text-gray-800'} mb-2`}>{event.title}</h4>
+                        {canEdit && (
+                          <button onClick={() => deleteDoc(getPublicDoc('events', event.id))} className="text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={18} /></button>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-600 mb-3">
+                        <span className="flex items-center gap-2"><Clock size={14} className="text-pink-400"/> {event.time}</span>
+                        <span className="flex items-center gap-2"><MapPin size={14} className="text-pink-400"/> {event.location}</span>
+                      </div>
+                      <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded-xl whitespace-pre-wrap">{event.details}</p>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'news' && (
+        <div className="space-y-6">
+          {canEdit && (
+            <button onClick={() => setIsNewsModalOpen(true)} className="w-full py-4 border-2 border-dashed border-pink-300 rounded-2xl text-pink-500 font-bold hover:bg-pink-50 transition-colors flex items-center justify-center gap-2">
+              <Plus size={20} /> เขียนข่าวสารใหม่
+            </button>
+          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {news.length === 0 && !canEdit ? (
+               <div className="col-span-full text-center py-12 text-gray-500 glass-panel rounded-3xl">ยังไม่มีข่าวสารใหม่</div>
+            ) : (
+              news.map((item) => (
+                <div key={item.id} className="bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-shadow border border-pink-50 flex flex-col group">
+                  <div className={`h-40 ${THEME.gradient} p-4 flex items-end justify-end relative`}>
+                    <span className="bg-white text-pink-600 text-xs font-bold px-3 py-1 rounded-full shadow-sm">{item.category || 'ทั่วไป'}</span>
+                    {canEdit && (
+                      <button onClick={() => deleteDoc(getPublicDoc('news', item.id))} className="absolute top-3 right-3 bg-white/50 hover:bg-white text-red-500 p-2 rounded-full transition-colors opacity-0 group-hover:opacity-100"><Trash2 size={16} /></button>
+                    )}
+                  </div>
+                  <div className="p-6 flex-grow flex flex-col">
+                    <p className="text-xs text-gray-400 mb-2">{new Date(item.createdAt).toLocaleDateString('th-TH')}</p>
+                    <h4 className="text-lg font-bold text-gray-800 mb-3 line-clamp-2">{item.title}</h4>
+                    <p className="text-sm text-gray-600 line-clamp-3 mb-4 flex-grow whitespace-pre-wrap">{item.content}</p>
+                    <button className="text-pink-500 font-semibold text-sm self-start hover:underline mt-auto">อ่านเพิ่มเติม...</button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+      {canEdit && isEventModalOpen && <EventModal onClose={() => setIsEventModalOpen(false)} />}
+      {canEdit && isNewsModalOpen && <NewsModal onClose={() => setIsNewsModalOpen(false)} />}
+    </div>
+  );
+}
+
+// --- 3. REGISTER VIEW ---
+function RegisterView({ links, currentAdmin }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const canEdit = currentAdmin?.role === 'superadmin' || currentAdmin?.permissions?.register;
+
+  return (
+    <div className="max-w-4xl mx-auto animate-in slide-in-from-bottom-8 space-y-8">
+      <div className="text-center mb-8">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-pink-100 text-pink-500 mb-4 shadow-inner">
+          <UserPlus size={32} />
+        </div>
+        <h2 className="text-3xl font-black text-gray-800">ระบบรับสมัคร</h2>
+        <p className="text-gray-600 mt-2">เลือกลิงก์รับสมัครตามฝ่ายที่คุณสนใจเพื่อกรอกข้อมูล</p>
+      </div>
+      {canEdit && <button onClick={() => setIsModalOpen(true)} className="mx-auto bg-pink-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-pink-600 transition-colors flex items-center justify-center gap-2 shadow-md w-full md:w-auto"><Plus size={18} /> เพิ่มลิงก์รับสมัครใหม่</button>}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {links.length === 0 && !canEdit ? (
+          <div className="col-span-full text-center py-20 text-gray-500 glass-panel rounded-3xl">ยังไม่มีการเปิดรับสมัครในขณะนี้</div>
+        ) : (
+          links.map(link => (
+            <div key={link.id} className="bg-white p-6 rounded-3xl shadow-sm border border-pink-50 hover:border-pink-200 hover:shadow-xl transition-all group relative flex flex-col h-full">
+              <div className="flex-grow">
+                <h3 className="text-xl font-bold text-gray-800 mb-2">{link.title}</h3>
+                {link.adminName && (
+                  <div className="mb-3 inline-flex items-center gap-1 bg-pink-50 text-pink-600 px-3 py-1 rounded-full text-xs font-bold border border-pink-100">
+                    <Star size={12} /> ผู้ดูแล: {link.adminName}
+                  </div>
+                )}
+                <p className="text-sm text-gray-600 mb-6 bg-gray-50 p-3 rounded-xl">{link.description}</p>
+              </div>
+              <a href={link.url} target="_blank" rel="noopener noreferrer" className="w-full bg-gradient-to-r from-pink-500 to-pink-400 hover:from-pink-600 hover:to-pink-500 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 group-hover:-translate-y-1">ไปที่หน้ากรอกใบสมัคร <ExternalLink size={18} /></a>
+              {canEdit && <button onClick={(e) => { e.preventDefault(); deleteDoc(getPublicDoc('registerLinks', link.id)); }} className="absolute top-4 right-4 bg-red-50 text-red-500 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500 hover:text-white"><Trash2 size={16} /></button>}
+            </div>
+          ))
+        )}
+      </div>
+      {canEdit && isModalOpen && <RegisterLinkModal onClose={() => setIsModalOpen(false)} />}
+    </div>
+  );
+}
+
+// --- 4. RESOURCES VIEW ---
+function ResourcesView({ resources, currentAdmin }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const canEdit = currentAdmin?.role === 'superadmin' || currentAdmin?.permissions?.resources;
+  const grouped = resources.reduce((acc, curr) => {
+    if (!acc[curr.category]) acc[curr.category] = [];
+    acc[curr.category].push(curr);
+    return acc;
+  }, {});
+  const categories = ['เพลงเชียร์', 'เอกสาร', 'ตารางซ้อม', 'โลโก้/กราฟิก', 'อื่นๆ'];
+
+  return (
+    <div className="space-y-8 animate-in fade-in">
+       <div className="flex justify-between items-center">
+        <h2 className="text-3xl font-black text-gray-800 flex items-center gap-3"><FolderOpen className="text-pink-500" size={32} /> คลังข้อมูลและสื่อ</h2>
+        {canEdit && <button onClick={() => setIsModalOpen(true)} className="bg-pink-500 text-white px-4 py-2 rounded-full font-semibold hover:bg-pink-600 transition-colors flex items-center gap-2 shadow-sm"><Plus size={18} /> เพิ่มไฟล์/ลิงก์</button>}
+      </div>
+
+      {Object.keys(grouped).length === 0 && !canEdit ? (
+        <div className="text-center py-20 text-gray-500 glass-panel rounded-3xl">ยังไม่มีข้อมูลในระบบ</div>
+      ) : (
+        <div className="space-y-10">
+          {categories.map(cat => {
+            if (!grouped[cat]) return null;
+            return (
+              <div key={cat} className="space-y-4">
+                <h3 className="text-xl font-bold text-gray-700 border-b-2 border-pink-100 pb-2 inline-block">{cat}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {grouped[cat].map(item => (
+                    <a key={item.id} href={item.link} target="_blank" rel="noopener noreferrer" className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 hover:border-pink-300 hover:shadow-md transition-all flex items-center gap-4 group relative">
+                      <div className="w-12 h-12 rounded-xl bg-pink-50 flex items-center justify-center text-pink-500 flex-shrink-0 group-hover:scale-110 transition-transform">
+                        {item.type === 'pdf' ? <Newspaper size={24} /> : item.type === 'image' ? <Star size={24} /> : <FolderOpen size={24} />}
+                      </div>
+                      <div className="flex-grow overflow-hidden">
+                        <h4 className="font-bold text-gray-800 truncate">{item.title}</h4>
+                        <p className="text-xs text-gray-500 truncate">{item.description}</p>
+                      </div>
+                      {canEdit && <button onClick={(e) => { e.preventDefault(); deleteDoc(getPublicDoc('resources', item.id)); }} className="absolute -top-2 -right-2 bg-red-100 text-red-500 p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500 hover:text-white shadow-sm"><X size={14} /></button>}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+      {canEdit && isModalOpen && <ResourceModal categories={categories} onClose={() => setIsModalOpen(false)} />}
+    </div>
+  );
+}
+
+// --- 5. TEAM VIEW ---
+function TeamView({ team, currentAdmin }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const canEdit = currentAdmin?.role === 'superadmin' || currentAdmin?.permissions?.team;
+  const order = ['สภาสี', 'หัวหน้าสแตนด์', 'หัวหน้าเชียร์', 'พาเหรด', 'นักกีฬา', 'ทีมงานทั่วไป'];
+  const grouped = team.reduce((acc, curr) => {
+    const cat = curr.department || 'ทีมงานทั่วไป';
+    if (!acc[cat]) acc[cat] = [];
+    acc[cat].push(curr);
+    return acc;
+  }, {});
+
+  return (
+    <div className="space-y-12 animate-in fade-in">
+      <div className="text-center space-y-4 mb-12">
+        <h2 className="text-4xl font-black text-gray-800 tracking-tight">ทำเนียบทีมงาน</h2>
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto">ผู้อยู่เบื้องหลังความสำเร็จและผู้ขับเคลื่อนคณะสีสุโขทัย</p>
+        {canEdit && <button onClick={() => setIsModalOpen(true)} className="mx-auto bg-pink-500 text-white px-6 py-2 rounded-full font-semibold hover:bg-pink-600 transition-colors flex items-center gap-2 shadow-md"><Plus size={18} /> เพิ่มรายชื่อทีมงาน</button>}
+      </div>
+
+      {team.length === 0 && !canEdit ? (
+         <div className="text-center py-20 text-gray-500 glass-panel rounded-3xl">กำลังอัปเดตข้อมูลทีมงาน</div>
+      ) : (
+        order.map(dept => {
+          if (!grouped[dept]) return null;
+          return (
+            <div key={dept} className="space-y-6">
+              <div className="flex items-center gap-4">
+                <h3 className="text-2xl font-bold text-gray-800 bg-white px-6 py-2 rounded-full shadow-sm border border-pink-100 inline-block">ฝ่าย: {dept}</h3>
+                <div className="flex-grow h-px bg-gradient-to-r from-pink-200 to-transparent"></div>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                {grouped[dept].map(member => (
+                  <div key={member.id} className="bg-white rounded-3xl p-4 shadow-sm hover:shadow-xl transition-all text-center border border-gray-50 group relative flex flex-col items-center">
+                    <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-pink-100 to-pink-200 p-1 mb-4 shadow-inner relative overflow-hidden flex-shrink-0">
+                      {member.imageUrl ? <img src={member.imageUrl} alt={member.name} className="w-full h-full rounded-full object-cover bg-white" /> : <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-pink-300"><Users size={40} /></div>}
+                    </div>
+                    <h4 className="font-bold text-gray-800 text-sm">{member.name}</h4>
+                    <p className="text-xs text-pink-500 font-medium mt-1">{member.role}</p>
+                    {member.contact && <p className="text-[10px] text-gray-500 mt-3 bg-gray-50 rounded-lg py-1.5 px-2 w-full truncate border border-gray-100" title={member.contact}>📞 {member.contact}</p>}
+                    {canEdit && <button onClick={() => deleteDoc(getPublicDoc('team', member.id))} className="absolute top-2 right-2 bg-red-100 text-red-500 p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500 hover:text-white"><Trash2 size={14} /></button>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })
+      )}
+      {canEdit && isModalOpen && <TeamModal departments={order} onClose={() => setIsModalOpen(false)} />}
+    </div>
+  );
+}
+
+// --- 6. FEEDBACK VIEW ---
+function FeedbackView() {
+  const [formData, setFormData] = useState({ name: '', topic: '', category: 'ทั่วไป', details: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      await addDoc(getPublicCollection('feedbacks'), { ...formData, createdAt: new Date().getTime() });
+      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZRq49PiKigE5BcDKgg0P4X1TIYuyhzqDyHe848TKBrDz_g6KD8ghkoABvyNH3twS3ow/exec';
+      if (GOOGLE_SCRIPT_URL) {
+        await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(formData) });
+      }
+      setIsSuccess(true);
+      setFormData({name: '', topic: '', category: 'ทั่วไป', details: ''});
+      setTimeout(() => setIsSuccess(false), 5000);
+    } catch (error) { alert("เกิดข้อผิดพลาด"); } finally { setIsSubmitting(false); }
+  };
+
+  return (
+    <div className="max-w-2xl mx-auto animate-in fade-in">
+       <div className="text-center mb-8">
+        <h2 className="text-3xl font-black text-gray-800 mb-2">กล่องรับความคิดเห็น</h2>
+        <p className="text-gray-600">พบปัญหา มีข้อเสนอแนะ หรืออยากให้กำลังใจทีมงาน ส่งมาได้เลย!</p>
+      </div>
+      <div className="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-pink-400">
+        {isSuccess ? (
+          <div className="text-center py-10">
+            <Heart size={64} className="text-pink-500 mx-auto mb-4 animate-bounce" />
+            <h3 className="text-2xl font-bold text-gray-800 mb-2">ส่งข้อความสำเร็จ!</h3>
+            <p className="text-gray-600">ขอบคุณสำหรับทุกความคิดเห็น ทีมงานจะนำไปปรับปรุงให้ดีขึ้นครับ/ค่ะ</p>
+            <button onClick={() => setIsSuccess(false)} className="mt-6 px-6 py-2 bg-gray-100 rounded-full font-semibold hover:bg-gray-200">ส่งอีกครั้ง</button>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div><label className="block text-sm font-bold text-gray-700 mb-1">หมวดหมู่</label><select className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-pink-400 outline-none bg-gray-50" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})}><option>ทั่วไป</option><option>แจ้งปัญหาการใช้งานเว็บ</option><option>ข้อเสนอแนะกิจกรรม</option><option>ร้องเรียน</option><option>ให้กำลังใจ</option></select></div>
+            <div><label className="block text-sm font-bold text-gray-700 mb-1">หัวข้อ <span className="text-red-500">*</span></label><input required type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-pink-400 outline-none" value={formData.topic} onChange={e => setFormData({...formData, topic: e.target.value})} placeholder="ระบุหัวข้อเรื่อง" /></div>
+            <div><label className="block text-sm font-bold text-gray-700 mb-1">รายละเอียด <span className="text-red-500">*</span></label><textarea required rows="4" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-pink-400 outline-none" value={formData.details} onChange={e => setFormData({...formData, details: e.target.value})} placeholder="เล่าให้เราฟัง..." /></div>
+            <div><label className="block text-sm font-bold text-gray-700 mb-1">ชื่อผู้ส่ง (ไม่บังคับ)</label><input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-pink-400 outline-none" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="ไม่ระบุก็ได้ (Anonymous)" /></div>
+            <button disabled={isSubmitting} type="submit" className="w-full py-4 bg-gray-900 text-white rounded-xl font-bold hover:bg-pink-500 transition-colors shadow-md">{isSubmitting ? 'กำลังส่ง...' : 'ส่งข้อความ'}</button>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// ADMIN MODALS & COMPONENTS
+// ============================================================================
+
+function AdminEditBtn({ onClick }) {
+  return <button onClick={onClick} className="absolute top-4 right-4 bg-white shadow-md text-pink-500 p-2 rounded-full hover:bg-pink-50 transition-colors group"><Edit2 size={16} className="group-hover:scale-110 transition-transform" /></button>;
+}
+
+function ModalWrapper({ title, onClose, children }) {
+  return (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4 animate-in fade-in duration-200">
+      <div className="bg-white rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl scale-in-center">
+        <div className="bg-pink-50 p-4 border-b border-pink-100 flex justify-between items-center">
+          <h3 className="font-bold text-gray-800 text-lg flex items-center gap-2"><Settings size={18} className="text-pink-500"/> {title}</h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-red-500 bg-white rounded-full p-1"><X size={20} /></button>
+        </div>
+        <div className="p-6 max-h-[80vh] overflow-y-auto custom-scrollbar">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Forms for Modals
+
+function ConfigModal({ config, onClose }) {
+  const [formData, setFormData] = useState({ 
+    ...config, 
+    sportScores: config.sportScores || [] 
+  });
+  const [newSport, setNewSport] = useState({ name: '', score: '' });
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    try { await setDoc(getPublicDoc('settings', 'main'), formData); onClose(); } catch (e) { alert("Error saving config"); }
+  };
+
+  const handleAddSport = () => {
+    if (!newSport.name) return;
+    const updatedSports = [
+      ...(formData.sportScores || []),
+      { id: Date.now().toString(), name: newSport.name, score: Number(newSport.score) || 0, createdAt: Date.now() }
+    ];
+    setFormData({ ...formData, sportScores: updatedSports });
+    setNewSport({ name: '', score: '' });
+  };
+
+  const handleRemoveSport = (id) => {
+    setFormData({ ...formData, sportScores: formData.sportScores.filter(s => s.id !== id) });
+  };
+
+  return (
+    <ModalWrapper title="จัดการระบบหน้าแรก" onClose={onClose}>
+      <div className="space-y-4">
+        <div><label className="block text-sm font-bold text-gray-700 mb-1">วันที่จัดงาน (Countdown)</label><input type="datetime-local" className="w-full border p-2 rounded-lg outline-none focus:border-pink-400" value={new Date(formData.targetDate).toISOString().slice(0, 16)} onChange={(e) => setFormData({...formData, targetDate: new Date(e.target.value).toISOString()})} /></div>
+        
+        <div className="border-t pt-4">
+          <h4 className="font-bold text-gray-800 mb-2">คะแนนรวม</h4>
+          <div className="mb-4">
+            <label className="text-xs text-gray-500">รวมทั้งหมด</label>
+            <input type="number" className="w-full border p-2 rounded-lg outline-none focus:border-pink-400" value={formData.scores?.total || 0} onChange={e=>setFormData({...formData, scores: {...formData.scores, total: Number(e.target.value)}})} />
+          </div>
+          
+          <h4 className="font-bold text-gray-800 mb-2">คะแนนแยกตามกีฬา/ประเภท (โชว์ 4 อันดับล่าสุด)</h4>
+          <div className="flex gap-2 mb-3">
+             <input type="text" placeholder="ชื่อกีฬา (เช่น บาส)" className="flex-grow border p-2 rounded-lg outline-none focus:border-pink-400" value={newSport.name} onChange={e => setNewSport({...newSport, name: e.target.value})} />
+             <input type="number" placeholder="คะแนน" className="w-24 border p-2 rounded-lg outline-none focus:border-pink-400" value={newSport.score} onChange={e => setNewSport({...newSport, score: e.target.value})} />
+             <button type="button" onClick={handleAddSport} className="bg-pink-500 text-white px-3 py-2 rounded-lg hover:bg-pink-600"><Plus size={20}/></button>
+          </div>
+          
+          <div className="space-y-2 max-h-40 overflow-y-auto pr-1 custom-scrollbar">
+            {(formData.sportScores || []).sort((a,b)=>b.createdAt - a.createdAt).map(sport => (
+              <div key={sport.id} className="flex justify-between items-center bg-gray-50 p-2 rounded-lg border border-gray-100">
+                <span className="text-sm font-medium text-gray-700">{sport.name}</span>
+                <div className="flex items-center gap-3">
+                  <span className="text-pink-600 font-bold">{sport.score}</span>
+                  <button type="button" onClick={() => handleRemoveSport(sport.id)} className="text-red-400 hover:text-red-600"><Trash2 size={16}/></button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="border-t pt-4"><h4 className="font-bold text-gray-800 mb-2">เหรียญรางวัล</h4><div className="grid grid-cols-3 gap-2"><div><label className="text-xs text-yellow-600">ทอง</label><input type="number" className="w-full border p-2 rounded-lg bg-yellow-50 outline-none focus:border-pink-400" value={formData.medals.gold} onChange={e=>setFormData({...formData, medals: {...formData.medals, gold: Number(e.target.value)}})} /></div><div><label className="text-xs text-gray-600">เงิน</label><input type="number" className="w-full border p-2 rounded-lg bg-gray-50 outline-none focus:border-pink-400" value={formData.medals.silver} onChange={e=>setFormData({...formData, medals: {...formData.medals, silver: Number(e.target.value)}})} /></div><div><label className="text-xs text-orange-600">ทองแดง</label><input type="number" className="w-full border p-2 rounded-lg bg-orange-50 outline-none focus:border-pink-400" value={formData.medals.bronze} onChange={e=>setFormData({...formData, medals: {...formData.medals, bronze: Number(e.target.value)}})} /></div></div></div>
+        <button onClick={handleSave} disabled={isSaving} className="w-full bg-pink-500 text-white font-bold py-3 rounded-xl mt-4 hover:bg-pink-600 transition-colors">{isSaving ? 'กำลังบันทึก...' : 'บันทึกการเปลี่ยนแปลง'}</button>
+      </div>
+    </ModalWrapper>
+  );
+}
+
+function AnnouncementModal({ onClose }) {
+  const [text, setText] = useState('');
+  const handleSave = async () => { if(!text) return; await addDoc(getPublicCollection('announcements'), { text, createdAt: new Date().getTime() }); onClose(); };
+  return (
+    <ModalWrapper title="เพิ่มประกาศด่วน" onClose={onClose}>
+      <textarea rows="4" className="w-full border p-3 rounded-xl outline-none focus:border-pink-400" placeholder="พิมพ์ข้อความประกาศที่นี่..." value={text} onChange={e=>setText(e.target.value)}></textarea>
+      <button onClick={handleSave} className="w-full bg-pink-500 text-white font-bold py-3 rounded-xl mt-4 hover:bg-pink-600 transition-colors">บันทึกประกาศ</button>
+    </ModalWrapper>
+  );
+}
+
+function EventModal({ onClose }) {
+  const [data, setData] = useState({ title: '', date: '', time: '', location: '', details: '' });
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    await addDoc(getPublicCollection('events'), { ...data, createdAt: new Date().getTime() });
+    onClose();
+  };
+
+  return (
+    <ModalWrapper title="เพิ่มตารางกิจกรรม" onClose={onClose}>
+      <form onSubmit={handleSave} className="space-y-3">
+        <input required className="w-full border p-2 rounded-lg outline-none focus:border-pink-400" placeholder="ชื่อกิจกรรม (เช่น นัดซ้อมสแตนด์รวม)" value={data.title} onChange={e=>setData({...data, title: e.target.value})} />
+        <div className="grid grid-cols-2 gap-2">
+          <input required type="date" className="w-full border p-2 rounded-lg outline-none focus:border-pink-400" value={data.date} onChange={e=>setData({...data, date: e.target.value})} />
+          <input required type="time" className="w-full border p-2 rounded-lg outline-none focus:border-pink-400" value={data.time} onChange={e=>setData({...data, time: e.target.value})} />
+        </div>
+        <input required className="w-full border p-2 rounded-lg outline-none focus:border-pink-400" placeholder="สถานที่" value={data.location} onChange={e=>setData({...data, location: e.target.value})} />
+        <textarea required rows="4" className="w-full border p-2 rounded-lg outline-none focus:border-pink-400" placeholder="รายละเอียดเพิ่มเติม" value={data.details} onChange={e=>setData({...data, details: e.target.value})}></textarea>
+        <button type="submit" className="w-full bg-pink-500 text-white font-bold py-3 rounded-xl mt-2 hover:bg-pink-600 transition-colors">เพิ่มกิจกรรม</button>
+      </form>
+    </ModalWrapper>
+  );
+}
+
+function NewsModal({ onClose }) {
+  const [data, setData] = useState({ title: '', category: 'ทั่วไป', content: '' });
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    await addDoc(getPublicCollection('news'), { ...data, createdAt: new Date().getTime() });
+    onClose();
+  };
+
+  return (
+    <ModalWrapper title="เพิ่มข่าวสาร" onClose={onClose}>
+      <form onSubmit={handleSave} className="space-y-3">
+        <select className="w-full border p-2 rounded-lg bg-white outline-none focus:border-pink-400" value={data.category} onChange={e=>setData({...data, category: e.target.value})}>
+          <option>กีฬา</option><option>สแตนด์</option><option>เชียร์</option><option>พาเหรด</option><option>ทั่วไป</option>
+        </select>
+        <input required className="w-full border p-2 rounded-lg outline-none focus:border-pink-400" placeholder="หัวข้อข่าว" value={data.title} onChange={e=>setData({...data, title: e.target.value})} />
+        <textarea required rows="6" className="w-full border p-2 rounded-lg outline-none focus:border-pink-400" placeholder="เนื้อหาข่าว..." value={data.content} onChange={e=>setData({...data, content: e.target.value})}></textarea>
+        <button type="submit" className="w-full bg-pink-500 text-white font-bold py-3 rounded-xl mt-2 hover:bg-pink-600 transition-colors">โพสต์ข่าว</button>
+      </form>
+    </ModalWrapper>
+  );
+}
+
+function ResourceModal({ categories, onClose }) {
+  const [data, setData] = useState({ title: '', category: categories[0], type: 'link', link: '', description: '' });
+  const handleSave = async (e) => { e.preventDefault(); await addDoc(getPublicCollection('resources'), { ...data, createdAt: new Date().getTime() }); onClose(); };
+  return (
+    <ModalWrapper title="เพิ่มสื่อ/คลังข้อมูล" onClose={onClose}>
+      <form onSubmit={handleSave} className="space-y-3">
+         <select className="w-full border p-2 rounded-lg bg-white outline-none focus:border-pink-400" value={data.category} onChange={e=>setData({...data, category: e.target.value})}>{categories.map(c => <option key={c}>{c}</option>)}</select>
+        <input required className="w-full border p-2 rounded-lg outline-none focus:border-pink-400" placeholder="ชื่อเอกสาร/ลิงก์" value={data.title} onChange={e=>setData({...data, title: e.target.value})} />
+        <div className="flex gap-2">
+           <select className="border p-2 rounded-lg bg-white outline-none focus:border-pink-400" value={data.type} onChange={e=>setData({...data, type: e.target.value})}><option value="link">Link</option><option value="pdf">PDF</option><option value="image">รูปภาพ</option></select>
+          <input required type="url" className="w-full border p-2 rounded-lg outline-none focus:border-pink-400" placeholder="URL (เช่น Google Drive link)" value={data.link} onChange={e=>setData({...data, link: e.target.value})} />
+        </div>
+        <input className="w-full border p-2 rounded-lg outline-none focus:border-pink-400" placeholder="คำอธิบายสั้นๆ" value={data.description} onChange={e=>setData({...data, description: e.target.value})} />
+        <button type="submit" className="w-full bg-pink-500 text-white font-bold py-3 rounded-xl mt-2 hover:bg-pink-600 transition-colors">บันทึก</button>
+      </form>
+    </ModalWrapper>
+  );
+}
+
+function TeamModal({ departments, onClose }) {
+  const [data, setData] = useState({ name: '', department: departments[0], role: '', contact: '', imageUrl: '' });
+  const handleSave = async (e) => { e.preventDefault(); await addDoc(getPublicCollection('team'), { ...data, createdAt: new Date().getTime() }); onClose(); };
+  return (
+     <ModalWrapper title="เพิ่มรายชื่อทีมงาน" onClose={onClose}>
+      <form onSubmit={handleSave} className="space-y-3">
+         <select className="w-full border p-2 rounded-lg bg-white outline-none focus:border-pink-400" value={data.department} onChange={e=>setData({...data, department: e.target.value})}>{departments.map(d => <option key={d}>{d}</option>)}</select>
+        <input required className="w-full border p-2 rounded-lg outline-none focus:border-pink-400" placeholder="ชื่อ - นามสกุล (ชื่อเล่น)" value={data.name} onChange={e=>setData({...data, name: e.target.value})} />
+        <input required className="w-full border p-2 rounded-lg outline-none focus:border-pink-400" placeholder="ตำแหน่ง (เช่น ประธานสี, เหรัญญิก)" value={data.role} onChange={e=>setData({...data, role: e.target.value})} />
+        <input className="w-full border p-2 rounded-lg outline-none focus:border-pink-400" placeholder="ช่องทางการติดต่อ (เช่น IG: sukhothai, เบอร์โทร)" value={data.contact} onChange={e=>setData({...data, contact: e.target.value})} />
+        <input className="w-full border p-2 rounded-lg outline-none focus:border-pink-400" placeholder="ลิงก์รูปภาพ (URL) - ไม่บังคับ" value={data.imageUrl} onChange={e=>setData({...data, imageUrl: e.target.value})} />
+        <button type="submit" className="w-full bg-pink-500 text-white font-bold py-3 rounded-xl mt-2 hover:bg-pink-600 transition-colors">เพิ่มรายชื่อ</button>
+      </form>
+    </ModalWrapper>
+  );
+}
+
+function RegisterLinkModal({ onClose }) {
+  const [data, setData] = useState({ title: '', description: '', url: '', adminName: '' });
+  const handleSave = async (e) => { e.preventDefault(); await addDoc(getPublicCollection('registerLinks'), { ...data, createdAt: new Date().getTime() }); onClose(); };
+  return (
+    <ModalWrapper title="เพิ่มลิงก์รับสมัคร (Google Form)" onClose={onClose}>
+      <form onSubmit={handleSave} className="space-y-3">
+        <input required className="w-full border p-2 rounded-lg outline-none focus:border-pink-400" placeholder="ประเภทรับสมัคร (เช่น สมัครสตาฟ, สมัครนักกีฬา)" value={data.title} onChange={e=>setData({...data, title: e.target.value})} />
+        <input className="w-full border p-2 rounded-lg outline-none focus:border-pink-400" placeholder="ชื่อผู้ดูแลฝ่าย (เช่น พี่เอก ม.6/1)" value={data.adminName} onChange={e=>setData({...data, adminName: e.target.value})} />
+        <input required type="url" className="w-full border p-2 rounded-lg outline-none focus:border-pink-400" placeholder="ลิงก์ Google Form (https://forms.gle/...)" value={data.url} onChange={e=>setData({...data, url: e.target.value})} />
+        <textarea className="w-full border p-2 rounded-lg outline-none focus:border-pink-400" placeholder="รายละเอียดเพิ่มเติม (เช่น เงื่อนไขการสมัคร, วันหมดเขต)" value={data.description} onChange={e=>setData({...data, description: e.target.value})}></textarea>
+        <button type="submit" className="w-full bg-pink-500 text-white font-bold py-3 rounded-xl mt-2 hover:bg-pink-600 transition-colors">เพิ่มการรับสมัคร</button>
+      </form>
+    </ModalWrapper>
+  );
+}
+
+function AdminLoginModal({ adminUsers, onClose, onSuccess }) {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const userMatch = adminUsers.find(u => u.username === username && u.password === password);
+    if (userMatch) {
+      onSuccess(userMatch);
+    } else {
+      setError(true);
+      setPassword('');
+    }
+  };
+
+  return (
+    <ModalWrapper title="เข้าสู่ระบบผู้ดูแล" onClose={onClose}>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="text-center mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-pink-50 mb-3"><Lock size={32} className="text-pink-500" /></div>
+          <p className="text-gray-600 font-medium">กรุณากรอกชื่อผู้ใช้งานและรหัสผ่าน</p>
+        </div>
+        <div className="space-y-3">
+          <div><label className="block text-sm font-bold text-gray-700 mb-1">ชื่อผู้ใช้งาน (Username)</label><input type="text" autoFocus required className={`w-full border-2 p-3 rounded-xl outline-none transition-colors ${error ? 'border-red-400' : 'border-gray-200 focus:border-pink-400'}`} value={username} onChange={(e) => { setUsername(e.target.value); setError(false); }} placeholder="กรอกชื่อผู้ใช้งาน" /></div>
+          <div><label className="block text-sm font-bold text-gray-700 mb-1">รหัสผ่าน (Password)</label><input type="password" required className={`w-full border-2 p-3 rounded-xl outline-none transition-colors ${error ? 'border-red-400 bg-red-50' : 'border-gray-200 focus:border-pink-400'}`} value={password} onChange={(e) => { setPassword(e.target.value); setError(false); }} placeholder="••••••••" /></div>
+        </div>
+        {error && <p className="text-red-500 text-sm text-center font-medium animate-pulse mt-2">ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง</p>}
+        <button type="submit" className="w-full bg-pink-500 text-white font-bold py-4 rounded-xl mt-4 hover:bg-pink-600 transition-colors shadow-lg hover:shadow-xl hover:-translate-y-1">เข้าสู่ระบบ</button>
+      </form>
+    </ModalWrapper>
+  );
+}
+
+function AdminManagerModal({ adminUsers, onClose }) {
+  const [data, setData] = useState({ name: '', username: '', password: '' });
+  const [perms, setPerms] = useState({ home: true, schedule: true, register: true, resources: true, team: true });
+  
+  const handleSave = async (e) => {
+    e.preventDefault();
+    if (adminUsers.find(u => u.username === data.username)) {
+       alert("ชื่อผู้ใช้งานนี้มีในระบบแล้ว กรุณาใช้ชื่ออื่น");
+       return;
+    }
+    await addDoc(getPublicCollection('admin_users'), { 
+      ...data, 
+      role: 'admin',
+      permissions: perms,
+      createdAt: new Date().getTime() 
+    });
+    setData({ name: '', username: '', password: '' });
+    // Reset permissions to default
+    setPerms({ home: true, schedule: true, register: true, resources: true, team: true });
+  };
+
+  const togglePerm = (key) => setPerms({...perms, [key]: !perms[key]});
+  
+  const permLabels = [
+    { key: 'home', label: 'หน้าแรก / คะแนน' },
+    { key: 'schedule', label: 'กิจกรรม / ข่าวสาร' },
+    { key: 'register', label: 'ระบบรับสมัคร' },
+    { key: 'resources', label: 'คลังข้อมูล / สื่อ' },
+    { key: 'team', label: 'ทำเนียบทีมงาน' }
+  ];
+
+  return (
+    <ModalWrapper title="จัดการผู้ดูแลระบบ (Admins)" onClose={onClose}>
+      <form onSubmit={handleSave} className="space-y-4 mb-6 bg-pink-50 p-5 rounded-xl border border-pink-100 shadow-inner">
+        <h4 className="font-bold text-gray-800 border-b border-pink-200 pb-2 flex items-center gap-2">
+          <Plus size={18} className="text-pink-500" /> เพิ่มแอดมินใหม่
+        </h4>
+        <div className="space-y-2">
+          <input required className="w-full border p-2 rounded-lg outline-none focus:border-pink-400 shadow-sm" placeholder="ชื่อ-นามสกุล หรือ ชื่อเล่น" value={data.name} onChange={e=>setData({...data, name: e.target.value})} />
+          <div className="flex gap-2">
+            <input required className="w-full border p-2 rounded-lg outline-none focus:border-pink-400 shadow-sm" placeholder="Username" value={data.username} onChange={e=>setData({...data, username: e.target.value})} />
+            <input required className="w-full border p-2 rounded-lg outline-none focus:border-pink-400 shadow-sm" placeholder="Password" value={data.password} onChange={e=>setData({...data, password: e.target.value})} />
+          </div>
+        </div>
+
+        <div className="pt-2">
+          <h5 className="text-sm font-bold text-gray-700 mb-2">จำกัดสิทธิ์การแก้ไข (Permissions)</h5>
+          <div className="grid grid-cols-2 gap-2">
+            {permLabels.map(p => (
+              <label key={p.key} className="flex items-center gap-2 cursor-pointer p-2 bg-white rounded-lg border border-pink-100 hover:border-pink-300 transition-colors">
+                <button type="button" onClick={() => togglePerm(p.key)} className="text-pink-500 focus:outline-none">
+                  {perms[p.key] ? <CheckSquare size={18} /> : <Square size={18} className="text-gray-300" />}
+                </button>
+                <span className="text-xs text-gray-700 font-medium select-none" onClick={() => togglePerm(p.key)}>{p.label}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <button type="submit" className="w-full bg-pink-500 text-white font-bold py-3 rounded-xl mt-4 hover:bg-pink-600 transition-colors shadow-md">เพิ่มแอดมินเข้าระบบ</button>
+      </form>
+
+      <div className="space-y-3">
+        <h4 className="font-bold text-gray-800 border-b pb-2 flex items-center gap-2">
+          <Users size={18} className="text-gray-500" /> รายชื่อแอดมินทั้งหมด
+        </h4>
+        {adminUsers.sort((a,b) => (a.role === 'superadmin' ? -1 : 1)).map(admin => (
+          <div key={admin.id} className={`flex justify-between items-center p-3 rounded-xl border shadow-sm ${admin.role === 'superadmin' ? 'bg-blue-50 border-blue-200' : 'bg-white border-gray-200'}`}>
+            <div className="flex-grow">
+              <p className="font-bold text-sm text-gray-800 flex items-center gap-1">
+                <Shield size={14} className={admin.role === 'superadmin' ? "text-blue-500" : "text-gray-400"} /> 
+                {admin.name} {admin.role === 'superadmin' && <span className="text-[10px] bg-blue-500 text-white px-2 py-0.5 rounded-full ml-2">Super Admin</span>}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">ID: {admin.username}</p>
+              {admin.role !== 'superadmin' && admin.permissions && (
+                <div className="flex flex-wrap gap-1 mt-2">
+                  {Object.keys(admin.permissions).map(key => 
+                    admin.permissions[key] && <span key={key} className="text-[10px] bg-pink-50 text-pink-600 px-1.5 py-0.5 rounded border border-pink-100">{permLabels.find(l => l.key === key)?.label || key}</span>
+                  )}
+                </div>
+              )}
+            </div>
+            {admin.role !== 'superadmin' && (
+              <button 
+                onClick={() => {
+                  if(window.confirm(`ต้องการลบแอดมิน ${admin.name} ใช่หรือไม่?`)) {
+                    deleteDoc(getPublicDoc('admin_users', admin.id));
+                  }
+                }} 
+                className="text-red-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-lg transition-colors flex-shrink-0"
+                title="ลบแอดมิน"
+              >
+                <Trash2 size={18} />
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+    </ModalWrapper>
+  );
+}
