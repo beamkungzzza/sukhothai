@@ -914,11 +914,22 @@
 
         initAuth().then(() => {
             onSnapshot(stateRef, (docSnap) => {
+                // ตัวช่วยแปลงข้อมูลที่พังเป็น Object ให้กลับมาเป็น Array ป้องกันการพังเงียบๆ
+                const ensureArr = (arr) => Array.isArray(arr) ? arr : Object.values(arr || []);
+                
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     appState = { 
                         ...defaultState, 
                         ...data,
+                        matchResults: ensureArr(data.matchResults),
+                        events: ensureArr(data.events),
+                        news: ensureArr(data.news),
+                        resources: ensureArr(data.resources),
+                        teamMembers: ensureArr(data.teamMembers),
+                        announcements: ensureArr(data.announcements),
+                        recruitments: ensureArr(data.recruitments),
+                        users: ensureArr(data.users),
                         score: { ...defaultState.score, ...(data.score || {}) },
                         medals: { ...defaultState.medals, ...(data.medals || {}) },
                         settings: { 
@@ -926,7 +937,6 @@
                             ...(data.settings || {}),
                             categories: { ...defaultState.settings.categories, ...(data.settings?.categories || {}) }
                         },
-                        users: data.users || [],
                         auth: { ...defaultState.auth, ...(data.auth || {}) },
                         texts: { ...defaultState.texts, ...(data.texts || {}) }
                     };
@@ -1354,6 +1364,48 @@
             document.getElementById('mr-points-group').classList.toggle('hidden', t !== 'score'); document.getElementById('mr-medal-group').classList.toggle('hidden', t !== 'medal');
         };
 
+        // --- Edit Mode Helpers (ระบบใหม่) ---
+        window.setEditMode = function(type, id, defaultBtnText, inputId) {
+            editingState[type] = id;
+            const btnSuffix = type === 'match' ? 'mr' : type;
+            const btn = document.getElementById(`btn-submit-${btnSuffix}`);
+            if(btn) btn.innerHTML = `<i class="ph-bold ph-check mr-2"></i>อัปเดตข้อมูล`;
+            
+            // สร้างหรือโชว์ปุ่มยกเลิก
+            let cancelBtn = document.getElementById(`btn-cancel-${btnSuffix}`);
+            if(!cancelBtn && btn) {
+                cancelBtn = document.createElement('button');
+                cancelBtn.id = `btn-cancel-${btnSuffix}`;
+                cancelBtn.type = 'button';
+                cancelBtn.className = 'ml-0 sm:ml-3 mt-3 sm:mt-0 w-full sm:w-auto bg-gray-200 text-gray-700 px-8 py-3 rounded-xl font-bold hover:bg-gray-300 transition hover-target inline-flex justify-center items-center';
+                cancelBtn.innerHTML = '<i class="ph-bold ph-x mr-2"></i> ยกเลิก';
+                cancelBtn.onclick = () => window.cancelEditMode(type, defaultBtnText, inputId);
+                btn.parentNode.appendChild(cancelBtn);
+            }
+            if(cancelBtn) cancelBtn.classList.remove('hidden');
+
+            // เลื่อนหน้าจอเฉพาะในส่วนของ Admin (ไม่ใช่หน้าจอหลัก)
+            const adminMain = document.querySelector('#admin-view main');
+            if(adminMain) adminMain.scrollTo({top: 0, behavior: 'smooth'});
+        };
+
+        window.cancelEditMode = function(type, defaultBtnText, inputId) {
+            editingState[type] = null;
+            const btnSuffix = type === 'match' ? 'mr' : type;
+            const btn = document.getElementById(`btn-submit-${btnSuffix}`);
+            if(btn) btn.innerHTML = defaultBtnText;
+            const cancelBtn = document.getElementById(`btn-cancel-${btnSuffix}`);
+            if(cancelBtn) cancelBtn.classList.add('hidden');
+            
+            // ล้างข้อมูลในฟอร์มอย่างปลอดภัย
+            const input = document.getElementById(inputId);
+            if(input && input.closest('form')) {
+                input.closest('form').reset();
+                if(type === 'match') window.toggleMrType();
+                if(type === 'res') window.toggleResourceInput();
+            }
+        };
+
         // --- Safe Delete Helper ---
         window.safeDelete = function(btn, type, id) {
             if(btn.dataset.confirm === 'true') {
@@ -1383,14 +1435,12 @@
         window.editMatchResult = function(id) {
             const item = appState.matchResults.find(i => String(i.id) === String(id));
             if(!item) return;
-            editingState.match = id;
+            window.setEditMode('match', id, 'บันทึกผล', 'mr-title');
             document.getElementById('mr-title').value = item.title;
             document.getElementById('mr-type').value = item.type;
             window.toggleMrType();
             if(item.type === 'score') document.getElementById('mr-points').value = item.reward;
             else document.getElementById('mr-medal').value = item.reward;
-            document.getElementById('btn-submit-mr').innerHTML = '<i class="ph-bold ph-check mr-2"></i>อัปเดตผล';
-            window.scrollTo({top: 0, behavior: 'smooth'});
         };
         window.addMatchResult = function(e) {
             e.preventDefault(); const type = document.getElementById('mr-type').value, reward = type === 'score' ? document.getElementById('mr-points').value : document.getElementById('mr-medal').value;
@@ -1402,14 +1452,13 @@
                     else appState.medals[item.reward]--;
                     item.title = document.getElementById('mr-title').value; item.type = type; item.reward = reward;
                 }
-                editingState.match = null;
-                document.getElementById('btn-submit-mr').innerHTML = 'บันทึกผล';
             } else {
                 appState.matchResults.unshift({ id: Date.now().toString(), title: document.getElementById('mr-title').value, type, reward, date: new Date().toLocaleDateString('th-TH', {day:'numeric',month:'short'}) });
             }
             if(type === 'score') appState.score.total = (parseInt(appState.score.total) || 0) + parseInt(reward);
             else { if(reward === 'gold') appState.medals.gold++; if(reward === 'silver') appState.medals.silver++; if(reward === 'bronze') appState.medals.bronze++; }
-            e.target.reset(); window.toggleMrType(); saveState(); renderAdminMatchResults();
+            window.cancelEditMode('match', 'บันทึกผล', 'mr-title'); // รีเซ็ตฟอร์ม+ปุ่มอัตโนมัติ
+            saveState(); renderAdminMatchResults();
         };
         window.deleteMatchResult = function(id) { 
             const item = appState.matchResults.find(a => String(a.id) === String(id));
@@ -1487,21 +1536,21 @@
 
         // --- EVENTS ---
         window.editEvent = function(id) {
-            const item = appState.events.find(i => String(i.id) === String(id)); if(!item) return; editingState.event = id;
+            const item = appState.events.find(i => String(i.id) === String(id)); if(!item) return; 
+            window.setEditMode('event', id, 'เพิ่มกิจกรรม', 'ev-date');
             document.getElementById('ev-date').value = item.date; document.getElementById('ev-time').value = item.time;
             document.getElementById('ev-title').value = item.title; document.getElementById('ev-loc').value = item.location;
-            document.getElementById('btn-submit-ev').innerHTML = '<i class="ph-bold ph-check mr-2"></i>อัปเดตกิจกรรม'; window.scrollTo({top: 0, behavior: 'smooth'});
         }
         window.addEvent = function(e) { 
             e.preventDefault(); 
             if(editingState.event) {
                 const item = appState.events.find(i => String(i.id) === editingState.event);
                 if(item) { item.date = document.getElementById('ev-date').value; item.time = document.getElementById('ev-time').value; item.title = document.getElementById('ev-title').value; item.location = document.getElementById('ev-loc').value; }
-                editingState.event = null; document.getElementById('btn-submit-ev').innerHTML = 'เพิ่มกิจกรรม';
             } else {
                 appState.events.push({ id: Date.now().toString(), date: document.getElementById('ev-date').value, time: document.getElementById('ev-time').value, title: document.getElementById('ev-title').value, location: document.getElementById('ev-loc').value }); 
             }
-            e.target.reset(); saveState(); renderAdminEvents(); 
+            window.cancelEditMode('event', 'เพิ่มกิจกรรม', 'ev-date');
+            saveState(); renderAdminEvents(); 
         };
         window.deleteEvent = function(id) { appState.events = appState.events.filter(a => String(a.id) !== String(id)); saveState(); renderAdminEvents(); };
         function renderAdminEvents() {
@@ -1511,9 +1560,9 @@
 
         // --- NEWS ---
         window.editNews = function(id) {
-            const item = appState.news.find(i => String(i.id) === String(id)); if(!item) return; editingState.news = id;
+            const item = appState.news.find(i => String(i.id) === String(id)); if(!item) return; 
+            window.setEditMode('news', id, 'โพสต์ข่าว', 'nw-cat');
             document.getElementById('nw-cat').value = item.category; document.getElementById('nw-title').value = item.title; document.getElementById('nw-excerpt').value = item.excerpt;
-            document.getElementById('btn-submit-nw').innerHTML = '<i class="ph-bold ph-check mr-2"></i>อัปเดตข่าวสาร'; window.scrollTo({top: 0, behavior: 'smooth'});
         }
         window.addNews = async function(e) {
             e.preventDefault(); const b = document.getElementById('btn-submit-nw'), f = document.getElementById('nw-image-file').files[0];
@@ -1523,12 +1572,13 @@
             if (editingState.news) {
                 const item = appState.news.find(i => String(i.id) === editingState.news);
                 if(item) { item.category = document.getElementById('nw-cat').value; item.title = document.getElementById('nw-title').value; item.excerpt = document.getElementById('nw-excerpt').value; if(url) item.image = url; }
-                editingState.news = null; b.innerHTML = 'โพสต์ข่าว';
             } else {
-                if(!url) { b.disabled=false; b.innerHTML='โพสต์ข่าว'; showToast('กรุณาอัปโหลดรูปภาพ'); return; }
+                if(!url) { b.disabled=false; showToast('กรุณาอัปโหลดรูปภาพ'); return; }
                 appState.news.push({ id: Date.now().toString(), category: document.getElementById('nw-cat').value, title: document.getElementById('nw-title').value, excerpt: document.getElementById('nw-excerpt').value, image: url }); 
             }
-            e.target.reset(); saveState(); b.disabled = false; renderAdminNews();
+            b.disabled = false;
+            window.cancelEditMode('news', 'โพสต์ข่าว', 'nw-cat');
+            saveState(); renderAdminNews();
         };
         window.deleteNews = function(id) { appState.news = appState.news.filter(a => String(a.id) !== String(id)); saveState(); renderAdminNews(); };
         function renderAdminNews() {
@@ -1538,10 +1588,10 @@
 
         // --- RESOURCES ---
         window.editResource = function(id) {
-            const item = appState.resources.find(i => String(i.id) === String(id)); if(!item) return; editingState.res = id;
+            const item = appState.resources.find(i => String(i.id) === String(id)); if(!item) return; 
+            window.setEditMode('res', id, 'บันทึกสื่อ', 'res-cat');
             document.getElementById('res-cat').value = item.category; document.getElementById('res-title').value = item.title; document.getElementById('res-type').value = item.type; window.toggleResourceInput();
             if(item.type === 'link') document.getElementById('res-url').value = item.url;
-            document.getElementById('btn-submit-res').innerHTML = '<i class="ph-bold ph-check mr-2"></i>อัปเดตสื่อ'; window.scrollTo({top: 0, behavior: 'smooth'});
         }
         window.toggleResourceInput = function() { const t = document.getElementById('res-type').value; document.getElementById('res-link-group').classList.toggle('hidden', t !== 'link'); document.getElementById('res-image-group').classList.toggle('hidden', t !== 'image'); };
         window.addResource = async function(e) {
@@ -1552,12 +1602,13 @@
             if(editingState.res) {
                 const item = appState.resources.find(i => String(i.id) === editingState.res);
                 if(item) { item.category = document.getElementById('res-cat').value; item.title = document.getElementById('res-title').value; item.type = t; if(url) item.url = url; }
-                editingState.res = null; b.innerHTML = 'บันทึกสื่อ';
             } else {
-                if(t === 'image' && !url) { b.disabled=false; b.innerHTML='บันทึกสื่อ'; showToast('กรุณาอัปโหลดรูปภาพ'); return; }
+                if(t === 'image' && !url) { b.disabled=false; showToast('กรุณาอัปโหลดรูปภาพ'); return; }
                 appState.resources.push({ id: Date.now().toString(), category: document.getElementById('res-cat').value, title: document.getElementById('res-title').value, type: t, url }); 
             }
-            e.target.reset(); window.toggleResourceInput(); saveState(); b.disabled = false; renderAdminResources();
+            b.disabled = false;
+            window.cancelEditMode('res', 'บันทึกสื่อ', 'res-cat');
+            saveState(); renderAdminResources();
         };
         window.deleteResource = function(id) { appState.resources = appState.resources.filter(a => String(a.id) !== String(id)); saveState(); renderAdminResources(); };
         function renderAdminResources() {
@@ -1567,9 +1618,9 @@
 
         // --- TEAM ---
         window.editTeamMember = function(id) {
-            const item = appState.teamMembers.find(i => String(i.id) === String(id)); if(!item) return; editingState.team = id;
+            const item = appState.teamMembers.find(i => String(i.id) === String(id)); if(!item) return; 
+            window.setEditMode('team', id, 'บันทึกทีมงาน', 'team-dept');
             document.getElementById('team-dept').value = item.department; document.getElementById('team-name').value = item.name; document.getElementById('team-role').value = item.role; document.getElementById('team-contact').value = item.contact || '';
-            document.getElementById('btn-submit-team').innerHTML = '<i class="ph-bold ph-check mr-2"></i>อัปเดตทีมงาน'; window.scrollTo({top: 0, behavior: 'smooth'});
         }
         window.addTeamMember = async function(e) {
             e.preventDefault(); const b = document.getElementById('btn-submit-team'), f = document.getElementById('team-image').files[0];
@@ -1579,12 +1630,13 @@
             if(editingState.team) {
                 const item = appState.teamMembers.find(i => String(i.id) === editingState.team);
                 if(item) { item.department = document.getElementById('team-dept').value; item.name = document.getElementById('team-name').value; item.role = document.getElementById('team-role').value; item.contact = document.getElementById('team-contact').value; if(url) item.image = url; }
-                editingState.team = null; b.innerHTML = 'บันทึกทีมงาน';
             } else {
-                if(!url) { b.disabled=false; b.innerHTML='บันทึกทีมงาน'; showToast('กรุณาอัปโหลดรูปภาพ'); return; }
+                if(!url) { b.disabled=false; showToast('กรุณาอัปโหลดรูปภาพ'); return; }
                 appState.teamMembers.push({ id: Date.now().toString(), department: document.getElementById('team-dept').value, name: document.getElementById('team-name').value, role: document.getElementById('team-role').value, contact: document.getElementById('team-contact').value, image: url }); 
             }
-            e.target.reset(); saveState(); b.disabled = false; renderAdminTeam();
+            b.disabled = false;
+            window.cancelEditMode('team', 'บันทึกทีมงาน', 'team-dept');
+            saveState(); renderAdminTeam();
         };
         window.deleteTeamMember = function(id) { appState.teamMembers = appState.teamMembers.filter(a => String(a.id) !== String(id)); saveState(); renderAdminTeam(); };
         function renderAdminTeam() {
@@ -1594,20 +1646,20 @@
 
         // --- ANNOUNCEMENTS ---
         window.editAnnouncement = function(id) {
-            const item = appState.announcements.find(i => String(i.id) === String(id)); if(!item) return; editingState.ann = id;
+            const item = appState.announcements.find(i => String(i.id) === String(id)); if(!item) return; 
+            window.setEditMode('ann', id, 'โพสต์ประกาศ', 'ann-title');
             document.getElementById('ann-title').value = item.title; document.getElementById('ann-content').value = item.content;
-            document.getElementById('btn-submit-ann').innerHTML = '<i class="ph-bold ph-check mr-2"></i>อัปเดตประกาศ'; window.scrollTo({top: 0, behavior: 'smooth'});
         }
         window.addAnnouncement = function(e) { 
             e.preventDefault(); 
             if(editingState.ann) {
                 const item = appState.announcements.find(i => String(i.id) === editingState.ann);
                 if(item) { item.title = document.getElementById('ann-title').value; item.content = document.getElementById('ann-content').value; }
-                editingState.ann = null; document.getElementById('btn-submit-ann').innerHTML = 'โพสต์ประกาศ';
             } else {
                 appState.announcements.push({ id: Date.now().toString(), title: document.getElementById('ann-title').value, content: document.getElementById('ann-content').value, date: new Date().toLocaleDateString('th-TH') }); 
             }
-            e.target.reset(); saveState(); renderAdminAnnouncements(); 
+            window.cancelEditMode('ann', 'โพสต์ประกาศ', 'ann-title');
+            saveState(); renderAdminAnnouncements(); 
         };
         window.deleteAnnouncement = function(id) { appState.announcements = appState.announcements.filter(a => String(a.id) !== String(id)); saveState(); renderAdminAnnouncements(); };
         function renderAdminAnnouncements() {
@@ -1617,20 +1669,20 @@
 
         // --- RECRUITMENTS ---
         window.editRecruitment = function(id) {
-            const item = appState.recruitments.find(i => String(i.id) === String(id)); if(!item) return; editingState.rec = id;
+            const item = appState.recruitments.find(i => String(i.id) === String(id)); if(!item) return; 
+            window.setEditMode('rec', id, 'บันทึกระบบสมัคร', 'rec-icon');
             document.getElementById('rec-icon').value = item.icon; document.getElementById('rec-title').value = item.title; document.getElementById('rec-desc').value = item.desc; document.getElementById('rec-link').value = item.link;
-            document.getElementById('btn-submit-rec').innerHTML = '<i class="ph-bold ph-check mr-2"></i>อัปเดตระบบสมัคร'; window.scrollTo({top: 0, behavior: 'smooth'});
         }
         window.addRecruitment = function(e) { 
             e.preventDefault(); 
             if(editingState.rec) {
                 const item = appState.recruitments.find(i => String(i.id) === editingState.rec);
                 if(item) { item.icon = document.getElementById('rec-icon').value; item.title = document.getElementById('rec-title').value; item.desc = document.getElementById('rec-desc').value; item.link = document.getElementById('rec-link').value; }
-                editingState.rec = null; document.getElementById('btn-submit-rec').innerHTML = 'บันทึกระบบสมัคร';
             } else {
                 appState.recruitments.push({ id: Date.now().toString(), icon: document.getElementById('rec-icon').value, title: document.getElementById('rec-title').value, desc: document.getElementById('rec-desc').value, link: document.getElementById('rec-link').value }); 
             }
-            e.target.reset(); saveState(); renderAdminRecruitments(); 
+            window.cancelEditMode('rec', 'บันทึกระบบสมัคร', 'rec-icon');
+            saveState(); renderAdminRecruitments(); 
         };
         window.deleteRecruitment = function(id) { appState.recruitments = appState.recruitments.filter(a => String(a.id) !== String(id)); saveState(); renderAdminRecruitments(); };
         function renderAdminRecruitments() {
