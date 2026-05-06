@@ -8,7 +8,6 @@
     <!-- Google Fonts: Inter, Noto Sans Thai & Prompt -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- โหลดน้ำหนักฟอนต์ตั้งแต่บางสุด 300 ไปจนถึง 900 -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Noto+Sans+Thai:wght@300;400;500;600;700;800;900&family=Prompt:wght@300;400;700;900&display=swap" rel="stylesheet">
     
     <!-- Phosphor Icons -->
@@ -150,7 +149,7 @@
                     <span id="pub-team-desc" class="text-xs md:text-sm text-theme-hotpink font-normal tracking-wider truncate max-w-[200px] md:max-w-none">สีชมพู: อ่อนโยนแต่ไม่อ่อนแอ</span>
                 </div>
                 
-                <!-- Desktop Menu (ปรับ font ให้บางลง) -->
+                <!-- Desktop Menu -->
                 <div class="hidden xl:flex items-center space-x-5 lg:space-x-6">
                     <a href="#" onclick="navigateTo('home'); return false;" class="text-sm font-normal text-gray-600 hover:text-theme-hotpink transition hover-target">หน้าแรก</a>
                     <a href="#" onclick="navigateTo('scores'); return false;" class="text-sm font-normal text-gray-600 hover:text-theme-hotpink transition hover-target">คะแนนรวม</a>
@@ -465,7 +464,6 @@
 
     <!-- ================= LOGIN MODAL ================= -->
     <div id="login-view" class="fixed inset-0 bg-theme-bg/95 backdrop-blur-xl z-[1000] flex items-center justify-center hide transition-opacity duration-300 opacity-0 px-4">
-        <!-- ปรับ padding และเพิ่ม max-h เพื่อไม่ให้ล้นจอ -->
         <div id="login-box" class="bg-white p-6 md:p-8 rounded-3xl shadow-2xl w-full max-w-sm md:max-w-md relative max-h-[90vh] overflow-y-auto hide-scrollbar">
             <button onclick="hideLogin()" class="absolute top-4 right-4 text-gray-400 hover:text-theme-hotpink transition-colors hover-target p-2">
                 <i class="ph ph-x text-xl md:text-2xl"></i>
@@ -869,7 +867,8 @@
         };
 
         let appState = { ...defaultState };
-        let lastRenderedState = {}; // เพิ่มตัวแปรเก็บสถานะการ Render ล่าสุด ป้องกันการวาดทับของเดิม
+        let editingState = { match: null, event: null, news: null, res: null, team: null, ann: null, rec: null };
+        let lastRenderedState = {}; // ตัวแปรเก็บสถานะการ Render ล่าสุด ป้องกันการวาดทับและแอนิเมชันกระตุก
 
         const userConfig = {
             apiKey: "AIzaSyAcWAIojT_gN9ybDolegZ6L9PJk5JYh0U0",
@@ -978,7 +977,6 @@
             if(document.getElementById('fdb-category')) document.getElementById('fdb-category').innerHTML = `<option value="" disabled selected>-- เลือกหมวดหมู่ --</option>` + fdbCats.map(c => `<option value="${c}">${c}</option>`).join('');
         };
 
-        // Navigation แบบหน้าเดียว (Single Page Smooth Scrolling)
         window.navigateTo = function(pageId) {
             if (window.isMobileMenuOpen) window.toggleMobileMenu();
             const targetId = pageId === 'home' ? 'section-hero' : (pageId === 'calendar-news' ? 'section-calendar' : `section-${pageId}`);
@@ -1022,11 +1020,11 @@
 
         function renderPublicMatchResults() {
             const stateKey = JSON.stringify(appState.matchResults) + window.currentMatchFilter;
-            if (lastRenderedState.mr === stateKey) return; // ถ้าข้อมูลไม่เปลี่ยน ข้ามการวาดใหม่
+            if (lastRenderedState.mr === stateKey) return; 
             lastRenderedState.mr = stateKey;
 
             const grid = document.getElementById('pub-match-results-grid'); if(!grid) return; 
-            grid.classList.remove('gs-animated'); // ลบป้ายบอกสถานะ เพื่อให้ GSAP จับของใหม่
+            grid.classList.remove('gs-animated'); 
             grid.innerHTML = '';
             let arr = (appState.matchResults || []).filter(r => r.type === window.currentMatchFilter);
             if(arr.length === 0) { grid.innerHTML = `<div class="col-span-full text-center text-gray-400 py-8 bg-gray-50 rounded-2xl text-sm border border-gray-100">ยังไม่มีข้อมูลในหมวดหมู่นี้</div>`; return; }
@@ -1096,8 +1094,8 @@
             document.querySelectorAll('#pub-news-grid').forEach(grid => {
                 grid.classList.remove('gs-animated');
                 grid.innerHTML = ''; const news = filter === 'all' ? appState.news : appState.news.filter(n => n.category === filter);
-                if(news.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-white rounded-3xl border border-gray-100 text-sm">ยังไม่มีข่าวสาร</div>'; return; }
-                news.slice().reverse().forEach(n => { grid.innerHTML += `<div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group gs-stagger-item"><div class="aspect-video bg-gray-100 relative overflow-hidden"><img src="${n.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"><div class="absolute top-3 left-3 bg-white/90 backdrop-blur text-theme-hotpink text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">${n.category}</div></div><div class="p-5 md:p-6"><h4 class="font-bold text-lg mb-2 text-theme-text line-clamp-2 group-hover:text-theme-hotpink transition-colors">${n.title}</h4><p class="text-sm text-gray-500 line-clamp-2">${n.excerpt}</p></div></div>`; });
+                if(news.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-white rounded-3xl border border-gray-100 text-sm"><i class="ph-fill ph-ghost text-4xl text-gray-200 mb-2 block"></i>ยังไม่มีข่าวสาร</div>'; return; }
+                news.slice().reverse().forEach(n => { grid.innerHTML += `<div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group gs-stagger-item"><div class="aspect-video bg-gray-100 relative overflow-hidden"><img src="${n.image}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"><div class="absolute top-3 left-3 bg-white/90 backdrop-blur text-theme-hotpink text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">${n.category}</div></div><div class="p-5 md:p-6"><h4 class="font-bold text-lg mb-2 text-theme-text line-clamp-2 group-hover:text-theme-hotpink transition-colors">${n.title}</h4><p class="text-sm text-gray-500 font-light line-clamp-2">${n.excerpt}</p></div></div>`; });
             });
         }
 
@@ -1114,9 +1112,9 @@
             document.querySelectorAll('#pub-res-grid').forEach(grid => {
                 grid.classList.remove('gs-animated');
                 grid.innerHTML = ''; const resList = filter === 'all' ? appState.resources : appState.resources.filter(n => n.category === filter);
-                if(resList.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-white rounded-3xl border border-gray-100 text-sm">ยังไม่มีไฟล์</div>'; return; }
+                if(resList.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-white rounded-3xl border border-gray-100 text-sm"><i class="ph-fill ph-ghost text-4xl text-gray-200 mb-2 block"></i>ยังไม่มีไฟล์</div>'; return; }
                 resList.slice().reverse().forEach(res => {
-                    let media = res.type === 'image' ? `<div class="aspect-video bg-gray-100 overflow-hidden"><img src="${res.url}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div>` : `<div class="aspect-video bg-gray-50 flex flex-col items-center justify-center text-gray-300 group-hover:bg-theme-pink/10 transition-colors"><i class="ph-fill ph-link text-5xl mb-2"></i></div>`;
+                    let media = res.type === 'image' ? `<div class="aspect-video bg-gray-100 overflow-hidden"><img src="${res.url}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div>` : `<div class="aspect-video bg-gray-50 flex flex-col items-center justify-center text-gray-300 group-hover:bg-theme-pink/10 transition-colors"><i class="ph-fill ph-link text-5xl mb-2"></i></div>`;
                     grid.innerHTML += `<div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group gs-stagger-item flex flex-col">${media}<div class="p-5 flex flex-col flex-grow"><span class="text-xs font-bold text-theme-hotpink mb-2">${res.category}</span><h4 class="font-bold text-base mb-4 text-theme-text line-clamp-2 group-hover:text-theme-hotpink transition-colors">${res.title}</h4><a href="${res.url}" target="_blank" class="mt-auto inline-flex items-center space-x-2 text-theme-text text-sm font-bold bg-gray-50 py-2 px-4 rounded-xl hover:bg-theme-pink/20 w-fit"><span>${res.type === 'image' ? 'ดูรูป' : 'เปิดดู'}</span><i class="ph-bold ph-arrow-up-right"></i></a></div></div>`;
                 });
             });
@@ -1135,10 +1133,10 @@
             document.querySelectorAll('#pub-team-grid').forEach(grid => {
                 grid.classList.remove('gs-animated');
                 grid.innerHTML = ''; const list = filter === 'all' ? appState.teamMembers : appState.teamMembers.filter(n => n.department === filter);
-                if(list.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-white rounded-3xl border border-gray-100 text-sm">ยังไม่มีข้อมูล</div>'; return; }
+                if(list.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-white rounded-3xl border border-gray-100 text-sm"><i class="ph-fill ph-ghost text-4xl text-gray-200 mb-2 block"></i>ยังไม่มีข้อมูลทีมงาน</div>'; return; }
                 list.forEach(m => {
                     let contact = m.contact ? `<a href="#" class="inline-flex items-center text-theme-hotpink text-xs font-bold mt-2"><i class="ph-fill ph-instagram-logo mr-1"></i> ${m.contact}</a>` : '';
-                    grid.innerHTML += `<div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 gs-stagger-item group"><div class="aspect-square bg-gray-100 animate-pulse overflow-hidden"><img src="${m.image}" loading="lazy" onload="this.parentElement.classList.remove('animate-pulse')" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div><div class="p-3 text-center"><h4 class="font-bold text-sm text-theme-text truncate">${m.name}</h4><p class="text-xs text-gray-500 mt-1 truncate">${m.role}</p>${contact}</div></div>`;
+                    grid.innerHTML += `<div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 gs-stagger-item group"><div class="aspect-square bg-gray-100 overflow-hidden"><img src="${m.image}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div><div class="p-3 text-center"><h4 class="font-bold text-sm text-theme-text truncate">${m.name}</h4><p class="text-xs text-gray-500 mt-1 truncate">${m.role}</p>${contact}</div></div>`;
                 });
             });
         }
@@ -1150,8 +1148,8 @@
 
             document.querySelectorAll('#pub-recruitment-grid').forEach(grid => {
                 grid.classList.remove('gs-animated');
-                grid.innerHTML = ''; if(appState.recruitments.length === 0) return;
-                appState.recruitments.forEach(rec => { grid.innerHTML += `<div class="bg-white p-6 md:p-8 rounded-3xl hover:-translate-y-1 hover:shadow-xl transition-all duration-300 gs-stagger-item group border border-gray-100 flex flex-col h-full"><div class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-theme-pink/20 transition-colors shrink-0"><i class="ph-fill ${rec.icon} text-2xl text-gray-700 group-hover:text-theme-hotpink transition-colors"></i></div><h4 class="text-xl font-bold text-theme-text mb-2">${rec.title}</h4><p class="text-gray-500 text-sm mb-4 line-clamp-2 flex-grow">${rec.desc}</p><a href="${rec.link}" target="_blank" class="mt-auto inline-flex items-center space-x-2 text-theme-text text-sm font-bold group-hover:text-theme-hotpink"><span>สมัคร</span><i class="ph-bold ph-arrow-right"></i></a></div>`; });
+                grid.innerHTML = ''; if(appState.recruitments.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10"><i class="ph-fill ph-ghost text-4xl text-gray-300 mb-2 block"></i>ยังไม่มีการรับสมัครในขณะนี้</div>'; return;}
+                appState.recruitments.forEach(rec => { grid.innerHTML += `<div class="bg-white p-6 md:p-8 rounded-3xl hover:-translate-y-1 hover:shadow-xl transition-all duration-300 gs-stagger-item group border border-gray-100 flex flex-col h-full"><div class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-theme-pink/20 transition-colors shrink-0"><i class="ph-fill ${rec.icon} text-2xl text-gray-700 group-hover:text-theme-hotpink transition-colors"></i></div><h4 class="text-xl font-bold text-theme-text mb-2">${rec.title}</h4><p class="text-gray-500 font-light text-sm mb-4 line-clamp-2 flex-grow">${rec.desc}</p><a href="${rec.link}" target="_blank" class="mt-auto inline-flex items-center space-x-2 text-theme-text text-sm font-bold group-hover:text-theme-hotpink"><span>สมัคร</span><i class="ph-bold ph-arrow-right"></i></a></div>`; });
             });
         }
 
@@ -1162,7 +1160,7 @@
 
             document.querySelectorAll('#pub-announcements-grid').forEach(grid => {
                 grid.classList.remove('gs-animated');
-                grid.innerHTML = ''; if(appState.announcements.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-gray-50 rounded-3xl text-sm">ไม่มีประกาศด่วน</div>'; return; }
+                grid.innerHTML = ''; if(appState.announcements.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-gray-50 rounded-3xl text-sm"><i class="ph-fill ph-ghost text-4xl text-gray-300 mb-2 block"></i>ไม่มีประกาศด่วน</div>'; return; }
                 appState.announcements.slice().reverse().forEach(ann => { grid.innerHTML += `<div class="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-200 hover:shadow-xl transition-all duration-300 gs-stagger-item"><div class="bg-red-50 text-red-500 text-xs font-bold px-2 py-1.5 rounded-md inline-flex items-center mb-3"><i class="ph-fill ph-warning-circle mr-1"></i> ${ann.date}</div><h4 class="text-lg font-bold text-theme-text mb-2">${ann.title}</h4><p class="text-theme-muted font-light text-sm leading-relaxed">${ann.content}</p></div>`; });
             });
         }
