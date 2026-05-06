@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SUKHOTHAI | คณะสีสุโขทัย 2569</title>
     
+    <!-- ยืนยันตัวตน Google Search Console -->
+    <meta name="google-site-verification" content="Cx8d5o1eoUbVascbP0CD9103lJ-HzlFrecoPsba5zxk" />
+    
+    <!-- SEO พื้นฐาน (ช่วยให้กูเกิลหาเจอง่ายขึ้น) -->
+    <meta name="description" content="เว็บไซต์อย่างเป็นทางการของคณะสีสุโขทัย (สีชมพู) ปี 2569 ติดตามคะแนน ข่าวสาร และกิจกรรมการแข่งขันกีฬาสีได้ที่นี่">
+    <meta name="keywords" content="สุโขทัย, สีชมพู, กีฬาสี 2569, คณะสี, SUKHOTHAI">
+    
     <!-- Google Fonts: Inter, Noto Sans Thai & Prompt -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -868,7 +875,7 @@
 
         let appState = { ...defaultState };
         let editingState = { match: null, event: null, news: null, res: null, team: null, ann: null, rec: null };
-        let lastRenderedState = {}; // ตัวแปรเก็บสถานะการ Render ล่าสุด ป้องกันการวาดทับและแอนิเมชันกระตุก
+        let lastRenderedState = {}; 
 
         const userConfig = {
             apiKey: "AIzaSyAcWAIojT_gN9ybDolegZ6L9PJk5JYh0U0",
@@ -914,7 +921,6 @@
 
         initAuth().then(() => {
             onSnapshot(stateRef, (docSnap) => {
-                // ตัวช่วยแปลงข้อมูลที่พังเป็น Object ให้กลับมาเป็น Array ป้องกันการพังเงียบๆ
                 const ensureArr = (arr) => Array.isArray(arr) ? arr : Object.values(arr || []);
                 
                 if (docSnap.exists()) {
@@ -1384,7 +1390,7 @@
             }
             if(cancelBtn) cancelBtn.classList.remove('hidden');
 
-            // เลื่อนหน้าจอเฉพาะในส่วนของ Admin (ไม่ใช่หน้าจอหลัก)
+            // เลื่อนหน้าจอเฉพาะในส่วนของ Admin
             const adminMain = document.querySelector('#admin-view main');
             if(adminMain) adminMain.scrollTo({top: 0, behavior: 'smooth'});
         };
@@ -1457,7 +1463,7 @@
             }
             if(type === 'score') appState.score.total = (parseInt(appState.score.total) || 0) + parseInt(reward);
             else { if(reward === 'gold') appState.medals.gold++; if(reward === 'silver') appState.medals.silver++; if(reward === 'bronze') appState.medals.bronze++; }
-            window.cancelEditMode('match', 'บันทึกผล', 'mr-title'); // รีเซ็ตฟอร์ม+ปุ่มอัตโนมัติ
+            window.cancelEditMode('match', 'บันทึกผล', 'mr-title'); 
             saveState(); renderAdminMatchResults();
         };
         window.deleteMatchResult = function(id) { 
@@ -1573,7 +1579,7 @@
                 const item = appState.news.find(i => String(i.id) === editingState.news);
                 if(item) { item.category = document.getElementById('nw-cat').value; item.title = document.getElementById('nw-title').value; item.excerpt = document.getElementById('nw-excerpt').value; if(url) item.image = url; }
             } else {
-                if(!url) { b.disabled=false; showToast('กรุณาอัปโหลดรูปภาพ'); return; }
+                if(!url) { b.disabled=false; b.innerHTML='โพสต์ข่าว'; showToast('กรุณาอัปโหลดรูปภาพ'); return; }
                 appState.news.push({ id: Date.now().toString(), category: document.getElementById('nw-cat').value, title: document.getElementById('nw-title').value, excerpt: document.getElementById('nw-excerpt').value, image: url }); 
             }
             b.disabled = false;
@@ -1603,7 +1609,7 @@
                 const item = appState.resources.find(i => String(i.id) === editingState.res);
                 if(item) { item.category = document.getElementById('res-cat').value; item.title = document.getElementById('res-title').value; item.type = t; if(url) item.url = url; }
             } else {
-                if(t === 'image' && !url) { b.disabled=false; showToast('กรุณาอัปโหลดรูปภาพ'); return; }
+                if(t === 'image' && !url) { b.disabled=false; b.innerHTML='บันทึกสื่อ'; showToast('กรุณาอัปโหลดรูปภาพ'); return; }
                 appState.resources.push({ id: Date.now().toString(), category: document.getElementById('res-cat').value, title: document.getElementById('res-title').value, type: t, url }); 
             }
             b.disabled = false;
@@ -1631,7 +1637,7 @@
                 const item = appState.teamMembers.find(i => String(i.id) === editingState.team);
                 if(item) { item.department = document.getElementById('team-dept').value; item.name = document.getElementById('team-name').value; item.role = document.getElementById('team-role').value; item.contact = document.getElementById('team-contact').value; if(url) item.image = url; }
             } else {
-                if(!url) { b.disabled=false; showToast('กรุณาอัปโหลดรูปภาพ'); return; }
+                if(!url) { b.disabled=false; b.innerHTML='บันทึกทีมงาน'; showToast('กรุณาอัปโหลดรูปภาพ'); return; }
                 appState.teamMembers.push({ id: Date.now().toString(), department: document.getElementById('team-dept').value, name: document.getElementById('team-name').value, role: document.getElementById('team-role').value, contact: document.getElementById('team-contact').value, image: url }); 
             }
             b.disabled = false;
@@ -1701,26 +1707,24 @@
         }
 
         function initGsapTriggers() {
-            // ไม่ต้อง kill() ทั้งหมดแล้ว เพื่อรักษาแอนิเมชันของส่วนที่ไม่ได้อัปเดต
             setTimeout(() => {
-                // หาเฉพาะ elements ที่ยังไม่เคยโดนทำแอนิเมชัน (ไม่มีคลาส gs-animated)
                 const reveals = gsap.utils.toArray('section:not(.hidden) .gs-reveal:not(.gs-animated)');
                 reveals.forEach(el => { 
-                    el.classList.add('gs-animated'); // แปะป้ายว่าโดนแล้ว
+                    el.classList.add('gs-animated'); 
                     gsap.set(el, { clearProps: "all" }); 
                     gsap.fromTo(el, { y: 30, autoAlpha: 0 }, { scrollTrigger: { trigger: el, start: "top 90%" }, y: 0, autoAlpha: 1, duration: 0.8, ease: "power3.out", overwrite: "auto" }); 
                 });
                 
                 const groups = gsap.utils.toArray('section:not(.hidden) .gs-stagger-group:not(.gs-animated)');
                 groups.forEach(g => { 
-                    g.classList.add('gs-animated'); // แปะป้ายที่กล่องแม่
+                    g.classList.add('gs-animated'); 
                     const items = g.querySelectorAll('.gs-stagger-item'); 
                     if(items.length) { 
                         gsap.set(items, { clearProps: "all" }); 
                         gsap.fromTo(items, { y: 40, autoAlpha: 0, scale: 0.95 }, { scrollTrigger: { trigger: g, start: "top 85%" }, y: 0, autoAlpha: 1, scale: 1, stagger: 0.1, duration: 0.8, ease: "power4.out", overwrite: "auto" }); 
                     } 
                 });
-                ScrollTrigger.refresh(); // ให้ GSAP คำนวณความสูงใหม่
+                ScrollTrigger.refresh(); 
             }, 50);
         }
 
