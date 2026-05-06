@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SUKHOTHAI | คณะสีสุโขทัย 2569</title>
+    
+    <!-- Google Fonts: Inter, Noto Sans Thai & Prompt -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Noto+Sans+Thai:wght@300;400;500;600;700;800;900&family=Prompt:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        theme: {
+                            bg: '#FFF9F5',
+                            text: '#1F1F1F',
+                            muted: '#555555',
+                            pink: '#FFB6C1',
+                            hotpink: '#FF69B4',
+                            gold: '#FFD700',
+                            silver: '#C0C0C0',
+                            bronze: '#CD7F32'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans Thai', 'sans-serif'],
+                        marquee: ['Inter', 'Prompt', 'sans-serif'],
+                    },
+                    animation: {
+                        'marquee': 'marquee 25s linear infinite',
+                        'loading-bar': 'loading-bar 1.5s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        },
+                        'loading-bar': {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(100%)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS -->
+    <style>
+        body { background-color: #FFF9F5; color: #1F1F1F; overflow-x: hidden; }
+        
+        /* Custom Cursor */
+        .cursor-dot {
+            position: fixed; top: 0; left: 0; width: 12px; height: 12px;
+            background-color: #FF69B4; border-radius: 50%; pointer-events: none;
+            z-index: 99999; transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
+            mix-blend-mode: multiply;
+            display: none;
+        }
+        
+        @media (pointer: fine) { 
+            body, a, button, input, textarea, select { cursor: none; } 
+            .cursor-dot { display: block; }
+        }
+
+        .cursor-dot.hovered { width: 48px; height: 48px; background-color: #FFB6C1; opacity: 0.5; }
+
+        /* Hide scrollbar but keep functionality */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #FFF9F5; }
+        ::-webkit-scrollbar-thumb { background: #FFB6C1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #FF69B4; }
+        
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Utility classes */
+        .glass-panel { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,105,180,0.15); }
+        .hide { display: none !important; }
+        
+        /* Toast Notification */
+        #toast {
+            position: fixed; bottom: 20px; right: 20px; z-index: 100000;
+            transform: translateY(100px); opacity: 0; transition: all 0.3s ease;
+        }
+        #toast.show { transform: translateY(0); opacity: 1; }
+
+        /* Text Outline & Gradient */
+        .text-outline { color: transparent; -webkit-text-stroke: 1px rgba(255, 105, 180, 0.4); }
+        .text-gradient-pink { background: linear-gradient(135deg, #FF69B4, #FFB6C1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* Filter buttons active state */
+        .filter-btn.active { background-color: #FF69B4; color: white; border-color: #FF69B4; }
+
+        /* Form Inputs (Prevent iOS Zoom) */
+        input[type="text"], input[type="number"], input[type="password"], input[type="datetime-local"], input[type="url"], select, textarea {
+            font-size: 16px !important;
+        }
+
+        /* Marquee Animation Custom CSS */
+        @keyframes scroll-marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
+        .animate-marquee-css { display: flex; width: max-content; animation: scroll-marquee 20s linear infinite; }
+    </style>
+</head>
+<body class="antialiased font-sans selection:bg-theme-pink selection:text-white">
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+
+    <!-- Preloader (Premium & Minimalist) -->
+    <div id="preloader" class="fixed inset-0 bg-white z-[999999] flex flex-col items-center justify-center transition-opacity duration-700">
+        <div class="flex flex-col items-center">
+            <h1 class="text-2xl md:text-3xl tracking-[0.2em] md:tracking-[0.3em] uppercase mb-6 flex items-center">
+                <span class="text-gray-900 font-black">SUKHO</span><span class="text-gray-400 font-light">THAI</span>
+            </h1>
+            <div class="w-48 md:w-64 h-[2px] bg-gray-100 relative overflow-hidden rounded-full">
+                <div class="absolute top-0 left-0 h-full bg-gradient-to-r from-theme-pink to-theme-hotpink w-full origin-left animate-loading-bar rounded-full"></div>
+            </div>
+            <p class="mt-6 text-xs font-bold text-gray-400 tracking-[0.3em] uppercase animate-pulse">Loading</p>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="bg-theme-text text-white px-6 py-3 rounded-lg shadow-2xl flex items-center space-x-3">
+        <i class="ph ph-check-circle text-theme-hotpink text-xl"></i>
+        <span id="toast-msg" class="font-medium">บันทึกข้อมูลสำเร็จ</span>
+    </div>
+
+    <!-- ================= PUBLIC VIEW ================= -->
+    <div id="public-view" class="transition-opacity duration-500 block">
+        
+        <!-- Navigation -->
+        <nav class="fixed w-full z-50 transition-all duration-300 glass-panel border-b-0 py-3 md:py-4" id="navbar">
+            <div class="max-w-7xl mx-auto px-4 md:px-12 flex justify-between items-center">
+                <div class="flex flex-col">
+                    <a href="#" onclick="navigateTo('home'); return false;" class="text-xl md:text-2xl font-bold tracking-tight text-theme-text hover-target uppercase">
+                        SUKHOTHAI<span class="text-theme-hotpink">.</span>
+                    </a>
+                    <span id="pub-team-desc" class="text-xs md:text-sm text-theme-hotpink font-medium tracking-wider truncate max-w-[200px] md:max-w-none">สีชมพู: อ่อนโยนแต่ไม่อ่อนแอ</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden xl:flex items-center space-x-5 lg:space-x-6">
+                    <a href="#" onclick="navigateTo('home'); return false;" class="text-sm font-medium hover:text-theme-hotpink transition hover-target">หน้าแรก</a>
+                    <a href="#" onclick="navigateTo('scores'); return false;" class="text-sm font-medium hover:text-theme-hotpink transition hover-target">คะแนนรวม</a>
+                    <a href="#" onclick="navigateTo('announcements'); return false;" class="text-sm font-medium hover:text-theme-hotpink transition hover-target">ประกาศด่วน</a>
+                    <a href="#" onclick="navigateTo('recruitment'); return false;" class="text-sm font-medium hover:text-theme-hotpink transition hover-target">รับสมัคร</a>
+                    <a href="#" onclick="navigateTo('calendar-news'); return false;" class="text-sm font-medium hover:text-theme-hotpink transition hover-target">กิจกรรม/ข่าวสาร</a>
+                    <a href="#" onclick="navigateTo('resources'); return false;" class="text-sm font-medium hover:text-theme-hotpink transition hover-target">สื่อฝึกซ้อม</a>
+                    <a href="#" onclick="navigateTo('team'); return false;" class="text-sm font-medium hover:text-theme-hotpink transition hover-target">ทำเนียบทีมงาน</a>
+                    <a href="#" onclick="navigateTo('feedback'); return false;" class="text-sm font-medium hover:text-theme-hotpink transition hover-target">ข้อเสนอแนะ</a>
+                    <button onclick="showLogin()" class="hover-target flex items-center justify-center w-10 h-10 rounded-full bg-theme-pink/20 hover:bg-theme-hotpink hover:text-white transition-colors duration-300 group">
+                        <i class="ph ph-user text-lg text-theme-hotpink group-hover:text-white transition-colors"></i>
+                    </button>
+                </div>
+
+                <div class="flex xl:hidden items-center space-x-3">
+                    <button onclick="showLogin()" class="flex items-center justify-center w-9 h-9 rounded-full bg-theme-pink/20 text-theme-hotpink hover-target">
+                        <i class="ph ph-user"></i>
+                    </button>
+                    <button onclick="toggleMobileMenu()" class="text-2xl text-theme-text p-1 hover-target">
+                        <i class="ph ph-list" id="mobile-menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="fixed inset-0 bg-white/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center space-y-6 opacity-0 pointer-events-none transition-opacity duration-300 overflow-y-auto py-10">
+            <a href="#" onclick="navigateTo('home'); return false;" class="text-2xl font-bold text-theme-text hover:text-theme-hotpink hover-target">หน้าแรก</a>
+            <a href="#" onclick="navigateTo('scores'); return false;" class="text-2xl font-bold text-theme-text hover:text-theme-hotpink hover-target">คะแนนและเหรียญรางวัล</a>
+            <a href="#" onclick="navigateTo('announcements'); return false;" class="text-2xl font-bold text-theme-text hover:text-theme-hotpink hover-target">ประกาศด่วน</a>
+            <a href="#" onclick="navigateTo('recruitment'); return false;" class="text-2xl font-bold text-theme-text hover:text-theme-hotpink hover-target">การรับสมัคร</a>
+            <a href="#" onclick="navigateTo('calendar-news'); return false;" class="text-2xl font-bold text-theme-text hover:text-theme-hotpink hover-target">กิจกรรมและข่าวสาร</a>
+            <a href="#" onclick="navigateTo('resources'); return false;" class="text-2xl font-bold text-theme-text hover:text-theme-hotpink hover-target">สื่อฝึกซ้อม/แหล่งรวมไฟล์</a>
+            <a href="#" onclick="navigateTo('team'); return false;" class="text-2xl font-bold text-theme-text hover:text-theme-hotpink hover-target">ทำเนียบทีมงาน</a>
+            <a href="#" onclick="navigateTo('feedback'); return false;" class="text-2xl font-bold text-theme-text hover:text-theme-hotpink hover-target">ข้อเสนอแนะ / แจ้งปัญหา</a>
+        </div>
+
+        <!-- ================= CONTENT SECTIONS ================= -->
+        <main id="main-content" class="transition-opacity duration-300">
+            
+            <!-- SECTION: HERO -->
+            <section id="section-hero" class="relative min-h-[90vh] md:min-h-screen flex flex-col items-center justify-center pt-28 pb-12 overflow-hidden px-4">
+                <div class="hero-blob absolute top-[10%] left-[5%] md:left-[10%] w-[200px] md:w-[300px] h-[200px] md:h-[300px] bg-theme-pink/40 rounded-full mix-blend-multiply blur-[60px] md:blur-[80px]"></div>
+                <div class="hero-blob absolute bottom-[10%] right-[5%] md:right-[10%] w-[250px] md:w-[400px] h-[250px] md:h-[400px] bg-[#FFE4E1]/60 rounded-full mix-blend-multiply blur-[80px] md:blur-[100px]"></div>
+                <div class="hero-blob absolute top-[40%] left-[50%] w-[150px] md:w-[250px] h-[150px] md:h-[250px] bg-theme-hotpink/20 rounded-full mix-blend-multiply blur-[60px] md:blur-[90px]"></div>
+                
+                <div class="relative z-10 text-center w-full max-w-5xl mx-auto">
+                    <h1 id="pub-hero-title" class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[1.1] mb-4 md:mb-6 gs-reveal uppercase bg-gradient-to-br from-gray-900 via-gray-800 to-gray-500 text-transparent bg-clip-text">
+                        SUKHOTHAI
+                    </h1>
+                    <p id="pub-hero-subtitle" class="text-base sm:text-lg md:text-xl text-gray-500 max-w-2xl mx-auto mb-10 md:mb-16 font-light tracking-wide gs-reveal px-4 leading-relaxed">
+                        ร่วมเป็นส่วนหนึ่งในตำนานสีชมพู ปลุกพลังความสามัคคี สู่ชัยชนะที่ยิ่งใหญ่
+                    </p>
+
+                    <!-- Countdown Timer -->
+                    <div class="grid grid-cols-4 gap-2 md:gap-8 max-w-4xl mx-auto gs-stagger-group px-2">
+                        <div class="glass-panel p-3 md:p-6 rounded-2xl md:rounded-3xl shadow-sm gs-stagger-item">
+                            <div id="cd-days" class="text-3xl md:text-6xl font-black text-theme-hotpink">00</div>
+                            <div class="text-xs md:text-sm text-gray-500 font-medium mt-1 md:mt-2 tracking-wider">วัน</div>
+                        </div>
+                        <div class="glass-panel p-3 md:p-6 rounded-2xl md:rounded-3xl shadow-sm gs-stagger-item">
+                            <div id="cd-hours" class="text-3xl md:text-6xl font-black text-theme-hotpink">00</div>
+                            <div class="text-xs md:text-sm text-gray-500 font-medium mt-1 md:mt-2 tracking-wider">ชั่วโมง</div>
+                        </div>
+                        <div class="glass-panel p-3 md:p-6 rounded-2xl md:rounded-3xl shadow-sm gs-stagger-item">
+                            <div id="cd-minutes" class="text-3xl md:text-6xl font-black text-theme-hotpink">00</div>
+                            <div class="text-xs md:text-sm text-gray-500 font-medium mt-1 md:mt-2 tracking-wider">นาที</div>
+                        </div>
+                        <div class="glass-panel p-3 md:p-6 rounded-2xl md:rounded-3xl shadow-sm gs-stagger-item relative overflow-hidden">
+                            <div id="cd-seconds" class="relative z-10 text-3xl md:text-6xl font-black text-theme-text">00</div>
+                            <div class="relative z-10 text-xs md:text-sm text-gray-500 font-medium mt-1 md:mt-2 tracking-wider">วินาที</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: MARQUEE -->
+            <div id="section-marquee" class="w-full overflow-hidden bg-theme-text py-3 md:py-4 flex relative border-y border-theme-hotpink/30 shadow-[0_0_20px_rgba(255,105,180,0.2)]">
+                <div class="animate-marquee-css flex items-center space-x-6 md:space-x-8 text-xl md:text-4xl font-black uppercase tracking-widest pl-6 whitespace-nowrap font-marquee">
+                    <span class="text-theme-hotpink mq-1">SUKHOTHAI 2569</span><span class="text-outline mq-2">PINK TEAM</span><span class="text-white mq-3">SPIRIT & UNITY</span><span class="text-outline mq-4">WE ARE THE CHAMPIONS</span><i class="ph-fill ph-star text-theme-hotpink"></i>
+                    <span class="text-theme-hotpink mq-1">SUKHOTHAI 2569</span><span class="text-outline mq-2">PINK TEAM</span><span class="text-white mq-3">SPIRIT & UNITY</span><span class="text-outline mq-4">WE ARE THE CHAMPIONS</span><i class="ph-fill ph-star text-theme-hotpink"></i>
+                    <span class="text-theme-hotpink mq-1">SUKHOTHAI 2569</span><span class="text-outline mq-2">PINK TEAM</span><span class="text-white mq-3">SPIRIT & UNITY</span><span class="text-outline mq-4">WE ARE THE CHAMPIONS</span><i class="ph-fill ph-star text-theme-hotpink"></i>
+                    <span class="text-theme-hotpink mq-1">SUKHOTHAI 2569</span><span class="text-outline mq-2">PINK TEAM</span><span class="text-white mq-3">SPIRIT & UNITY</span><span class="text-outline mq-4">WE ARE THE CHAMPIONS</span><i class="ph-fill ph-star text-theme-hotpink"></i>
+                </div>
+            </div>
+
+            <!-- SECTION: SCORES -->
+            <section id="section-scores" class="py-16 md:py-24 bg-white relative transition-all duration-500">
+                <div class="max-w-7xl mx-auto px-4 md:px-12">
+                    <div class="text-center mb-10 md:mb-16 gs-reveal">
+                        <h2 class="text-xs md:text-sm font-bold tracking-widest text-gray-500 mb-2 uppercase">Scoreboard</h2>
+                        <h3 class="text-3xl md:text-5xl font-bold tracking-tight text-theme-text">สรุปคะแนนและเหรียญรางวัล</h3>
+                    </div>
+
+                    <div class="flex flex-col gap-6 md:gap-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 gs-stagger-group">
+                            <div class="bg-gradient-to-br from-theme-pink/10 to-white border border-theme-pink/30 rounded-3xl p-6 md:p-10 text-center shadow-md gs-stagger-item">
+                                <div class="flex items-center justify-center space-x-2 mb-2">
+                                    <i class="ph-fill ph-star text-2xl md:text-3xl text-theme-hotpink"></i>
+                                    <div class="text-theme-text font-bold md:text-lg">คะแนนรวมสุโขทัย</div>
+                                </div>
+                                <div class="pub-total-score text-5xl sm:text-7xl font-black text-theme-hotpink tracking-tighter">0</div>
+                                <div class="mt-1 text-theme-text font-bold text-xs tracking-widest uppercase">Total Points</div>
+                            </div>
+                            <div class="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-3xl p-6 md:p-10 text-center shadow-md gs-stagger-item">
+                                <div class="flex items-center justify-center space-x-2 mb-2">
+                                    <i class="ph-fill ph-trophy text-2xl md:text-3xl text-gray-700"></i>
+                                    <div class="text-gray-700 font-bold md:text-lg">รวมเหรียญรางวัลทั้งหมด</div>
+                                </div>
+                                <div class="pub-total-medals text-5xl sm:text-7xl font-black text-gray-800 tracking-tighter">0</div>
+                                <div class="mt-1 text-gray-500 font-bold text-xs tracking-widest uppercase">Total Medals</div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-2 md:gap-6 mt-2 md:mt-4 gs-stagger-group">
+                            <div class="bg-white border border-gray-200 shadow-sm rounded-2xl md:rounded-3xl p-4 md:p-8 flex flex-col items-center justify-center gs-stagger-item">
+                                <div class="w-10 h-10 md:w-16 md:h-16 rounded-full bg-theme-gold/10 flex items-center justify-center mb-2 md:mb-4 border border-theme-gold/30">
+                                    <i class="ph-fill ph-medal text-2xl md:text-4xl text-theme-gold"></i>
+                                </div>
+                                <div class="pub-medal-gold text-3xl md:text-5xl font-black text-theme-text">0</div>
+                                <div class="text-xs md:text-sm font-medium text-gray-500 mt-1 md:mt-2">ทอง</div>
+                            </div>
+                            <div class="bg-white border border-gray-200 shadow-sm rounded-2xl md:rounded-3xl p-4 md:p-8 flex flex-col items-center justify-center gs-stagger-item">
+                                <div class="w-10 h-10 md:w-16 md:h-16 rounded-full bg-theme-silver/10 flex items-center justify-center mb-2 md:mb-4 border border-theme-silver/30">
+                                    <i class="ph-fill ph-medal text-2xl md:text-4xl text-theme-silver"></i>
+                                </div>
+                                <div class="pub-medal-silver text-3xl md:text-5xl font-black text-theme-text">0</div>
+                                <div class="text-xs md:text-sm font-medium text-gray-500 mt-1 md:mt-2">เงิน</div>
+                            </div>
+                            <div class="bg-white border border-gray-200 shadow-sm rounded-2xl md:rounded-3xl p-4 md:p-8 flex flex-col items-center justify-center gs-stagger-item">
+                                <div class="w-10 h-10 md:w-16 md:h-16 rounded-full bg-theme-bronze/10 flex items-center justify-center mb-2 md:mb-4 border border-theme-bronze/30">
+                                    <i class="ph-fill ph-medal text-2xl md:text-4xl text-theme-bronze"></i>
+                                </div>
+                                <div class="pub-medal-bronze text-3xl md:text-5xl font-black text-theme-text">0</div>
+                                <div class="text-xs md:text-sm font-medium text-gray-500 mt-1 md:mt-2">ทองแดง</div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 pt-8 border-t border-gray-100 gs-reveal">
+                            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 sm:mb-6">
+                                <h4 class="text-xl md:text-2xl font-bold text-gray-800">ผลการแข่งขันจากทุกประเภทกีฬา</h4>
+                                <div class="flex gap-1 bg-gray-100 p-1.5 rounded-full mb-4 sm:mb-0 shadow-inner">
+                                    <button onclick="window.filterMatchResults('score')" id="btn-filter-score" class="px-5 py-2 rounded-full text-xs md:text-sm font-bold bg-theme-hotpink text-white shadow-sm transition hover-target">คะแนนที่ได้รับ</button>
+                                    <button onclick="window.filterMatchResults('medal')" id="btn-filter-medal" class="px-5 py-2 rounded-full text-xs md:text-sm font-bold text-gray-500 hover:text-gray-800 transition hover-target">เหรียญรางวัล</button>
+                                </div>
+                            </div>
+                            <div id="pub-match-results-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 gs-stagger-group">
+                                <!-- JS injected -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: ANNOUNCEMENTS -->
+            <section id="section-announcements" class="py-16 md:py-24 bg-theme-bg border-y border-gray-100 transition-all duration-500">
+                <div class="max-w-7xl mx-auto px-4 md:px-12">
+                    <div class="flex items-center mb-8 md:mb-12 gs-reveal">
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-red-50 rounded-full flex items-center justify-center mr-3 md:mr-4 shrink-0 border border-red-100">
+                            <i class="ph-fill ph-bell-ringing text-2xl md:text-3xl text-red-500 animate-bounce"></i>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl font-bold tracking-tight text-theme-text">ประกาศด่วน</h3>
+                    </div>
+                    <div id="pub-announcements-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 gs-stagger-group">
+                        <!-- Cards injected by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: RECRUITMENT -->
+            <section id="section-recruitment" class="py-16 md:py-24 bg-white relative overflow-hidden border-b border-gray-100 transition-all duration-500">
+                <div class="max-w-7xl mx-auto px-4 md:px-12 relative z-10">
+                    <div class="text-center mb-10 md:mb-16 gs-reveal">
+                        <h2 class="text-xs md:text-sm font-bold tracking-widest text-theme-hotpink mb-2 uppercase">Join Us</h2>
+                        <h3 class="text-3xl md:text-5xl font-bold tracking-tight text-theme-text">เปิดรับสมัครชาวสุโขทัย</h3>
+                        <p class="text-sm md:text-base text-theme-muted mt-3 md:mt-4 max-w-2xl mx-auto px-4">มาร่วมเป็นส่วนสำคัญในการขับเคลื่อนสีชมพูสู่ชัยชนะ เลือกตำแหน่งที่ใช่สำหรับคุณ</p>
+                    </div>
+                    <div id="pub-recruitment-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 gs-stagger-group">
+                        <!-- Cards injected by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: CALENDAR & NEWS -->
+            <section id="section-calendar" class="py-16 md:py-24 bg-theme-bg relative border-b border-gray-100 transition-all duration-500">
+                <div class="max-w-7xl mx-auto px-4 md:px-12">
+                    <div class="text-center mb-10 md:mb-16 gs-reveal">
+                        <h2 class="text-xs md:text-sm font-bold tracking-widest text-theme-hotpink mb-2 uppercase">Schedule & Updates</h2>
+                        <h3 class="text-3xl md:text-5xl font-bold tracking-tight text-theme-text">ตารางกิจกรรมและข่าวสาร</h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
+                        <div class="lg:col-span-1 gs-reveal flex flex-col gap-6">
+                            <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+                                <div class="flex justify-between items-center mb-4">
+                                   <button onclick="prevMonth()" class="text-gray-400 hover:text-theme-hotpink transition-colors hover-target p-2"><i class="ph-bold ph-caret-left text-xl"></i></button>
+                                   <h4 id="cal-month-year" class="font-bold text-base md:text-lg text-theme-text"></h4>
+                                   <button onclick="nextMonth()" class="text-gray-400 hover:text-theme-hotpink transition-colors hover-target p-2"><i class="ph-bold ph-caret-right text-xl"></i></button>
+                                </div>
+                                <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold text-gray-400 mb-2">
+                                    <div>อา</div><div>จ</div><div>อ</div><div>พ</div><div>พฤ</div><div>ศ</div><div>ส</div>
+                                </div>
+                                <div id="cal-days-grid" class="grid grid-cols-7 gap-1 text-center"></div>
+                            </div>
+                            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 h-full max-h-[400px] md:max-h-[500px] overflow-y-auto">
+                                <h4 class="text-lg md:text-xl font-bold text-theme-text mb-6 flex items-center sticky top-0 bg-white py-2 z-10">
+                                    <i class="ph-fill ph-calendar-blank text-theme-hotpink mr-2"></i> กิจกรรมที่กำลังมาถึง
+                                </h4>
+                                <div id="pub-events-list" class="relative pl-5 border-l-2 border-theme-pink/30 space-y-6 md:space-y-8">
+                                    <!-- JS injected -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-2 gs-reveal">
+                            <div class="flex gap-2 mb-6 md:mb-8 overflow-x-auto hide-scrollbar pb-2 pr-6 md:pr-0 relative" id="news-filters">
+                                <!-- JS injected -->
+                            </div>
+                            <div id="pub-news-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-6 gs-stagger-group">
+                                <!-- JS injected -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: RESOURCES -->
+            <section id="section-resources" class="py-16 md:py-24 bg-white relative border-b border-gray-100 transition-all duration-500">
+                <div class="max-w-7xl mx-auto px-4 md:px-12">
+                    <div class="text-center mb-10 md:mb-16 gs-reveal">
+                        <h2 class="text-xs md:text-sm font-bold tracking-widest text-gray-500 mb-2 uppercase">Practice Materials</h2>
+                        <h3 class="text-3xl md:text-5xl font-bold tracking-tight text-theme-text">แหล่งรวมไฟล์ และสื่อฝึกซ้อม</h3>
+                        <p class="text-sm md:text-base text-gray-500 mt-3 md:mt-4 max-w-2xl mx-auto px-4">รวมไฟล์เพลงเชียร์ เนื้อร้อง ตารางซ้อม และสื่อที่จำเป็นสำหรับชาวสีชมพู</p>
+                    </div>
+
+                    <div class="flex gap-2 mb-6 md:mb-8 overflow-x-auto hide-scrollbar pb-2 pr-6 md:pr-0 gs-reveal" id="res-filters">
+                        <!-- JS injected -->
+                    </div>
+
+                    <div id="pub-res-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 gs-stagger-group">
+                        <!-- Cards injected by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: TEAM DIRECTORY -->
+            <section id="section-team" class="py-16 md:py-24 bg-theme-bg relative border-b border-gray-100 transition-all duration-500">
+                <div class="max-w-7xl mx-auto px-4 md:px-12">
+                    <div class="text-center mb-10 md:mb-16 gs-reveal">
+                        <h2 class="text-xs md:text-sm font-bold tracking-widest text-gray-500 mb-2 uppercase">Our Team</h2>
+                        <h3 class="text-3xl md:text-5xl font-bold tracking-tight text-theme-text">ทำเนียบทีมงาน</h3>
+                        <p class="text-sm md:text-base text-gray-500 mt-3 md:mt-4 max-w-2xl mx-auto px-4">บุคลากรและผู้นำที่อยู่เบื้องหลังความสำเร็จของคณะสีสุโขทัย</p>
+                    </div>
+
+                    <div class="flex gap-2 mb-6 md:mb-10 overflow-x-auto hide-scrollbar pb-2 pr-6 md:pr-0 gs-reveal" id="team-filters">
+                        <!-- JS injected -->
+                    </div>
+
+                    <div id="pub-team-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 gs-stagger-group">
+                        <!-- Members injected by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: FEEDBACK -->
+            <section id="section-feedback" class="py-16 md:py-24 bg-white relative transition-all duration-500">
+                <div class="max-w-4xl mx-auto px-4 md:px-12 relative z-10">
+                    <div class="text-center mb-10 md:mb-16 gs-reveal">
+                        <h2 class="text-xs md:text-sm font-bold tracking-widest text-theme-hotpink mb-2 uppercase">Help Us Improve</h2>
+                        <h3 class="text-3xl md:text-5xl font-bold tracking-tight text-theme-text">ข้อเสนอแนะ / แจ้งปัญหา</h3>
+                        <p class="text-sm md:text-base text-theme-muted mt-3 md:mt-4 px-4">ความเห็นของคุณสำคัญต่อเรา เพื่อพัฒนาคณะสีให้ดียิ่งขึ้น</p>
+                    </div>
+
+                    <div class="bg-white p-6 md:p-10 rounded-3xl shadow-xl border border-gray-100 gs-reveal">
+                        <form id="public-feedback-form" onsubmit="window.submitFeedback(event)" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">หมวดหมู่ <span class="text-red-500">*</span></label>
+                                    <select id="fdb-category" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-theme-hotpink focus:ring-1 focus:ring-theme-hotpink transition-all hover-target" required>
+                                        <!-- Options injected by JS -->
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">ชื่อ-นามสกุล (ไม่บังคับ)</label>
+                                    <input type="text" id="fdb-name" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-theme-hotpink focus:ring-1 focus:ring-theme-hotpink transition-all hover-target" placeholder="ไม่ต้องระบุก็ได้">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2">หัวข้อ / เรื่องที่ต้องการแจ้ง <span class="text-red-500">*</span></label>
+                                <input type="text" id="fdb-title" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-theme-hotpink focus:ring-1 focus:ring-theme-hotpink transition-all hover-target" placeholder="อธิบายหัวข้อสั้นๆ" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2">รายละเอียด <span class="text-red-500">*</span></label>
+                                <textarea id="fdb-details" rows="5" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-theme-hotpink focus:ring-1 focus:ring-theme-hotpink transition-all resize-none hover-target" placeholder="อธิบายรายละเอียดปัญหา..." required></textarea>
+                            </div>
+                            <div class="text-center pt-4">
+                                <button type="submit" id="fdb-submit-btn" class="bg-theme-text text-white px-10 py-4 rounded-full font-bold hover:bg-theme-hotpink transition-colors hover-target shadow-lg shadow-gray-200 w-full md:w-auto">
+                                    ส่งข้อเสนอแนะ
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="py-8 text-center text-xs md:text-sm text-theme-muted bg-white border-t border-gray-100 relative z-20">
+            <p>&copy; <span id="year"></span> คณะสีสุโขทัย (สีชมพู). All rights reserved.</p>
+        </footer>
+    </div>
+
+
+    <!-- ================= LOGIN MODAL ================= -->
+    <div id="login-view" class="fixed inset-0 bg-theme-bg/95 backdrop-blur-xl z-[1000] flex items-center justify-center hide transition-opacity duration-300 opacity-0 px-4">
+        <!-- ปรับ padding และเพิ่ม max-h เพื่อไม่ให้ล้นจอ -->
+        <div id="login-box" class="bg-white p-6 md:p-8 rounded-3xl shadow-2xl w-full max-w-sm md:max-w-md relative max-h-[90vh] overflow-y-auto hide-scrollbar">
+            <button onclick="hideLogin()" class="absolute top-4 right-4 text-gray-400 hover:text-theme-hotpink transition-colors hover-target p-2">
+                <i class="ph ph-x text-xl md:text-2xl"></i>
+            </button>
+            <div class="text-center mb-6 mt-2">
+                <div class="w-12 h-12 md:w-14 md:h-14 bg-theme-pink/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="ph-fill ph-lock-key text-xl md:text-2xl text-theme-hotpink"></i>
+                </div>
+                <h2 id="auth-title" class="text-lg md:text-xl font-bold text-theme-text">ผู้ดูแลระบบ</h2>
+                <p id="auth-subtitle" class="text-[10px] md:text-xs text-theme-muted mt-1">กรุณาเข้าสู่ระบบเพื่อจัดการข้อมูล</p>
+            </div>
+            
+            <!-- ปรับลดช่องว่าง (space-y) ให้ชิดกันขึ้น -->
+            <form id="login-form" onsubmit="handleAuth(event)" class="space-y-3 md:space-y-4">
+                <input type="hidden" id="auth-mode" value="login">
+                
+                <div id="signup-fields-group" class="hidden">
+                    <!-- จับ ชื่อและตำแหน่ง มาอยู่คู่กันในบรรทัดเดียว -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[10px] md:text-xs font-bold text-gray-700 mb-1">ชื่อ-นามสกุล</label>
+                            <input type="text" id="auth-name" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-theme-hotpink focus:ring-1 focus:ring-theme-hotpink transition-all hover-target" placeholder="เช่น พี่เอ" autocomplete="off">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] md:text-xs font-bold text-gray-700 mb-1">ตำแหน่งในสี</label>
+                            <input type="text" id="auth-role" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-theme-hotpink focus:ring-1 focus:ring-theme-hotpink transition-all hover-target" placeholder="เช่น สภาสี" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] md:text-xs font-bold text-gray-700 mb-1">Username</label>
+                    <input type="text" id="username" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-theme-hotpink focus:ring-1 focus:ring-theme-hotpink transition-all hover-target" placeholder="ชื่อผู้ใช้งาน" required autocomplete="off">
+                </div>
+                <div>
+                    <label class="block text-[10px] md:text-xs font-bold text-gray-700 mb-1">Password</label>
+                    <input type="password" id="password" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-theme-hotpink focus:ring-1 focus:ring-theme-hotpink transition-all hover-target" placeholder="รหัสผ่าน" required autocomplete="off">
+                </div>
+                
+                <div id="login-error" class="text-red-500 text-xs hidden font-bold text-center">ข้อมูลไม่ถูกต้อง</div>
+                
+                <button type="submit" id="auth-submit-btn" class="w-full bg-theme-text text-white rounded-xl py-2.5 text-sm font-bold hover:bg-theme-hotpink transition-colors hover-target mt-2">
+                    เข้าสู่ระบบ
+                </button>
+                <div class="text-center text-[10px] md:text-xs pt-1">
+                    <button type="button" id="auth-toggle-btn" onclick="toggleAuthMode()" class="text-theme-hotpink font-bold hover:underline hover-target">ขอสิทธิ์เข้าใช้งาน (สมัครสมาชิก)</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ================= ADMIN DASHBOARD ================= -->
+    <div id="admin-view" class="fixed inset-0 bg-gray-50 z-[200] flex flex-col md:flex-row hide transition-opacity duration-300 opacity-0">
+        
+        <aside class="w-full md:w-64 bg-white border-b md:border-r border-gray-200 flex flex-col shrink-0 shadow-sm relative z-20">
+            <div class="p-4 md:p-6 border-b border-gray-100 flex justify-between items-center md:block">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-theme-hotpink flex items-center justify-center shadow-md">
+                        <i class="ph-fill ph-crown text-white text-lg md:text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-theme-text text-sm md:text-base">Admin Panel</h2>
+                        <p class="text-[10px] md:text-xs text-theme-hotpink font-medium">Sukhothai Control</p>
+                    </div>
+                </div>
+                <button onclick="logout()" class="md:hidden flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-500 hover-target">
+                    <i class="ph ph-sign-out"></i>
+                </button>
+            </div>
+
+            <nav class="flex md:flex-col p-2 md:p-4 gap-2 md:gap-2 overflow-x-auto md:overflow-y-auto hide-scrollbar w-full flex-1">
+                <button onclick="switchAdminTab('overview')" id="tab-btn-overview" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl bg-theme-pink/10 text-theme-hotpink font-bold transition-colors hover-target text-left text-xs md:text-sm">
+                    <i class="ph ph-squares-four text-lg"></i><span class="whitespace-nowrap">ภาพรวม & คะแนน</span>
+                </button>
+                <button onclick="switchAdminTab('events')" id="tab-btn-events" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-bold transition-colors hover-target text-left text-xs md:text-sm">
+                    <i class="ph ph-calendar text-lg"></i><span class="whitespace-nowrap">ตารางกิจกรรม</span>
+                </button>
+                <button onclick="switchAdminTab('news')" id="tab-btn-news" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-bold transition-colors hover-target text-left text-xs md:text-sm">
+                    <i class="ph ph-newspaper text-lg"></i><span class="whitespace-nowrap">ข่าวสาร</span>
+                </button>
+                <button onclick="switchAdminTab('resources')" id="tab-btn-resources" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-bold transition-colors hover-target text-left text-xs md:text-sm">
+                    <i class="ph ph-folder text-lg"></i><span class="whitespace-nowrap">สื่อฝึกซ้อม/ไฟล์</span>
+                </button>
+                <button onclick="switchAdminTab('team')" id="tab-btn-team" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-bold transition-colors hover-target text-left text-xs md:text-sm">
+                    <i class="ph ph-users-three text-lg"></i><span class="whitespace-nowrap">ทำเนียบทีมงาน</span>
+                </button>
+                <button onclick="switchAdminTab('announcements')" id="tab-btn-announcements" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-bold transition-colors hover-target text-left text-xs md:text-sm">
+                    <i class="ph ph-bell-ringing text-lg"></i><span class="whitespace-nowrap">ประกาศด่วน</span>
+                </button>
+                <button onclick="switchAdminTab('recruitments')" id="tab-btn-recruitments" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-bold transition-colors hover-target text-left text-xs md:text-sm">
+                    <i class="ph ph-address-book text-lg"></i><span class="whitespace-nowrap">ระบบรับสมัคร</span>
+                </button>
+                <button onclick="switchAdminTab('settings')" id="tab-btn-settings" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-bold transition-colors hover-target text-left text-xs md:text-sm">
+                    <i class="ph ph-text-t text-lg"></i><span class="whitespace-nowrap">ตั้งค่าข้อความเว็บ</span>
+                </button>
+                <button onclick="switchAdminTab('users')" id="tab-btn-users" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-bold transition-colors hover-target text-left text-xs md:text-sm">
+                    <i class="ph ph-user-gear text-lg"></i><span class="whitespace-nowrap">จัดการแอดมินย่อย</span>
+                </button>
+            </nav>
+
+            <div class="hidden md:block p-4 border-t border-gray-100">
+                <button onclick="logout()" class="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 font-bold transition-colors hover-target text-sm">
+                    <i class="ph ph-sign-out text-lg"></i><span>ออกจากระบบ</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto p-4 md:p-8 relative bg-gray-50">
+            <div class="max-w-4xl mx-auto pb-24">
+                <h1 class="text-2xl md:text-3xl font-black text-theme-text mb-6 md:mb-8">Dashboard</h1>
+
+                <div id="tab-overview" class="admin-tab space-y-6 lg:space-y-8 block">
+                    <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-timer mr-2 text-theme-hotpink"></i>ตั้งค่าเวลานับถอยหลัง</h3>
+                        <form onsubmit="window.saveCountdown(event)" class="flex flex-col sm:flex-row gap-3 lg:gap-4">
+                            <input type="datetime-local" id="admin-target-date" class="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none hover-target" required>
+                            <button type="submit" class="bg-theme-text text-white px-6 lg:px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target whitespace-nowrap">อัปเดตเวลา</button>
+                        </form>
+                    </div>
+
+                    <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-plus-circle mr-2 text-theme-hotpink"></i>เพิ่มผลการแข่งขัน / แจ้งคะแนน</h3>
+                        <form onsubmit="window.addMatchResult(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">รายการกีฬา / การประกวด</label>
+                                <input type="text" id="mr-title" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none font-bold" required>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">ผลลัพธ์ที่ได้</label>
+                                    <select id="mr-type" onchange="window.toggleMrType()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none">
+                                        <option value="score">ได้เป็นคะแนน</option>
+                                        <option value="medal">ได้เป็นเหรียญรางวัล</option>
+                                    </select>
+                                </div>
+                                <div id="mr-points-group">
+                                    <label class="block text-xs lg:text-sm font-bold text-blue-500 mb-1">จำนวนคะแนน</label>
+                                    <input type="number" id="mr-points" class="w-full bg-blue-50 border border-blue-200 rounded-xl px-4 py-2 focus:border-blue-500 focus:outline-none text-blue-700 font-bold">
+                                </div>
+                                <div id="mr-medal-group" class="hidden">
+                                    <label class="block text-xs lg:text-sm font-bold text-yellow-600 mb-1">เหรียญที่ได้</label>
+                                    <select id="mr-medal" class="w-full bg-yellow-50 border border-yellow-200 rounded-xl px-4 py-2 focus:border-yellow-500 focus:outline-none font-bold text-yellow-700">
+                                        <option value="gold">เหรียญทอง</option>
+                                        <option value="silver">เหรียญเงิน</option>
+                                        <option value="bronze">เหรียญทองแดง</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="text-right pt-2"><button type="submit" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">บันทึกผล</button></div>
+                        </form>
+                        <div class="mt-6 border-t border-gray-100 pt-4">
+                            <h4 class="font-bold text-xs text-gray-500 mb-3 uppercase tracking-wider">ผลการแข่งขันล่าสุด (3 อันดับแรก)</h4>
+                            <div id="admin-mr-list" class="space-y-2"></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-100 p-5 lg:p-6 rounded-2xl shadow-inner border border-gray-200">
+                        <h3 class="text-sm font-bold mb-4 flex items-center text-gray-500"><i class="ph ph-wrench mr-2"></i>แก้ไขยอดรวมแบบกำหนดเอง</h3>
+                        <form onsubmit="window.saveManualTotals(event)" class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div><label class="block text-xs font-bold text-gray-500 mb-1">คะแนนรวมทั้งหมด</label><input type="number" id="admin-score-total" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm font-bold"></div>
+                                <div><label class="block text-xs font-bold text-theme-gold mb-1">เหรียญทองรวม</label><input type="number" id="admin-gold" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm font-bold"></div>
+                                <div><label class="block text-xs font-bold text-theme-silver mb-1">เหรียญเงินรวม</label><input type="number" id="admin-silver" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm font-bold"></div>
+                                <div><label class="block text-xs font-bold text-theme-bronze mb-1">เหรียญทองแดงรวม</label><input type="number" id="admin-bronze" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm font-bold"></div>
+                            </div>
+                            <div class="text-right"><button type="submit" class="bg-gray-300 text-gray-700 px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-gray-400 transition">บังคับอัปเดต</button></div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="tab-events" class="admin-tab space-y-6 lg:space-y-8 hide">
+                    <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-calendar-plus mr-2 text-theme-hotpink"></i>เพิ่มกิจกรรมใหม่</h3>
+                        <form onsubmit="window.addEvent(event)" class="space-y-4">
+                            <div class="grid grid-cols-2 gap-3 lg:gap-4">
+                                <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">วันที่ (เช่น 15 พ.ย. 69)</label><input type="text" id="ev-date" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
+                                <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">เวลา (เช่น 08:30)</label><input type="text" id="ev-time" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
+                            </div>
+                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">ชื่อกิจกรรม</label><input type="text" id="ev-title" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none font-bold" required></div>
+                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">สถานที่</label><input type="text" id="ev-loc" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
+                            <div class="text-right"><button type="submit" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">เพิ่มกิจกรรม</button></div>
+                        </form>
+                    </div>
+                    <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-base lg:text-lg font-bold mb-4">รายการกิจกรรมทั้งหมด</h3>
+                        <div id="admin-events-list" class="space-y-3"></div>
+                    </div>
+                </div>
+
+                <div id="tab-news" class="admin-tab space-y-6 lg:space-y-8 hide">
+                    <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-newspaper mr-2 text-theme-hotpink"></i>เพิ่มข่าวสารใหม่</h3>
+                        <form onsubmit="window.addNews(event)" class="space-y-4">
+                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">หมวดหมู่</label><select id="nw-cat" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></select></div>
+                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">หัวข้อข่าว</label><input type="text" id="nw-title" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none font-bold" required></div>
+                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">เนื้อหาโดยย่อ</label><textarea id="nw-excerpt" rows="2" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none resize-none" required></textarea></div>
+                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">รูปภาพ</label><input type="file" id="nw-image-file" accept="image/*" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
+                            <div class="text-right"><button type="submit" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">โพสต์ข่าว</button></div>
+                        </form>
+                    </div>
+                    <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-base lg:text-lg font-bold mb-4">รายการข่าวสารทั้งหมด</h3>
+                        <div id="admin-news-list" class="space-y-3"></div>
+                    </div>
+                </div>
+
+                <div id="tab-resources" class="admin-tab space-y-6 lg:space-y-8 hide">
+                    <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-folder-plus mr-2 text-theme-hotpink"></i>เพิ่มสื่อฝึกซ้อม</h3>
+                        <form onsubmit="window.addResource(event)" class="space-y-4">
+                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">หมวดหมู่</label><select id="res-cat" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></select></div>
+                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">ชื่อสื่อ</label><input type="text" id="res-title" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none font-bold" required></div>
+                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">ประเภท</label><select id="res-type" onchange="window.toggleResourceInput()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required><option value="link">ลิงก์ภายนอก</option><option value="image">อัปโหลดรูปภาพ</option></select></div>
+                            <div id="res-link-group"><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">URL</label><input type="url" id="res-url" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none"></div>
+                            <div id="res-image-group" class="hidden"><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">ไฟล์</label><input type="file" id="res-file" accept="image/*" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none"></div>
+                            <div class="text-right pt-2"><button type="submit" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">บันทึก</button></div>
+                        </form>
+                    </div>
+                    <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-base lg:text-lg font-bold mb-4">รายการสื่อฝึกซ้อม</h3>
+                        <div id="admin-res-list" class="space-y-3"></div>
+                    </div>
+                </div>
+
+                <div id="tab-team" class="admin-tab space-y-6 lg:space-y-8 hide">
+                    <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-user-plus mr-2 text-theme-hotpink"></i>เพิ่มบุคลากร</h3>
+                        <form onsubmit="window.addTeamMember(event)" class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">ฝ่าย</label><select id="team-dept" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></select></div>
+                                <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">ชื่อ</label><input type="text" id="team-name" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none font-bold" required></div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">ตำแหน่ง</label><input type="text" id="team-role" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
+                                <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">IG / FB</label><input type="text" id="team-contact" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none"></div>
+                            </div>
+                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">รูปโปรไฟล์</label><input type="file" id="team-image" accept="image/*" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
+                            <div class="text-right pt-2"><button type="submit" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">เพิ่มทีมงาน</button></div>
+                        </form>
+                    </div>
+                    <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-base lg:text-lg font-bold mb-4">รายชื่อทีมงาน</h3>
+                        <div id="admin-team-list" class="space-y-3"></div>
+                    </div>
+                </div>
+
+                <div id="tab-announcements" class="admin-tab space-y-6 lg:space-y-8 hide">
+                    <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-bell-ringing mr-2 text-theme-hotpink"></i>เพิ่มประกาศด่วน</h3>
+                        <form onsubmit="window.addAnnouncement(event)" class="space-y-4">
+                            <input type="text" id="ann-title" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none font-bold" placeholder="หัวข้อประกาศ" required>
+                            <textarea id="ann-content" rows="3" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none resize-none" placeholder="รายละเอียด..." required></textarea>
+                            <div class="text-right"><button type="submit" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">โพสต์ประกาศ</button></div>
+                        </form>
+                    </div>
+                    <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-base lg:text-lg font-bold mb-4">รายการประกาศด่วน</h3>
+                        <div id="admin-ann-list" class="space-y-3"></div>
+                    </div>
+                </div>
+
+                <div id="tab-recruitments" class="admin-tab space-y-6 lg:space-y-8 hide">
+                    <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-address-book mr-2 text-theme-hotpink"></i>เพิ่มการรับสมัคร</h3>
+                        <form onsubmit="window.addRecruitment(event)" class="space-y-4">
+                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">ไอคอน</label><select id="rec-icon" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none"><option value="ph-users-three">สตาฟ</option><option value="ph-crown">หัวหน้า</option><option value="ph-sneaker">นักกีฬา</option><option value="ph-star-four">เชียร์</option><option value="ph-megaphone">สแตนด์</option><option value="ph-flag-banner">พาเหรด</option></select></div>
+                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">หัวข้อ</label><input type="text" id="rec-title" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none font-bold" required></div>
+                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">รายละเอียด</label><textarea id="rec-desc" rows="2" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none resize-none" required></textarea></div>
+                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">ลิงก์ Form</label><input type="url" id="rec-link" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
+                            <div class="text-right"><button type="submit" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">บันทึก</button></div>
+                        </form>
+                    </div>
+                    <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-base lg:text-lg font-bold mb-4">รายการรับสมัคร</h3>
+                        <div id="admin-rec-list" class="space-y-3"></div>
+                    </div>
+                </div>
+
+                <div id="tab-settings" class="admin-tab space-y-6 lg:space-y-8 hide">
+                    <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-lock-key mr-2 text-theme-hotpink"></i>ตั้งค่าบัญชีแอดมินหลัก</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div><label class="block text-xs font-bold text-gray-700 mb-1">Admin Username</label><input type="text" id="set-admin-user" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" placeholder="admin"></div>
+                            <div><label class="block text-xs font-bold text-gray-700 mb-1">Admin Password</label><input type="password" id="set-admin-pass" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" placeholder="password"></div>
+                        </div>
+                        <p class="text-[10px] text-gray-500 mt-2">ระวัง! หากเปลี่ยนแล้วต้องจำให้ได้เพื่อเข้าสู่ระบบครั้งต่อไป</p>
+                    </div>
+
+                    <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-text-t mr-2 text-theme-hotpink"></i>ตั้งค่าข้อความหน้าเว็บ</h3>
+                        <form onsubmit="window.saveTexts(event)" class="space-y-4">
+                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-2">หัวข้อหลัก (Hero Title)</label><input type="text" id="set-hero-title" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none font-bold text-lg" required></div>
+                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-2">คำเชิญชวน (Hero Subtitle)</label><textarea id="set-hero-subtitle" rows="3" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none resize-none" required></textarea></div>
+                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-2">คำอธิบายคณะสีมุมซ้ายบน</label><input type="text" id="set-team-desc" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
+                            
+                            <hr class="my-4 border-gray-100">
+                            <h4 class="font-bold text-gray-700">ข้อความเลื่อน (Marquee)</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div><label class="block text-xs font-bold text-theme-hotpink mb-1">ข้อความ 1</label><input type="text" id="set-mq-1" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
+                                <div><label class="block text-xs font-bold text-gray-400 mb-1">ข้อความ 2</label><input type="text" id="set-mq-2" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
+                                <div><label class="block text-xs font-bold text-gray-700 mb-1">ข้อความ 3</label><input type="text" id="set-mq-3" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
+                                <div><label class="block text-xs font-bold text-gray-400 mb-1">ข้อความ 4</label><input type="text" id="set-mq-4" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
+                            </div>
+
+                            <hr class="my-4 border-gray-100">
+                            <h4 class="font-bold text-gray-700">การเชื่อมต่อแบบฟอร์มข้อเสนอแนะ</h4>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 mb-1">Google Apps Script URL</label>
+                                <input type="url" id="set-gs-url" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" placeholder="https://script.google.com/macros/s/...">
+                            </div>
+
+                            <hr class="my-4 border-gray-100">
+                            <h4 class="font-bold text-gray-700">Cloudinary อัปโหลดอัตโนมัติ</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div><label class="block text-xs font-bold text-gray-700 mb-1">Cloud Name</label><input type="text" id="set-cld-name" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none"></div>
+                                <div><label class="block text-xs font-bold text-gray-700 mb-1">Upload Preset</label><input type="text" id="set-cld-preset" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none"></div>
+                            </div>
+
+                            <hr class="my-4 border-gray-100">
+                            <h4 class="font-bold text-gray-700">จัดการชื่อหมวดหมู่ (คั่นด้วยลูกน้ำ , )</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+                                <div><label class="block text-xs font-bold text-gray-700 mb-1">ข่าวสาร</label><input type="text" id="set-cat-news" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
+                                <div><label class="block text-xs font-bold text-gray-700 mb-1">สื่อฝึกซ้อม</label><input type="text" id="set-cat-res" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
+                                <div><label class="block text-xs font-bold text-gray-700 mb-1">ทีมงาน</label><input type="text" id="set-cat-team" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
+                                <div><label class="block text-xs font-bold text-gray-700 mb-1">ข้อเสนอแนะ</label><input type="text" id="set-cat-fdb" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
+                            </div>
+
+                            <div class="text-right pt-4"><button type="submit" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">บันทึกการตั้งค่าทั้งหมด</button></div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="tab-users" class="admin-tab space-y-6 lg:space-y-8 hide">
+                    <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-users mr-2 text-theme-hotpink"></i>รอการอนุมัติ (Pending)</h3>
+                        <div id="admin-pending-users-list" class="space-y-3"></div>
+                    </div>
+                    <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-shield-check mr-2 text-theme-hotpink"></i>แอดมินย่อยทั้งหมด (Approved)</h3>
+                        <div id="admin-approved-users-list" class="space-y-4"></div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- GSAP & JS Logic -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+        gsap.registerPlugin(ScrollTrigger);
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // ================= CONTINUOUS ANIMATIONS =================
+        function initContinuousAnimations() {
+            gsap.to('.hero-blob', {
+                x: "random(-20, 20)", y: "random(-20, 20)", rotation: "random(-10, 10)",
+                scale: "random(0.9, 1.1)", opacity: "random(0.4, 0.8)", 
+                duration: "random(6, 10)", ease: "sine.inOut", repeat: -1, yoyo: true, stagger: 1.5
+            });
+            gsap.to(['#cd-days', '#cd-hours', '#cd-minutes', '#cd-seconds'], {
+                opacity: 0.6, duration: 1.5, ease: "sine.inOut", repeat: -1, yoyo: true, stagger: 0.2
+            });
+        }
+
+        // ================= STATE MANAGEMENT (FIREBASE) =================
+        const defaultState = {
+            targetDate: "2026-11-01T08:00",
+            score: { total: 0 },
+            medals: { gold: 0, silver: 0, bronze: 0 },
+            matchResults: [],
+            announcements: [],
+            events: [],
+            news: [],
+            recruitments: [],
+            resources: [],
+            teamMembers: [],
+            users: [], // สำหรับเก็บข้อมูลแอดมินย่อยที่สมัครเข้ามา
+            auth: { user: "admin", pass: "sukhothai2569" }, // Default Initial Auth
+            settings: { 
+                googleScriptUrl: "",
+                cloudinaryName: "",
+                cloudinaryPreset: "",
+                categories: {
+                    news: "กีฬา, สแตนด์, เชียร์, พาเหรด, ทั่วไป",
+                    resources: "เพลงเชียร์, เนื้อเพลง/บทพูด, ตารางซ้อม, กราฟิก/มีเดีย, เอกสาร",
+                    team: "ครูประจำสี, สภาสี, สแตนด์, เชียร์, กลางแจ้ง, พาเหรด, นักกีฬา",
+                    feedback: "ทั่วไป/เสนอแนะ, แจ้งปัญหาการซ้อม, แจ้งปัญหาด้านกีฬา, สวัสดิการ/สถานที่, อื่นๆ"
+                }
+            },
+            texts: { 
+                heroTitle: "SUKHOTHAI", 
+                heroSubtitle: "ร่วมเป็นส่วนหนึ่งในตำนานสีชมพู ปลุกพลังความสามัคคี สู่ชัยชนะที่ยิ่งใหญ่", 
+                teamDesc: "สีชมพู: อ่อนโยนแต่ไม่อ่อนแอ",
+                marquee1: "SUKHOTHAI 2569", marquee2: "PINK TEAM", marquee3: "SPIRIT & UNITY", marquee4: "WE ARE THE CHAMPIONS"
+            }
+        };
+
+        let appState = { ...defaultState };
+
+        const userConfig = {
+            apiKey: "AIzaSyAcWAIojT_gN9ybDolegZ6L9PJk5JYh0U0",
+            authDomain: "sukhothai-color.firebaseapp.com",
+            projectId: "sukhothai-color",
+            storageBucket: "sukhothai-color.firebasestorage.app",
+            messagingSenderId: "1007722488855",
+            appId: "1:1007722488855:web:a71eedffe714e84c9a6852"
+        };
+
+        const isCanvas = typeof __firebase_config !== 'undefined';
+        const firebaseConfig = isCanvas ? JSON.parse(__firebase_config) : userConfig;
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'sukhothai-2569';
+        const docPath = isCanvas 
+            ? ['artifacts', appId, 'public', 'data', 'sukhothai', 'main_state'] 
+            : ['sukhothai_db', 'main_state']; 
+
+        const stateRef = doc(db, ...docPath);
+
+        window.saveState = async function() {
+            try {
+                await setDoc(stateRef, appState);
+                showToast('บันทึกขึ้นระบบ Cloud สำเร็จ');
+            } catch (e) {
+                console.error("Error saving state: ", e);
+                showToast('เกิดข้อผิดพลาดในการบันทึก');
+            }
+        };
+
+        const initAuth = async () => {
+            try {
+                if (isCanvas && typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch(e) { console.warn("Auth skipped.", e); }
+        };
+
+        initAuth().then(() => {
+            onSnapshot(stateRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    appState = { 
+                        ...defaultState, 
+                        ...data,
+                        score: { ...defaultState.score, ...(data.score || {}) },
+                        medals: { ...defaultState.medals, ...(data.medals || {}) },
+                        settings: { 
+                            ...defaultState.settings, 
+                            ...(data.settings || {}),
+                            categories: { ...defaultState.settings.categories, ...(data.settings?.categories || {}) }
+                        },
+                        users: data.users || [],
+                        auth: { ...defaultState.auth, ...(data.auth || {}) },
+                        texts: { ...defaultState.texts, ...(data.texts || {}) }
+                    };
+                } else {
+                    appState = { ...defaultState };
+                    setDoc(stateRef, appState).catch(console.error);
+                }
+                renderPublicView();
+                if(!document.getElementById('admin-view').classList.contains('hide')) populateAdminForms();
+            }, (error) => {
+                console.error("Firestore Listen Error:", error);
+                renderPublicView();
+            });
+        });
+
+        // ================= PUBLIC VIEW & SPA NAVIGATION =================
+        let countdownInterval;
+        let currentNewsFilter = 'all';
+        let currentResFilter = 'all';
+        let currentTeamFilter = 'all';
+        let currentCalDate = new Date(); 
+        let currentEventDateFilter = 'all';
+
+        window.renderDynamicCategories = function() {
+            const safeCats = appState.settings?.categories || defaultState.settings.categories;
+            const parseCats = (str) => (str || "").split(',').map(s => s.trim()).filter(Boolean);
+            
+            const newsCats = parseCats(safeCats.news);
+            const resCats = parseCats(safeCats.resources);
+            const teamCats = parseCats(safeCats.team);
+            const fdbCats = parseCats(safeCats.feedback);
+
+            let newsFilterHtml = `<button onclick="filterNews('all')" class="filter-btn news-filter-btn active shrink-0 px-4 py-2 rounded-full text-xs md:text-sm font-bold border border-gray-200 bg-white text-gray-600 transition-colors hover-target">ทั้งหมด</button>`;
+            newsCats.forEach(c => newsFilterHtml += `<button onclick="filterNews('${c}')" class="filter-btn news-filter-btn shrink-0 px-4 py-2 rounded-full text-xs md:text-sm font-bold border border-gray-200 bg-white text-gray-600 transition-colors hover-target">${c}</button>`);
+            if(document.getElementById('news-filters')) document.getElementById('news-filters').innerHTML = newsFilterHtml;
+
+            let resFilterHtml = `<button onclick="filterRes('all')" class="filter-btn res-filter-btn active shrink-0 px-4 py-2 rounded-full text-xs md:text-sm font-bold border border-gray-200 bg-white text-gray-600 transition-colors hover-target">ทั้งหมด</button>`;
+            resCats.forEach(c => resFilterHtml += `<button onclick="filterRes('${c}')" class="filter-btn res-filter-btn shrink-0 px-4 py-2 rounded-full text-xs md:text-sm font-bold border border-gray-200 bg-white text-gray-600 transition-colors hover-target">${c}</button>`);
+            if(document.getElementById('res-filters')) document.getElementById('res-filters').innerHTML = resFilterHtml;
+
+            let teamFilterHtml = `<button onclick="filterTeam('all')" class="filter-btn team-filter-btn active shrink-0 px-4 py-2 rounded-full text-xs md:text-sm font-bold border border-gray-200 bg-white text-gray-600 transition-colors hover-target">ทั้งหมด</button>`;
+            teamCats.forEach(c => teamFilterHtml += `<button onclick="filterTeam('${c}')" class="filter-btn team-filter-btn shrink-0 px-4 py-2 rounded-full text-xs md:text-sm font-bold border border-gray-200 bg-white text-gray-600 transition-colors hover-target">${c}</button>`);
+            if(document.getElementById('team-filters')) document.getElementById('team-filters').innerHTML = teamFilterHtml;
+
+            if(document.getElementById('nw-cat')) document.getElementById('nw-cat').innerHTML = newsCats.map(c => `<option value="${c}">${c}</option>`).join('');
+            if(document.getElementById('res-cat')) document.getElementById('res-cat').innerHTML = resCats.map(c => `<option value="${c}">${c}</option>`).join('');
+            if(document.getElementById('team-dept')) document.getElementById('team-dept').innerHTML = teamCats.map(c => `<option value="${c}">${c}</option>`).join('');
+            if(document.getElementById('fdb-category')) document.getElementById('fdb-category').innerHTML = `<option value="" disabled selected>-- เลือกหมวดหมู่ --</option>` + fdbCats.map(c => `<option value="${c}">${c}</option>`).join('');
+        };
+
+        window.navigateTo = function(pageId) {
+            const mainContent = document.getElementById('main-content');
+            mainContent.classList.add('opacity-0');
+            if (window.isMobileMenuOpen) window.toggleMobileMenu();
+            setTimeout(() => {
+                const allSections = ['hero', 'marquee', 'scores', 'announcements', 'calendar', 'resources', 'team', 'recruitment', 'feedback'];
+                allSections.forEach(s => { const el = document.getElementById(`section-${s}`); if(el) el.classList.add('hidden'); });
+                if (pageId === 'home') { allSections.forEach(s => { const el = document.getElementById(`section-${s}`); if(el) el.classList.remove('hidden'); }); } 
+                else { const section = document.getElementById(`section-${pageId === 'calendar-news' ? 'calendar' : pageId}`); if(section) { section.classList.remove('hidden'); section.classList.add('pt-32'); } }
+                if (pageId === 'home') { ['scores', 'announcements', 'calendar', 'resources', 'team', 'recruitment', 'feedback'].forEach(s => { const el = document.getElementById(`section-${s}`); if(el) el.classList.remove('pt-32'); }); }
+                window.scrollTo(0, 0);
+                mainContent.classList.remove('opacity-0');
+                setTimeout(() => initGsapTriggers(), 100);
+            }, 300);
+        };
+
+        function renderPublicView() {
+            document.getElementById('pub-hero-title').textContent = appState.texts?.heroTitle || "SUKHOTHAI";
+            document.getElementById('pub-hero-subtitle').textContent = appState.texts?.heroSubtitle || "";
+            document.getElementById('pub-team-desc').textContent = appState.texts?.teamDesc || "";
+            document.querySelectorAll('.mq-1').forEach(el => el.textContent = appState.texts?.marquee1 || "");
+            document.querySelectorAll('.mq-2').forEach(el => el.textContent = appState.texts?.marquee2 || "");
+            document.querySelectorAll('.mq-3').forEach(el => el.textContent = appState.texts?.marquee3 || "");
+            document.querySelectorAll('.mq-4').forEach(el => el.textContent = appState.texts?.marquee4 || "");
+            
+            const totalMedals = (Number(appState.medals?.gold) || 0) + (Number(appState.medals?.silver) || 0) + (Number(appState.medals?.bronze) || 0);
+            animateValue('.pub-total-score', 0, appState.score?.total || 0, 1500);
+            animateValue('.pub-total-medals', 0, totalMedals, 1500);
+            animateValue('.pub-medal-gold', 0, appState.medals?.gold || 0, 1000);
+            animateValue('.pub-medal-silver', 0, appState.medals?.silver || 0, 1000);
+            animateValue('.pub-medal-bronze', 0, appState.medals?.bronze || 0, 1000);
+            
+            renderDynamicCategories();
+            renderEvents(); renderCalendar(); renderNews(currentNewsFilter); renderPublicAnnouncements(); renderPublicRecruitments(); renderResources(currentResFilter); renderTeam(currentTeamFilter); renderPublicMatchResults();
+            startCountdown();
+            setTimeout(() => ScrollTrigger.refresh(), 100);
+        }
+
+        window.filterMatchResults = function(type) {
+            window.currentMatchFilter = type;
+            const btnS = document.getElementById('btn-filter-score'), btnM = document.getElementById('btn-filter-medal');
+            if(type === 'score') { btnS.classList.replace('bg-gray-100', 'bg-theme-hotpink'); btnS.classList.replace('text-gray-500', 'text-white'); btnM.classList.add('bg-white', 'text-gray-500'); btnM.classList.remove('bg-theme-hotpink', 'text-white'); } 
+            else { btnM.classList.replace('bg-gray-100', 'bg-theme-hotpink'); btnM.classList.replace('text-gray-500', 'text-white'); btnS.classList.add('bg-white', 'text-gray-500'); btnS.classList.remove('bg-theme-hotpink', 'text-white'); }
+            renderPublicMatchResults();
+        }
+
+        function renderPublicMatchResults() {
+            const grid = document.getElementById('pub-match-results-grid'); if(!grid) return; grid.innerHTML = '';
+            let arr = (appState.matchResults || []).filter(r => r.type === window.currentMatchFilter);
+            if(arr.length === 0) { grid.innerHTML = `<div class="col-span-full text-center text-gray-400 py-8 bg-gray-50 rounded-2xl text-sm border border-gray-100">ยังไม่มีข้อมูลในหมวดหมู่นี้</div>`; return; }
+            arr.forEach(mr => {
+                let icon = '', text = '', color = '', bg = '';
+                if(mr.type === 'score') { icon = '<i class="ph-fill ph-star text-2xl text-blue-500"></i>'; text = `+${mr.reward} คะแนน`; color = 'text-blue-600'; bg = 'bg-blue-50 border-blue-100'; } 
+                else { let c = mr.reward === 'gold' ? 'text-theme-gold' : mr.reward === 'silver' ? 'text-theme-silver' : 'text-theme-bronze'; icon = `<i class="ph-fill ph-medal text-2xl ${c}"></i>`; text = mr.reward === 'gold' ? 'ทอง' : mr.reward === 'silver' ? 'เงิน' : 'ทองแดง'; color = c; bg = 'bg-gray-50 border-gray-100'; }
+                grid.innerHTML += `<div class="bg-white border border-gray-100 rounded-2xl p-4 flex items-center gap-4 hover:-translate-y-1 transition-transform gs-stagger-item shadow-sm"><div class="w-12 h-12 rounded-xl ${bg} border flex items-center justify-center shrink-0">${icon}</div><div class="overflow-hidden"><h4 class="font-bold text-sm text-gray-800 truncate">${mr.title}</h4><div class="text-xs font-bold ${color} mt-0.5">${text}</div></div><div class="ml-auto text-[10px] text-gray-400 bg-gray-50 px-2 py-1 rounded-md border border-gray-100">${mr.date}</div></div>`;
+            });
+        }
+
+        window.renderCalendar = function() {
+            const grids = document.querySelectorAll('#cal-days-grid'), monthYears = document.querySelectorAll('#cal-month-year');
+            grids.forEach((grid, idx) => {
+                grid.innerHTML = ''; const year = currentCalDate.getFullYear(), month = currentCalDate.getMonth();
+                const thaiMonths = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+                const shortThaiMonths = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+                if(monthYears[idx]) monthYears[idx].textContent = `${thaiMonths[month]} ${year + 543}`;
+                const firstDay = new Date(year, month, 1).getDay(), daysInMonth = new Date(year, month + 1, 0).getDate(), today = new Date();
+                for (let i = 0; i < firstDay; i++) grid.innerHTML += `<div></div>`;
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const targetDateStr = `${day} ${shortThaiMonths[month]} ${(year + 543).toString().slice(-2)}`;
+                    const hasEvent = appState.events.some(ev => ev.date === targetDateStr), isToday = day === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+                    const isSelected = currentEventDateFilter === targetDateStr;
+                    let base = 'relative p-2 text-sm flex flex-col items-center justify-center aspect-square transition cursor-pointer hover:bg-theme-pink/20 hover:rounded-full';
+                    if (isSelected) base += ' bg-theme-hotpink text-white rounded-full font-bold shadow-md'; 
+                    else if (isToday) base += ' border border-theme-hotpink text-theme-hotpink rounded-full font-bold'; 
+                    else base += ' text-gray-600';
+                    grid.innerHTML += `<div onclick="window.filterEventsByDate('${targetDateStr}')" class="${base}"><span>${day}</span>${hasEvent ? `<div class="absolute bottom-1 w-1.5 h-1.5 ${isSelected?'bg-white':'bg-theme-pink'} rounded-full"></div>` : ''}</div>`;
+                }
+            });
+        };
+        window.prevMonth = function() { currentCalDate.setMonth(currentCalDate.getMonth() - 1); renderCalendar(); };
+        window.nextMonth = function() { currentCalDate.setMonth(currentCalDate.getMonth() + 1); renderCalendar(); };
+        window.filterEventsByDate = function(d) { currentEventDateFilter = (currentEventDateFilter === d) ? 'all' : d; renderCalendar(); renderEvents(); };
+
+        function renderEvents() {
+            document.querySelectorAll('#pub-events-list').forEach(list => {
+                list.innerHTML = ''; const titleEl = list.previousElementSibling;
+                if (titleEl) titleEl.innerHTML = currentEventDateFilter === 'all' ? '<i class="ph-fill ph-calendar-blank text-theme-hotpink mr-2"></i> กิจกรรมที่กำลังมาถึง' : `<i class="ph-fill ph-calendar-check text-theme-hotpink mr-2"></i> วันที่ ${currentEventDateFilter} <button onclick="window.filterEventsByDate('all')" class="ml-auto text-xs bg-theme-pink/20 text-theme-hotpink px-3 py-1 rounded-full">ดูทั้งหมด</button>`;
+                let evs = currentEventDateFilter === 'all' ? appState.events : appState.events.filter(e => e.date === currentEventDateFilter);
+                if(evs.length === 0) { list.innerHTML = '<div class="text-gray-400 py-4 text-sm">ไม่มีกิจกรรมในวันที่เลือก</div>'; return; }
+                evs.forEach(ev => { list.innerHTML += `<div class="relative hover:-translate-y-1 transition-transform duration-300 mb-6"><div class="absolute -left-[29px] bg-theme-hotpink w-4 h-4 rounded-full border-4 border-white shadow-sm"></div><div class="text-sm text-theme-hotpink font-bold">${ev.date} • ${ev.time}</div><div class="font-bold text-lg text-theme-text mt-1">${ev.title}</div><div class="text-sm text-gray-500 mt-1 flex items-center"><i class="ph-fill ph-map-pin mr-1 text-gray-400"></i> ${ev.location}</div></div>`; });
+            });
+        }
+
+        window.filterNews = function(cat) {
+            currentNewsFilter = cat;
+            document.querySelectorAll('.news-filter-btn').forEach(btn => btn.classList.toggle('active', (cat === 'all' && btn.textContent.trim() === 'ทั้งหมด') || btn.textContent.trim() === cat));
+            renderNews(cat); setTimeout(() => ScrollTrigger.refresh(), 100);
+        };
+        function renderNews(filter = 'all') {
+            document.querySelectorAll('#pub-news-grid').forEach(grid => {
+                grid.innerHTML = ''; const news = filter === 'all' ? appState.news : appState.news.filter(n => n.category === filter);
+                if(news.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-white rounded-3xl border border-gray-100 text-sm">ยังไม่มีข่าวสาร</div>'; return; }
+                news.slice().reverse().forEach(n => { grid.innerHTML += `<div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group gs-stagger-item"><div class="h-40 md:h-48 bg-gray-100 relative overflow-hidden"><img src="${n.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"><div class="absolute top-3 left-3 bg-white/90 backdrop-blur text-theme-hotpink text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">${n.category}</div></div><div class="p-5 md:p-6"><h4 class="font-bold text-lg mb-2 text-theme-text line-clamp-2 group-hover:text-theme-hotpink transition-colors">${n.title}</h4><p class="text-sm text-gray-500 line-clamp-2">${n.excerpt}</p></div></div>`; });
+            });
+        }
+
+        window.filterRes = function(cat) {
+            currentResFilter = cat;
+            document.querySelectorAll('.res-filter-btn').forEach(btn => btn.classList.toggle('active', (cat === 'all' && btn.textContent.trim() === 'ทั้งหมด') || btn.textContent.trim() === cat));
+            renderResources(cat); setTimeout(() => ScrollTrigger.refresh(), 100);
+        };
+        function renderResources(filter = 'all') {
+            document.querySelectorAll('#pub-res-grid').forEach(grid => {
+                grid.innerHTML = ''; const resList = filter === 'all' ? appState.resources : appState.resources.filter(n => n.category === filter);
+                if(resList.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-white rounded-3xl border border-gray-100 text-sm">ยังไม่มีไฟล์</div>'; return; }
+                resList.slice().reverse().forEach(res => {
+                    let media = res.type === 'image' ? `<div class="h-32 bg-gray-100 overflow-hidden"><img src="${res.url}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div>` : `<div class="h-32 bg-gray-50 flex flex-col items-center justify-center text-gray-300 group-hover:bg-theme-pink/10 transition-colors"><i class="ph-fill ph-link text-5xl mb-2"></i></div>`;
+                    grid.innerHTML += `<div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group gs-stagger-item flex flex-col">${media}<div class="p-5 flex flex-col flex-grow"><span class="text-xs font-bold text-theme-hotpink mb-2">${res.category}</span><h4 class="font-bold text-base mb-4 text-theme-text line-clamp-2 group-hover:text-theme-hotpink transition-colors">${res.title}</h4><a href="${res.url}" target="_blank" class="mt-auto inline-flex items-center space-x-2 text-theme-text text-sm font-bold bg-gray-50 py-2 px-4 rounded-xl hover:bg-theme-pink/20 w-fit"><span>${res.type === 'image' ? 'ดูรูป' : 'เปิดดู'}</span><i class="ph-bold ph-arrow-up-right"></i></a></div></div>`;
+                });
+            });
+        }
+
+        window.filterTeam = function(dept) {
+            currentTeamFilter = dept;
+            document.querySelectorAll('.team-filter-btn').forEach(btn => btn.classList.toggle('active', (dept === 'all' && btn.textContent.trim() === 'ทั้งหมด') || btn.textContent.trim() === dept));
+            renderTeam(dept); setTimeout(() => ScrollTrigger.refresh(), 100);
+        };
+        function renderTeam(filter = 'all') {
+            document.querySelectorAll('#pub-team-grid').forEach(grid => {
+                grid.innerHTML = ''; const list = filter === 'all' ? appState.teamMembers : appState.teamMembers.filter(n => n.department === filter);
+                if(list.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-white rounded-3xl border border-gray-100 text-sm">ยังไม่มีข้อมูล</div>'; return; }
+                list.forEach(m => {
+                    let contact = m.contact ? `<a href="#" class="inline-flex items-center text-theme-hotpink text-xs font-bold mt-2"><i class="ph-fill ph-instagram-logo mr-1"></i> ${m.contact}</a>` : '';
+                    grid.innerHTML += `<div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 gs-stagger-item group"><div class="aspect-square bg-gray-100 overflow-hidden"><img src="${m.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div><div class="p-3 text-center"><h4 class="font-bold text-sm text-theme-text truncate">${m.name}</h4><p class="text-xs text-gray-500 mt-1 truncate">${m.role}</p>${contact}</div></div>`;
+                });
+            });
+        }
+
+        function renderPublicRecruitments() {
+            document.querySelectorAll('#pub-recruitment-grid').forEach(grid => {
+                grid.innerHTML = ''; if(appState.recruitments.length === 0) return;
+                appState.recruitments.forEach(rec => { grid.innerHTML += `<div class="bg-white p-6 md:p-8 rounded-3xl hover:-translate-y-1 hover:shadow-xl transition-all duration-300 gs-stagger-item group border border-gray-100 flex flex-col h-full"><div class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-theme-pink/20 transition-colors shrink-0"><i class="ph-fill ${rec.icon} text-2xl text-gray-700 group-hover:text-theme-hotpink transition-colors"></i></div><h4 class="text-xl font-bold text-theme-text mb-2">${rec.title}</h4><p class="text-gray-500 text-sm mb-4 line-clamp-2 flex-grow">${rec.desc}</p><a href="${rec.link}" target="_blank" class="mt-auto inline-flex items-center space-x-2 text-theme-text text-sm font-bold group-hover:text-theme-hotpink"><span>สมัคร</span><i class="ph-bold ph-arrow-right"></i></a></div>`; });
+            });
+        }
+
+        function renderPublicAnnouncements() {
+            document.querySelectorAll('#pub-announcements-grid').forEach(grid => {
+                grid.innerHTML = ''; if(appState.announcements.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-gray-50 rounded-3xl text-sm">ไม่มีประกาศด่วน</div>'; return; }
+                appState.announcements.slice().reverse().forEach(ann => { grid.innerHTML += `<div class="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-200 hover:shadow-xl transition-all duration-300 gs-stagger-item"><div class="bg-red-50 text-red-500 text-xs font-bold px-2 py-1.5 rounded-md inline-flex items-center mb-3"><i class="ph-fill ph-warning-circle mr-1"></i> ${ann.date}</div><h4 class="text-lg font-bold text-theme-text mb-2">${ann.title}</h4><p class="text-theme-muted font-light text-sm leading-relaxed">${ann.content}</p></div>`; });
+            });
+        }
+
+        function startCountdown() {
+            clearInterval(countdownInterval);
+            const update = () => {
+                const diff = new Date(appState.targetDate).getTime() - new Date().getTime();
+                if (diff < 0) { clearInterval(countdownInterval); ['days', 'hours', 'minutes', 'seconds'].forEach(id => document.querySelectorAll(`#cd-${id}`).forEach(el => el.textContent = '00')); return; }
+                const d = String(Math.floor(diff / 86400000)).padStart(2, '0'), h = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0'), m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0'), s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+                document.querySelectorAll('#cd-days').forEach(el => el.textContent = d); document.querySelectorAll('#cd-hours').forEach(el => el.textContent = h); document.querySelectorAll('#cd-minutes').forEach(el => el.textContent = m); document.querySelectorAll('#cd-seconds').forEach(el => el.textContent = s);
+            };
+            update(); countdownInterval = setInterval(update, 1000);
+        }
+
+        function animateValue(sel, start, end, duration) {
+            document.querySelectorAll(sel).forEach(el => {
+                if (!el) return; let startT = null;
+                const step = (t) => { if (!startT) startT = t; const prog = Math.min((t - startT) / duration, 1); el.innerHTML = Math.floor(prog * (end - start) + start).toLocaleString('th-TH'); if (prog < 1) window.requestAnimationFrame(step); };
+                window.requestAnimationFrame(step);
+            });
+        }
+
+        window.submitFeedback = function(e) {
+            e.preventDefault(); const btn = document.getElementById('fdb-submit-btn'); btn.innerHTML = 'กำลังส่ง... <i class="ph-bold ph-spinner animate-spin ml-2"></i>'; btn.disabled = true;
+            const data = { timestamp: new Date().toLocaleString('th-TH'), name: document.getElementById('fdb-name').value || 'ไม่ระบุตัวตน', category: document.getElementById('fdb-category').value, title: document.getElementById('fdb-title').value, details: document.getElementById('fdb-details').value };
+            const url = appState.settings?.googleScriptUrl;
+            if(!url || !url.startsWith('http')) { setTimeout(() => { e.target.reset(); btn.innerHTML = 'ส่งข้อเสนอแนะ'; btn.disabled = false; showToast('ส่งสำเร็จ (จำลอง)'); }, 1000); return; }
+            const fd = new FormData(); for (const k in data) fd.append(k, data[k]);
+            fetch(url, { method: 'POST', body: fd, mode: 'no-cors' }).then(() => { e.target.reset(); btn.innerHTML = 'ส่งข้อเสนอแนะ'; btn.disabled = false; showToast('ขอบคุณสำหรับข้อเสนอแนะ!'); }).catch(() => { btn.innerHTML = 'ส่งข้อเสนอแนะ'; btn.disabled = false; showToast('เกิดข้อผิดพลาด'); });
+        };
+
+        const pubView = document.getElementById('public-view'), loginView = document.getElementById('login-view'), adminView = document.getElementById('admin-view');
+        window.isMobileMenuOpen = false;
+        let currentUser = null; 
+
+        window.toggleMobileMenu = function() {
+            window.isMobileMenuOpen = !window.isMobileMenuOpen; const menu = document.getElementById('mobile-menu'), icon = document.getElementById('mobile-menu-icon'), links = menu.querySelectorAll('a');
+            if (window.isMobileMenuOpen) { menu.classList.remove('opacity-0', 'pointer-events-none'); menu.classList.add('opacity-100', 'pointer-events-auto'); icon.classList.replace('ph-list', 'ph-x'); gsap.fromTo(links, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, stagger: 0.05, ease: "power3.out" }); } 
+            else { menu.classList.remove('opacity-100', 'pointer-events-auto'); menu.classList.add('opacity-0', 'pointer-events-none'); icon.classList.replace('ph-x', 'ph-list'); }
+        };
+
+        window.showLogin = function() { if (window.isMobileMenuOpen) toggleMobileMenu(); loginView.classList.remove('hide'); setTimeout(() => { loginView.classList.replace('opacity-0', 'opacity-100'); }, 10); };
+        window.hideLogin = function() { loginView.classList.replace('opacity-100', 'opacity-0'); setTimeout(() => loginView.classList.add('hide'), 300); };
+
+        window.toggleAuthMode = function() {
+            const modeInput = document.getElementById('auth-mode');
+            const currentMode = modeInput.value;
+            const newMode = currentMode === 'login' ? 'signup' : 'login';
+            modeInput.value = newMode;
+            
+            const isNewModeLogin = newMode === 'login';
+            
+            // ถ้าหน้าใหม่เป็นล็อกอิน ให้ซ่อนช่องกรอกชื่อ/ตำแหน่ง ถ้าเป็นสมัครให้โชว์
+            document.getElementById('signup-fields-group').classList.toggle('hidden', isNewModeLogin);
+            document.getElementById('auth-name').required = !isNewModeLogin;
+            document.getElementById('auth-role').required = !isNewModeLogin;
+            
+            document.getElementById('auth-title').innerText = isNewModeLogin ? 'ผู้ดูแลระบบ' : 'ขอสิทธิ์เข้าใช้งาน';
+            document.getElementById('auth-subtitle').innerText = isNewModeLogin ? 'กรุณาเข้าสู่ระบบเพื่อจัดการข้อมูล' : 'กรอกข้อมูลเพื่อรอแอดมินหลักอนุมัติ';
+            document.getElementById('auth-submit-btn').innerText = isNewModeLogin ? 'เข้าสู่ระบบ' : 'ส่งคำขอ';
+            document.getElementById('auth-toggle-btn').innerText = isNewModeLogin ? 'ขอสิทธิ์เข้าใช้งาน (สมัครสมาชิก)' : 'มีบัญชีแล้ว? เข้าสู่ระบบ';
+            document.getElementById('login-error').classList.add('hidden');
+        };
+
+        window.handleAuth = function(e) {
+            e.preventDefault();
+            const mode = document.getElementById('auth-mode').value;
+            const u = document.getElementById('username').value.trim();
+            const p = document.getElementById('password').value.trim();
+            const n = document.getElementById('auth-name').value.trim();
+            const r = document.getElementById('auth-role').value.trim();
+            
+            document.getElementById('login-error').classList.add('hidden'); 
+
+            if (mode === 'signup') {
+                if(u === (appState.auth?.user || "admin") || (appState.users || []).some(x => x.username === u)) {
+                    document.getElementById('login-error').innerText = 'ชื่อผู้ใช้นี้ถูกใช้งานแล้ว';
+                    document.getElementById('login-error').classList.remove('hidden'); return;
+                }
+                if(!appState.users) appState.users = [];
+                appState.users.push({ id: Date.now().toString(), username: u, password: p, name: n, position: r, status: 'pending', permissions: [] });
+                saveState();
+                showToast('ส่งคำขอสำเร็จ กรุณารอแอดมินหลักอนุมัติ');
+                window.toggleAuthMode();
+                document.getElementById('login-form').reset();
+            } else {
+                const validUser = appState.auth?.user || "admin";
+                const validPass = appState.auth?.pass || "sukhothai2569";
+
+                if (u === validUser && p === validPass) {
+                    currentUser = { role: 'master', username: u, permissions: 'all' };
+                    window.hideLogin(); openAdmin(); return;
+                }
+                
+                const subUser = (appState.users || []).find(x => x.username === u && x.password === p);
+                if (subUser) {
+                    if(subUser.status === 'pending') {
+                        document.getElementById('login-error').innerText = 'บัญชีนี้อยู่ระหว่างรอการอนุมัติ';
+                    } else if (subUser.status === 'approved') {
+                        currentUser = { role: 'sub', username: u, permissions: subUser.permissions || [] };
+                        window.hideLogin(); openAdmin(); return;
+                    }
+                    document.getElementById('login-error').classList.remove('hidden'); return;
+                }
+
+                document.getElementById('login-error').innerText = 'ข้อมูลไม่ถูกต้อง';
+                document.getElementById('login-error').classList.remove('hidden'); 
+                gsap.fromTo('#login-box', {x: -10}, {x: 10, yoyo: true, repeat: 3, duration: 0.1});
+            }
+        };
+
+        function openAdmin() { 
+            pubView.classList.add('hide'); adminView.classList.remove('hide'); 
+            
+            const allTabs = ['overview', 'events', 'news', 'resources', 'team', 'announcements', 'recruitments', 'settings', 'users'];
+            let firstTab = null;
+
+            allTabs.forEach(tab => {
+                const btn = document.getElementById(`tab-btn-${tab}`);
+                if(!btn) return;
+                
+                if(currentUser.role === 'master') {
+                    btn.classList.remove('hidden');
+                    if(!firstTab) firstTab = tab;
+                } else {
+                    if(tab === 'users' || tab === 'settings') {
+                        btn.classList.add('hidden');
+                    } else if ((currentUser.permissions || []).includes(tab)) {
+                        btn.classList.remove('hidden');
+                        if(!firstTab) firstTab = tab;
+                    } else {
+                        btn.classList.add('hidden');
+                    }
+                }
+            });
+
+            if(firstTab) {
+                switchAdminTab(firstTab);
+            } else { 
+                showToast('คุณยังไม่มีสิทธิ์เข้าถึงเมนูใดๆ'); window.logout(); return; 
+            }
+
+            populateAdminForms(); 
+            setTimeout(() => adminView.classList.replace('opacity-0', 'opacity-100'), 10); 
+        }
+
+        window.logout = function() { 
+            currentUser = null;
+            document.getElementById('login-form').reset();
+            adminView.classList.replace('opacity-100', 'opacity-0'); 
+            setTimeout(() => { adminView.classList.add('hide'); pubView.classList.remove('hide'); navigateTo('home'); }, 300); 
+        };
+
+        window.switchAdminTab = function(tid) {
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.add('hide')); document.getElementById(`tab-${tid}`).classList.remove('hide');
+            ['overview', 'events', 'news', 'resources', 'team', 'announcements', 'recruitments', 'settings', 'users'].forEach(id => {
+                const b = document.getElementById(`tab-btn-${id}`); if(b) b.classList.toggle('bg-theme-pink/10', id === tid); if(b) b.classList.toggle('text-theme-hotpink', id === tid);
+            });
+        };
+
+        function populateAdminForms() {
+            const safeSetValue = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+
+            safeSetValue('admin-target-date', appState.targetDate || "");
+            safeSetValue('admin-score-total', appState.score?.total || 0);
+            safeSetValue('admin-gold', appState.medals?.gold || 0);
+            safeSetValue('admin-silver', appState.medals?.silver || 0);
+            safeSetValue('admin-bronze', appState.medals?.bronze || 0);
+            
+            safeSetValue('set-hero-title', appState.texts?.heroTitle || "");
+            safeSetValue('set-hero-subtitle', appState.texts?.heroSubtitle || "");
+            safeSetValue('set-team-desc', appState.texts?.teamDesc || "");
+            safeSetValue('set-mq-1', appState.texts?.marquee1 || "");
+            safeSetValue('set-mq-2', appState.texts?.marquee2 || "");
+            safeSetValue('set-mq-3', appState.texts?.marquee3 || "");
+            safeSetValue('set-mq-4', appState.texts?.marquee4 || "");
+            
+            safeSetValue('set-gs-url', appState.settings?.googleScriptUrl || '');
+            safeSetValue('set-cld-name', appState.settings?.cloudinaryName || '');
+            safeSetValue('set-cld-preset', appState.settings?.cloudinaryPreset || '');
+            
+            safeSetValue('set-cat-news', appState.settings?.categories?.news || defaultState.settings.categories.news);
+            safeSetValue('set-cat-res', appState.settings?.categories?.resources || defaultState.settings.categories.resources);
+            safeSetValue('set-cat-team', appState.settings?.categories?.team || defaultState.settings.categories.team);
+            safeSetValue('set-cat-fdb', appState.settings?.categories?.feedback || defaultState.settings.categories.feedback);
+            
+            safeSetValue('set-admin-user', appState.auth?.user || "admin");
+            safeSetValue('set-admin-pass', appState.auth?.pass || "sukhothai2569");
+            
+            renderAdminEvents(); renderAdminNews(); renderAdminResources(); renderAdminTeam(); renderAdminAnnouncements(); renderAdminRecruitments(); renderAdminMatchResults();
+            if(currentUser && currentUser.role === 'master') renderAdminUsers();
+        }
+
+        window.saveCountdown = function(e) { e.preventDefault(); appState.targetDate = document.getElementById('admin-target-date').value; saveState(); };
+        window.toggleMrType = function() {
+            const t = document.getElementById('mr-type').value;
+            document.getElementById('mr-points-group').classList.toggle('hidden', t !== 'score'); document.getElementById('mr-medal-group').classList.toggle('hidden', t !== 'medal');
+        };
+        window.addMatchResult = function(e) {
+            e.preventDefault(); const type = document.getElementById('mr-type').value, reward = type === 'score' ? document.getElementById('mr-points').value : document.getElementById('mr-medal').value;
+            if(type === 'score') appState.score.total = (parseInt(appState.score.total) || 0) + parseInt(reward);
+            else { if(reward === 'gold') appState.medals.gold++; if(reward === 'silver') appState.medals.silver++; if(reward === 'bronze') appState.medals.bronze++; }
+            appState.matchResults.unshift({ id: Date.now().toString(), title: document.getElementById('mr-title').value, type, reward, date: new Date().toLocaleDateString('th-TH', {day:'numeric',month:'short'}) });
+            e.target.reset(); window.toggleMrType(); saveState();
+        };
+        window.deleteMatchResult = function(id) { appState.matchResults = appState.matchResults.filter(a => String(a.id) !== String(id)); saveState(); };
+        function renderAdminMatchResults() {
+            const list = document.getElementById('admin-mr-list'); if(!list) return; list.innerHTML = '';
+            if(!appState.matchResults || appState.matchResults.length === 0) { list.innerHTML = '<div class="text-gray-400 text-sm py-2">ยังไม่มีประวัติ</div>'; return; }
+            appState.matchResults.slice(0, 3).forEach(mr => {
+                let badge = mr.type === 'score' ? `<span class="bg-blue-100 text-blue-600 px-2 py-1 rounded text-[10px] font-bold">+${mr.reward}</span>` : `<span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-[10px] font-bold">${mr.reward}</span>`;
+                list.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100"><div><span class="font-bold text-sm truncate block max-w-[150px]">${mr.title}</span><span class="text-[10px] text-gray-400">${mr.date}</span></div><div class="flex items-center gap-3">${badge}<button type="button" onclick="window.deleteMatchResult('${mr.id}')" class="text-red-400 hover:text-red-600 transition"><i class="ph-fill ph-trash"></i></button></div></div>`;
+            });
+        }
+        window.saveManualTotals = function(e) { e.preventDefault(); appState.score.total = parseInt(document.getElementById('admin-score-total').value); appState.medals.gold = parseInt(document.getElementById('admin-gold').value); appState.medals.silver = parseInt(document.getElementById('admin-silver').value); appState.medals.bronze = parseInt(document.getElementById('admin-bronze').value); saveState(); };
+
+        window.saveTexts = function(e) { 
+            e.preventDefault(); 
+            
+            const newAdminUser = document.getElementById('set-admin-user').value || "admin";
+            
+            // ป้องกันแอดมินหลักเผลอตั้ง Username ตัวเองไปซ้ำกับแอดมินย่อย
+            if ((appState.users || []).some(x => x.username === newAdminUser)) {
+                showToast('❌ บันทึกไม่ได้: Username นี้มีแอดมินย่อยใช้อยู่แล้ว!');
+                document.getElementById('set-admin-user').focus();
+                return; // หยุดการทำงาน ไม่ให้บันทึกข้อมูล
+            }
+
+            appState.texts.heroTitle = document.getElementById('set-hero-title').value; 
+            appState.texts.heroSubtitle = document.getElementById('set-hero-subtitle').value; 
+            appState.texts.teamDesc = document.getElementById('set-team-desc').value; 
+            appState.texts.marquee1 = document.getElementById('set-mq-1').value;
+            appState.texts.marquee2 = document.getElementById('set-mq-2').value;
+            appState.texts.marquee3 = document.getElementById('set-mq-3').value;
+            appState.texts.marquee4 = document.getElementById('set-mq-4').value;
+            appState.settings.googleScriptUrl = document.getElementById('set-gs-url').value;
+            appState.settings.cloudinaryName = document.getElementById('set-cld-name').value;
+            appState.settings.cloudinaryPreset = document.getElementById('set-cld-preset').value;
+            appState.settings.categories.news = document.getElementById('set-cat-news').value;
+            appState.settings.categories.resources = document.getElementById('set-cat-res').value;
+            appState.settings.categories.team = document.getElementById('set-cat-team').value;
+            appState.settings.categories.feedback = document.getElementById('set-cat-fdb').value;
+            
+            if(!appState.auth) appState.auth = {};
+            appState.auth.user = newAdminUser;
+            appState.auth.pass = document.getElementById('set-admin-pass').value || "sukhothai2569";
+            
+            saveState(); showToast('บันทึกการตั้งค่าสำเร็จ');
+        };
+
+        // ====== USER MANAGEMENT LOGIC ======
+        window.approveUser = function(id) { const u = appState.users.find(x => x.id === id); if(u) { u.status = 'approved'; u.permissions = ['overview']; saveState(); renderAdminUsers(); showToast('อนุมัติบัญชีแล้ว'); } };
+        window.rejectUser = function(id) { appState.users = appState.users.filter(x => x.id !== id); saveState(); renderAdminUsers(); showToast('ลบบัญชี/ปฏิเสธสำเร็จ'); };
+        window.updatePermissions = function(id) {
+            const u = appState.users.find(x => x.id === id);
+            if(u) {
+                const perms = [];
+                document.querySelectorAll(`.perm-${id}:checked`).forEach(cb => perms.push(cb.value));
+                u.permissions = perms; saveState(); showToast('บันทึกสิทธิ์สำเร็จ');
+            }
+        };
+        
+        function renderAdminUsers() {
+            const pendingList = document.getElementById('admin-pending-users-list');
+            const approvedList = document.getElementById('admin-approved-users-list');
+            if(!pendingList || !approvedList) return;
+            pendingList.innerHTML = ''; approvedList.innerHTML = '';
+            
+            const users = appState.users || [];
+            const pending = users.filter(x => x.status === 'pending');
+            const approved = users.filter(x => x.status === 'approved');
+
+            if(pending.length === 0) pendingList.innerHTML = '<div class="text-sm text-gray-400 py-2">ไม่มีคำขอใหม่</div>';
+            pending.forEach(u => {
+                pendingList.innerHTML += `<div class="bg-gray-50 p-4 rounded-xl border border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4"><div class="overflow-hidden"><div class="font-bold text-sm text-theme-text">${u.name} <span class="text-xs font-normal text-theme-hotpink bg-theme-pink/10 px-2 py-0.5 rounded ml-1">${u.position || '-'}</span></div><div class="text-xs text-gray-500 mt-1 flex flex-wrap gap-x-3 gap-y-1"><span>User: <strong class="text-gray-700">${u.username}</strong></span><span>Pass: <strong class="text-gray-700">${u.password}</strong></span></div></div><div class="flex gap-2 shrink-0"><button onclick="approveUser('${u.id}')" class="bg-green-100 text-green-600 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-green-200 transition shadow-sm">อนุมัติ</button><button onclick="rejectUser('${u.id}')" class="bg-red-100 text-red-600 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-red-200 transition shadow-sm">ปฏิเสธ</button></div></div>`;
+            });
+
+            if(approved.length === 0) approvedList.innerHTML = '<div class="text-sm text-gray-400 py-2">ยังไม่มีแอดมินย่อยในระบบ</div>';
+            const availableTabs = [
+                {id: 'overview', name: 'ภาพรวม&คะแนน'}, {id: 'events', name: 'ตารางกิจกรรม'}, {id: 'news', name: 'ข่าวสาร'}, 
+                {id: 'resources', name: 'สื่อฝึกซ้อม'}, {id: 'team', name: 'ทำเนียบทีม'}, {id: 'announcements', name: 'ประกาศด่วน'}, {id: 'recruitments', name: 'รับสมัคร'}
+            ];
+            
+            approved.forEach(u => {
+                let cbHtml = '';
+                availableTabs.forEach(t => {
+                    const isChecked = (u.permissions || []).includes(t.id) ? 'checked' : '';
+                    cbHtml += `<label class="flex items-center space-x-2"><input type="checkbox" class="perm-${u.id} accent-theme-hotpink w-4 h-4" value="${t.id}" ${isChecked}><span class="text-xs text-gray-600">${t.name}</span></label>`;
+                });
+                
+                approvedList.innerHTML += `<div class="bg-gray-50 p-4 lg:p-5 rounded-xl border border-gray-200 flex flex-col gap-3"><div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-200 pb-3 gap-3"><div><div class="font-bold text-sm text-theme-text">${u.name} <span class="text-xs font-normal text-theme-hotpink bg-theme-pink/10 px-2 py-0.5 rounded ml-1">${u.position || '-'}</span></div><div class="text-xs text-gray-500 mt-1 flex flex-wrap gap-x-3 gap-y-1"><span>User: <strong class="text-gray-700">${u.username}</strong></span><span>Pass: <strong class="text-gray-700">${u.password}</strong></span></div></div><button onclick="rejectUser('${u.id}')" class="text-red-400 hover:text-red-600 transition text-xs font-bold bg-white px-3 py-1.5 border border-gray-100 rounded-lg shadow-sm shrink-0">ลบบัญชี</button></div><div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 py-1">${cbHtml}</div><div class="text-right mt-1"><button onclick="updatePermissions('${u.id}')" class="bg-theme-text text-white text-xs font-bold px-5 py-2.5 rounded-lg hover:bg-theme-hotpink transition shadow-sm">บันทึกสิทธิ์</button></div></div>`;
+            });
+        }
+
+        async function uploadImageHelper(file, maxSize = 1200) {
+            const cn = appState.settings?.cloudinaryName, cp = appState.settings?.cloudinaryPreset;
+            if (cn && cp) {
+                const fd = new FormData(); fd.append('file', file); fd.append('upload_preset', cp);
+                try { const res = await fetch(`https://api.cloudinary.com/v1_1/${cn}/image/upload`, { method: 'POST', body: fd }); const d = await res.json(); if (d.secure_url) return d.secure_url; } catch (err) { console.error('Cld error', err); }
+            }
+            return new Promise(res => {
+                const r = new FileReader(); r.readAsDataURL(file); r.onload = ev => {
+                    const i = new Image(); i.src = ev.target.result; i.onload = () => {
+                        const c = document.createElement('canvas'); let w = i.width, h = i.height; if (w > maxSize) { h *= (maxSize / w); w = maxSize; }
+                        c.width = w; c.height = h; c.getContext('2d').drawImage(i, 0, 0, w, h); res(c.toDataURL('image/jpeg', 0.8));
+                    };
+                };
+            });
+        }
+
+        window.addEvent = function(e) { e.preventDefault(); appState.events.push({ id: Date.now().toString(), date: document.getElementById('ev-date').value, time: document.getElementById('ev-time').value, title: document.getElementById('ev-title').value, location: document.getElementById('ev-loc').value }); e.target.reset(); saveState(); renderAdminEvents(); };
+        window.deleteEvent = function(id) { appState.events = appState.events.filter(a => String(a.id) !== String(id)); saveState(); renderAdminEvents(); };
+        function renderAdminEvents() {
+            const l = document.getElementById('admin-events-list'); l.innerHTML = '';
+            appState.events.forEach(ev => { l.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100"><div><div class="font-bold text-sm">${ev.title}</div><div class="text-[10px] text-gray-500">${ev.date} • ${ev.time}</div></div><button onclick="window.deleteEvent('${ev.id}')" class="text-red-500 transition"><i class="ph ph-trash"></i></button></div>`; });
+        }
+
+        window.addNews = async function(e) {
+            e.preventDefault(); const b = e.target.querySelector('button[type="submit"]'), f = document.getElementById('nw-image-file').files[0];
+            if (f) { b.disabled = true; b.innerHTML = 'กำลังอัปโหลด...'; const url = await uploadImageHelper(f, 1200); appState.news.push({ id: Date.now().toString(), category: document.getElementById('nw-cat').value, title: document.getElementById('nw-title').value, excerpt: document.getElementById('nw-excerpt').value, image: url }); e.target.reset(); saveState(); b.disabled = false; b.innerHTML = 'โพสต์ข่าว'; }
+        };
+        window.deleteNews = function(id) { appState.news = appState.news.filter(a => String(a.id) !== String(id)); saveState(); };
+        function renderAdminNews() {
+            const l = document.getElementById('admin-news-list'); l.innerHTML = '';
+            appState.news.slice().reverse().forEach(nw => { l.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100 gap-2 overflow-hidden"><div class="flex items-center space-x-3 overflow-hidden"><img src="${nw.image}" class="w-10 h-10 rounded object-cover shrink-0"><div class="truncate text-xs font-bold">${nw.title}</div></div><button onclick="window.deleteNews('${nw.id}')" class="text-red-500 transition shrink-0"><i class="ph ph-trash"></i></button></div>`; });
+        }
+
+        window.toggleResourceInput = function() { const t = document.getElementById('res-type').value; document.getElementById('res-link-group').classList.toggle('hidden', t !== 'link'); document.getElementById('res-image-group').classList.toggle('hidden', t !== 'image'); };
+        window.addResource = async function(e) {
+            e.preventDefault(); const b = e.target.querySelector('button[type="submit"]'), t = document.getElementById('res-type').value, f = document.getElementById('res-file').files[0];
+            let url = t === 'link' ? document.getElementById('res-url').value : null;
+            if(t === 'image' && f) { b.disabled = true; b.innerHTML = 'อัปโหลด...'; url = await uploadImageHelper(f, 1600); }
+            if(url) { appState.resources.push({ id: Date.now().toString(), category: document.getElementById('res-cat').value, title: document.getElementById('res-title').value, type: t, url }); e.target.reset(); window.toggleResourceInput(); saveState(); b.disabled = false; b.innerHTML = 'บันทึก'; }
+        };
+        window.deleteResource = function(id) { appState.resources = appState.resources.filter(a => String(a.id) !== String(id)); saveState(); };
+        function renderAdminResources() {
+            const l = document.getElementById('admin-res-list'); l.innerHTML = '';
+            appState.resources.slice().reverse().forEach(res => { l.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100 gap-2"><div class="truncate text-xs font-bold">${res.title}</div><button onclick="window.deleteResource('${res.id}')" class="text-red-500"><i class="ph ph-trash"></i></button></div>`; });
+        }
+
+        window.addTeamMember = async function(e) {
+            e.preventDefault(); const b = e.target.querySelector('button[type="submit"]'), f = document.getElementById('team-image').files[0];
+            if (f) { b.disabled = true; b.innerHTML = 'อัปโหลด...'; const url = await uploadImageHelper(f, 600); appState.teamMembers.push({ id: Date.now().toString(), department: document.getElementById('team-dept').value, name: document.getElementById('team-name').value, role: document.getElementById('team-role').value, contact: document.getElementById('team-contact').value, image: url }); e.target.reset(); saveState(); b.disabled = false; b.innerHTML = 'เพิ่มทีมงาน'; }
+        };
+        window.deleteTeamMember = function(id) { appState.teamMembers = appState.teamMembers.filter(a => String(a.id) !== String(id)); saveState(); };
+        function renderAdminTeam() {
+            const l = document.getElementById('admin-team-list'); l.innerHTML = '';
+            appState.teamMembers.forEach(m => { l.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100 gap-2"><div class="flex items-center space-x-2 truncate"><img src="${m.image}" class="w-8 h-8 rounded-full object-cover shrink-0"><span class="text-xs truncate">${m.name}</span></div><button onclick="window.deleteTeamMember('${m.id}')" class="text-red-500"><i class="ph ph-trash"></i></button></div>`; });
+        }
+
+        window.addAnnouncement = function(e) { e.preventDefault(); appState.announcements.push({ id: Date.now().toString(), title: document.getElementById('ann-title').value, content: document.getElementById('ann-content').value, date: new Date().toLocaleDateString('th-TH') }); e.target.reset(); saveState(); };
+        window.deleteAnnouncement = function(id) { appState.announcements = appState.announcements.filter(a => String(a.id) !== String(id)); saveState(); };
+        function renderAdminAnnouncements() {
+            const l = document.getElementById('admin-ann-list'); l.innerHTML = '';
+            appState.announcements.slice().reverse().forEach(ann => { l.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100"><div><div class="font-bold text-xs">${ann.title}</div></div><button onclick="window.deleteAnnouncement('${ann.id}')" class="text-red-500"><i class="ph ph-trash"></i></button></div>`; });
+        }
+
+        window.addRecruitment = function(e) { e.preventDefault(); appState.recruitments.push({ id: Date.now().toString(), icon: document.getElementById('rec-icon').value, title: document.getElementById('rec-title').value, desc: document.getElementById('rec-desc').value, link: document.getElementById('rec-link').value }); e.target.reset(); saveState(); };
+        window.deleteRecruitment = function(id) { appState.recruitments = appState.recruitments.filter(a => String(a.id) !== String(id)); saveState(); };
+        function renderAdminRecruitments() {
+            const l = document.getElementById('admin-rec-list'); l.innerHTML = '';
+            appState.recruitments.forEach(rec => { l.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100"><div><div class="font-bold text-xs">${rec.title}</div></div><button onclick="window.deleteRecruitment('${rec.id}')" class="text-red-500"><i class="ph ph-trash"></i></button></div>`; });
+        }
+
+        function showToast(m = 'บันทึกสำเร็จ') { const t = document.getElementById('toast'); document.getElementById('toast-msg').textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
+
+        function initGsapTriggers() {
+            ScrollTrigger.getAll().forEach(t => t.kill());
+            setTimeout(() => {
+                const reveals = gsap.utils.toArray('section:not(.hidden) .gs-reveal');
+                reveals.forEach(el => { gsap.set(el, { clearProps: "all" }); gsap.fromTo(el, { y: 30, autoAlpha: 0 }, { scrollTrigger: { trigger: el, start: "top 90%" }, y: 0, autoAlpha: 1, duration: 0.8, ease: "power3.out", overwrite: "auto" }); });
+                const groups = gsap.utils.toArray('section:not(.hidden) .gs-stagger-group');
+                groups.forEach(g => { const items = g.querySelectorAll('.gs-stagger-item'); if(items.length) { gsap.set(items, { clearProps: "all" }); gsap.fromTo(items, { y: 40, autoAlpha: 0, scale: 0.95 }, { scrollTrigger: { trigger: g, start: "top 85%" }, y: 0, autoAlpha: 1, scale: 1, stagger: 0.15, duration: 1, ease: "power4.out", overwrite: "auto" }); } });
+                ScrollTrigger.refresh();
+            }, 50);
+        }
+
+        window.addEventListener('load', () => {
+            renderPublicView(); initContinuousAnimations();
+            const pre = document.getElementById('preloader');
+            if (pre) { setTimeout(() => { gsap.to(pre, { opacity: 0, duration: 0.8, ease: "power2.inOut", onComplete: () => pre.style.display = 'none' }); setTimeout(() => initGsapTriggers(), 300); }, 800); } 
+            else { setTimeout(() => initGsapTriggers(), 100); }
+            window.addEventListener('scroll', () => {
+                const nav = document.getElementById('navbar');
+                if(window.scrollY > 20) { nav.classList.add('bg-white/95', 'shadow-sm', 'py-2'); nav.classList.remove('py-3', 'md:py-4', 'border-b-0'); } 
+                else { nav.classList.remove('bg-white/95', 'shadow-sm', 'py-2'); nav.classList.add('py-3', 'md:py-4', 'border-b-0'); }
+            });
+            if (window.matchMedia("(pointer: fine)").matches) {
+                const cur = document.querySelector('.cursor-dot'), xT = gsap.quickTo(cur, "x", {duration: 0.1, ease: "power3"}), yT = gsap.quickTo(cur, "y", {duration: 0.1, ease: "power3"});
+                window.addEventListener('mousemove', e => { xT(e.clientX); yT(e.clientY); });
+                document.body.addEventListener('mouseover', e => { if(e.target.closest('.hover-target')) cur.classList.add('hovered'); });
+                document.body.addEventListener('mouseout', e => { if(e.target.closest('.hover-target')) cur.classList.remove('hovered'); });
+            }
+        });
+    </script>
+</body>
+</html>
