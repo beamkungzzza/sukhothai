@@ -8,6 +8,7 @@
     <!-- Google Fonts: Inter, Noto Sans Thai & Prompt -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- โหลดน้ำหนักฟอนต์ตั้งแต่บางสุด 300 ไปจนถึง 900 -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Noto+Sans+Thai:wght@300;400;500;600;700;800;900&family=Prompt:wght@300;400;700;900&display=swap" rel="stylesheet">
     
     <!-- Phosphor Icons -->
@@ -143,22 +144,22 @@
         <nav class="fixed w-full z-50 transition-all duration-300 glass-panel border-b-0 py-3 md:py-4" id="navbar">
             <div class="max-w-7xl mx-auto px-4 md:px-12 flex justify-between items-center">
                 <div class="flex flex-col">
-                    <a href="#" onclick="navigateTo('home'); return false;" class="text-xl md:text-2xl font-bold tracking-tight text-theme-text hover-target uppercase">
+                    <a href="#" onclick="navigateTo('home'); return false;" class="text-xl md:text-2xl font-black tracking-tight text-theme-text hover-target uppercase">
                         SUKHOTHAI<span class="text-theme-hotpink">.</span>
                     </a>
-                    <span id="pub-team-desc" class="text-xs md:text-sm text-theme-hotpink font-medium tracking-wider truncate max-w-[200px] md:max-w-none">สีชมพู: อ่อนโยนแต่ไม่อ่อนแอ</span>
+                    <span id="pub-team-desc" class="text-xs md:text-sm text-theme-hotpink font-normal tracking-wider truncate max-w-[200px] md:max-w-none">สีชมพู: อ่อนโยนแต่ไม่อ่อนแอ</span>
                 </div>
                 
-                <!-- Desktop Menu -->
+                <!-- Desktop Menu (ปรับ font ให้บางลง) -->
                 <div class="hidden xl:flex items-center space-x-5 lg:space-x-6">
-                    <a href="#" onclick="navigateTo('home'); return false;" class="text-sm font-medium hover:text-theme-hotpink transition hover-target">หน้าแรก</a>
-                    <a href="#" onclick="navigateTo('scores'); return false;" class="text-sm font-medium hover:text-theme-hotpink transition hover-target">คะแนนรวม</a>
-                    <a href="#" onclick="navigateTo('announcements'); return false;" class="text-sm font-medium hover:text-theme-hotpink transition hover-target">ประกาศด่วน</a>
-                    <a href="#" onclick="navigateTo('recruitment'); return false;" class="text-sm font-medium hover:text-theme-hotpink transition hover-target">รับสมัคร</a>
-                    <a href="#" onclick="navigateTo('calendar-news'); return false;" class="text-sm font-medium hover:text-theme-hotpink transition hover-target">กิจกรรม/ข่าวสาร</a>
-                    <a href="#" onclick="navigateTo('resources'); return false;" class="text-sm font-medium hover:text-theme-hotpink transition hover-target">สื่อฝึกซ้อม</a>
-                    <a href="#" onclick="navigateTo('team'); return false;" class="text-sm font-medium hover:text-theme-hotpink transition hover-target">ทำเนียบทีมงาน</a>
-                    <a href="#" onclick="navigateTo('feedback'); return false;" class="text-sm font-medium hover:text-theme-hotpink transition hover-target">ข้อเสนอแนะ</a>
+                    <a href="#" onclick="navigateTo('home'); return false;" class="text-sm font-normal text-gray-600 hover:text-theme-hotpink transition hover-target">หน้าแรก</a>
+                    <a href="#" onclick="navigateTo('scores'); return false;" class="text-sm font-normal text-gray-600 hover:text-theme-hotpink transition hover-target">คะแนนรวม</a>
+                    <a href="#" onclick="navigateTo('announcements'); return false;" class="text-sm font-normal text-gray-600 hover:text-theme-hotpink transition hover-target">ประกาศด่วน</a>
+                    <a href="#" onclick="navigateTo('recruitment'); return false;" class="text-sm font-normal text-gray-600 hover:text-theme-hotpink transition hover-target">รับสมัคร</a>
+                    <a href="#" onclick="navigateTo('calendar-news'); return false;" class="text-sm font-normal text-gray-600 hover:text-theme-hotpink transition hover-target">กิจกรรม/ข่าวสาร</a>
+                    <a href="#" onclick="navigateTo('resources'); return false;" class="text-sm font-normal text-gray-600 hover:text-theme-hotpink transition hover-target">สื่อฝึกซ้อม</a>
+                    <a href="#" onclick="navigateTo('team'); return false;" class="text-sm font-normal text-gray-600 hover:text-theme-hotpink transition hover-target">ทำเนียบทีมงาน</a>
+                    <a href="#" onclick="navigateTo('feedback'); return false;" class="text-sm font-normal text-gray-600 hover:text-theme-hotpink transition hover-target">ข้อเสนอแนะ</a>
                     <button onclick="showLogin()" class="hover-target flex items-center justify-center w-10 h-10 rounded-full bg-theme-pink/20 hover:bg-theme-hotpink hover:text-white transition-colors duration-300 group">
                         <i class="ph ph-user text-lg text-theme-hotpink group-hover:text-white transition-colors"></i>
                     </button>
@@ -177,14 +178,14 @@
 
         <!-- Mobile Menu Overlay -->
         <div id="mobile-menu" class="fixed inset-0 bg-white/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center space-y-6 opacity-0 pointer-events-none transition-opacity duration-300 overflow-y-auto py-10">
-            <a href="#" onclick="navigateTo('home'); return false;" class="text-2xl font-bold text-theme-text hover:text-theme-hotpink hover-target">หน้าแรก</a>
-            <a href="#" onclick="navigateTo('scores'); return false;" class="text-2xl font-bold text-theme-text hover:text-theme-hotpink hover-target">คะแนนและเหรียญรางวัล</a>
-            <a href="#" onclick="navigateTo('announcements'); return false;" class="text-2xl font-bold text-theme-text hover:text-theme-hotpink hover-target">ประกาศด่วน</a>
-            <a href="#" onclick="navigateTo('recruitment'); return false;" class="text-2xl font-bold text-theme-text hover:text-theme-hotpink hover-target">การรับสมัคร</a>
-            <a href="#" onclick="navigateTo('calendar-news'); return false;" class="text-2xl font-bold text-theme-text hover:text-theme-hotpink hover-target">กิจกรรมและข่าวสาร</a>
-            <a href="#" onclick="navigateTo('resources'); return false;" class="text-2xl font-bold text-theme-text hover:text-theme-hotpink hover-target">สื่อฝึกซ้อม/แหล่งรวมไฟล์</a>
-            <a href="#" onclick="navigateTo('team'); return false;" class="text-2xl font-bold text-theme-text hover:text-theme-hotpink hover-target">ทำเนียบทีมงาน</a>
-            <a href="#" onclick="navigateTo('feedback'); return false;" class="text-2xl font-bold text-theme-text hover:text-theme-hotpink hover-target">ข้อเสนอแนะ / แจ้งปัญหา</a>
+            <a href="#" onclick="navigateTo('home'); return false;" class="text-2xl font-medium text-theme-text hover:text-theme-hotpink hover-target">หน้าแรก</a>
+            <a href="#" onclick="navigateTo('scores'); return false;" class="text-2xl font-medium text-theme-text hover:text-theme-hotpink hover-target">คะแนนและเหรียญรางวัล</a>
+            <a href="#" onclick="navigateTo('announcements'); return false;" class="text-2xl font-medium text-theme-text hover:text-theme-hotpink hover-target">ประกาศด่วน</a>
+            <a href="#" onclick="navigateTo('recruitment'); return false;" class="text-2xl font-medium text-theme-text hover:text-theme-hotpink hover-target">การรับสมัคร</a>
+            <a href="#" onclick="navigateTo('calendar-news'); return false;" class="text-2xl font-medium text-theme-text hover:text-theme-hotpink hover-target">กิจกรรมและข่าวสาร</a>
+            <a href="#" onclick="navigateTo('resources'); return false;" class="text-2xl font-medium text-theme-text hover:text-theme-hotpink hover-target">สื่อฝึกซ้อม/แหล่งรวมไฟล์</a>
+            <a href="#" onclick="navigateTo('team'); return false;" class="text-2xl font-medium text-theme-text hover:text-theme-hotpink hover-target">ทำเนียบทีมงาน</a>
+            <a href="#" onclick="navigateTo('feedback'); return false;" class="text-2xl font-medium text-theme-text hover:text-theme-hotpink hover-target">ข้อเสนอแนะ / แจ้งปัญหา</a>
         </div>
 
         <!-- ================= CONTENT SECTIONS ================= -->
@@ -208,19 +209,19 @@
                     <div class="grid grid-cols-4 gap-2 md:gap-8 max-w-4xl mx-auto gs-stagger-group px-2">
                         <div class="glass-panel p-3 md:p-6 rounded-2xl md:rounded-3xl shadow-sm gs-stagger-item">
                             <div id="cd-days" class="text-3xl md:text-6xl font-black text-theme-hotpink">00</div>
-                            <div class="text-xs md:text-sm text-gray-500 font-medium mt-1 md:mt-2 tracking-wider">วัน</div>
+                            <div class="text-xs md:text-sm text-gray-500 font-normal mt-1 md:mt-2 tracking-wider">วัน</div>
                         </div>
                         <div class="glass-panel p-3 md:p-6 rounded-2xl md:rounded-3xl shadow-sm gs-stagger-item">
                             <div id="cd-hours" class="text-3xl md:text-6xl font-black text-theme-hotpink">00</div>
-                            <div class="text-xs md:text-sm text-gray-500 font-medium mt-1 md:mt-2 tracking-wider">ชั่วโมง</div>
+                            <div class="text-xs md:text-sm text-gray-500 font-normal mt-1 md:mt-2 tracking-wider">ชั่วโมง</div>
                         </div>
                         <div class="glass-panel p-3 md:p-6 rounded-2xl md:rounded-3xl shadow-sm gs-stagger-item">
                             <div id="cd-minutes" class="text-3xl md:text-6xl font-black text-theme-hotpink">00</div>
-                            <div class="text-xs md:text-sm text-gray-500 font-medium mt-1 md:mt-2 tracking-wider">นาที</div>
+                            <div class="text-xs md:text-sm text-gray-500 font-normal mt-1 md:mt-2 tracking-wider">นาที</div>
                         </div>
                         <div class="glass-panel p-3 md:p-6 rounded-2xl md:rounded-3xl shadow-sm gs-stagger-item relative overflow-hidden">
                             <div id="cd-seconds" class="relative z-10 text-3xl md:text-6xl font-black text-theme-text">00</div>
-                            <div class="relative z-10 text-xs md:text-sm text-gray-500 font-medium mt-1 md:mt-2 tracking-wider">วินาที</div>
+                            <div class="relative z-10 text-xs md:text-sm text-gray-500 font-normal mt-1 md:mt-2 tracking-wider">วินาที</div>
                         </div>
                     </div>
                 </div>
@@ -270,21 +271,21 @@
                                     <i class="ph-fill ph-medal text-2xl md:text-4xl text-theme-gold"></i>
                                 </div>
                                 <div class="pub-medal-gold text-3xl md:text-5xl font-black text-theme-text">0</div>
-                                <div class="text-xs md:text-sm font-medium text-gray-500 mt-1 md:mt-2">ทอง</div>
+                                <div class="text-xs md:text-sm font-normal text-gray-500 mt-1 md:mt-2">ทอง</div>
                             </div>
                             <div class="bg-white border border-gray-200 shadow-sm rounded-2xl md:rounded-3xl p-4 md:p-8 flex flex-col items-center justify-center gs-stagger-item">
                                 <div class="w-10 h-10 md:w-16 md:h-16 rounded-full bg-theme-silver/10 flex items-center justify-center mb-2 md:mb-4 border border-theme-silver/30">
                                     <i class="ph-fill ph-medal text-2xl md:text-4xl text-theme-silver"></i>
                                 </div>
                                 <div class="pub-medal-silver text-3xl md:text-5xl font-black text-theme-text">0</div>
-                                <div class="text-xs md:text-sm font-medium text-gray-500 mt-1 md:mt-2">เงิน</div>
+                                <div class="text-xs md:text-sm font-normal text-gray-500 mt-1 md:mt-2">เงิน</div>
                             </div>
                             <div class="bg-white border border-gray-200 shadow-sm rounded-2xl md:rounded-3xl p-4 md:p-8 flex flex-col items-center justify-center gs-stagger-item">
                                 <div class="w-10 h-10 md:w-16 md:h-16 rounded-full bg-theme-bronze/10 flex items-center justify-center mb-2 md:mb-4 border border-theme-bronze/30">
                                     <i class="ph-fill ph-medal text-2xl md:text-4xl text-theme-bronze"></i>
                                 </div>
                                 <div class="pub-medal-bronze text-3xl md:text-5xl font-black text-theme-text">0</div>
-                                <div class="text-xs md:text-sm font-medium text-gray-500 mt-1 md:mt-2">ทองแดง</div>
+                                <div class="text-xs md:text-sm font-normal text-gray-500 mt-1 md:mt-2">ทองแดง</div>
                             </div>
                         </div>
 
@@ -293,7 +294,7 @@
                                 <h4 class="text-xl md:text-2xl font-bold text-gray-800">ผลการแข่งขันจากทุกประเภทกีฬา</h4>
                                 <div class="flex gap-1 bg-gray-100 p-1.5 rounded-full mb-4 sm:mb-0 shadow-inner">
                                     <button onclick="window.filterMatchResults('score')" id="btn-filter-score" class="px-5 py-2 rounded-full text-xs md:text-sm font-bold bg-theme-hotpink text-white shadow-sm transition hover-target">คะแนนที่ได้รับ</button>
-                                    <button onclick="window.filterMatchResults('medal')" id="btn-filter-medal" class="px-5 py-2 rounded-full text-xs md:text-sm font-bold text-gray-500 hover:text-gray-800 transition hover-target">เหรียญรางวัล</button>
+                                    <button onclick="window.filterMatchResults('medal')" id="btn-filter-medal" class="px-5 py-2 rounded-full text-xs md:text-sm font-normal text-gray-500 hover:text-gray-800 transition hover-target">เหรียญรางวัล</button>
                                 </div>
                             </div>
                             <div id="pub-match-results-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 gs-stagger-group">
@@ -325,7 +326,7 @@
                     <div class="text-center mb-10 md:mb-16 gs-reveal">
                         <h2 class="text-xs md:text-sm font-bold tracking-widest text-theme-hotpink mb-2 uppercase">Join Us</h2>
                         <h3 class="text-3xl md:text-5xl font-bold tracking-tight text-theme-text">เปิดรับสมัครชาวสุโขทัย</h3>
-                        <p class="text-sm md:text-base text-theme-muted mt-3 md:mt-4 max-w-2xl mx-auto px-4">มาร่วมเป็นส่วนสำคัญในการขับเคลื่อนสีชมพูสู่ชัยชนะ เลือกตำแหน่งที่ใช่สำหรับคุณ</p>
+                        <p class="text-sm md:text-base text-gray-500 font-light mt-3 md:mt-4 max-w-2xl mx-auto px-4">มาร่วมเป็นส่วนสำคัญในการขับเคลื่อนสีชมพูสู่ชัยชนะ เลือกตำแหน่งที่ใช่สำหรับคุณ</p>
                     </div>
                     <div id="pub-recruitment-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 gs-stagger-group">
                         <!-- Cards injected by JS -->
@@ -349,7 +350,7 @@
                                    <h4 id="cal-month-year" class="font-bold text-base md:text-lg text-theme-text"></h4>
                                    <button onclick="nextMonth()" class="text-gray-400 hover:text-theme-hotpink transition-colors hover-target p-2"><i class="ph-bold ph-caret-right text-xl"></i></button>
                                 </div>
-                                <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold text-gray-400 mb-2">
+                                <div class="grid grid-cols-7 gap-1 text-center text-xs font-normal text-gray-400 mb-2">
                                     <div>อา</div><div>จ</div><div>อ</div><div>พ</div><div>พฤ</div><div>ศ</div><div>ส</div>
                                 </div>
                                 <div id="cal-days-grid" class="grid grid-cols-7 gap-1 text-center"></div>
@@ -382,7 +383,7 @@
                     <div class="text-center mb-10 md:mb-16 gs-reveal">
                         <h2 class="text-xs md:text-sm font-bold tracking-widest text-gray-500 mb-2 uppercase">Practice Materials</h2>
                         <h3 class="text-3xl md:text-5xl font-bold tracking-tight text-theme-text">แหล่งรวมไฟล์ และสื่อฝึกซ้อม</h3>
-                        <p class="text-sm md:text-base text-gray-500 mt-3 md:mt-4 max-w-2xl mx-auto px-4">รวมไฟล์เพลงเชียร์ เนื้อร้อง ตารางซ้อม และสื่อที่จำเป็นสำหรับชาวสีชมพู</p>
+                        <p class="text-sm md:text-base text-gray-500 font-light mt-3 md:mt-4 max-w-2xl mx-auto px-4">รวมไฟล์เพลงเชียร์ เนื้อร้อง ตารางซ้อม และสื่อที่จำเป็นสำหรับชาวสีชมพู</p>
                     </div>
 
                     <div class="flex gap-2 mb-6 md:mb-8 overflow-x-auto hide-scrollbar pb-2 pr-6 md:pr-0 gs-reveal" id="res-filters">
@@ -401,7 +402,7 @@
                     <div class="text-center mb-10 md:mb-16 gs-reveal">
                         <h2 class="text-xs md:text-sm font-bold tracking-widest text-gray-500 mb-2 uppercase">Our Team</h2>
                         <h3 class="text-3xl md:text-5xl font-bold tracking-tight text-theme-text">ทำเนียบทีมงาน</h3>
-                        <p class="text-sm md:text-base text-gray-500 mt-3 md:mt-4 max-w-2xl mx-auto px-4">บุคลากรและผู้นำที่อยู่เบื้องหลังความสำเร็จของคณะสีสุโขทัย</p>
+                        <p class="text-sm md:text-base text-gray-500 font-light mt-3 md:mt-4 max-w-2xl mx-auto px-4">บุคลากรและผู้นำที่อยู่เบื้องหลังความสำเร็จของคณะสีสุโขทัย</p>
                     </div>
 
                     <div class="flex gap-2 mb-6 md:mb-10 overflow-x-auto hide-scrollbar pb-2 pr-6 md:pr-0 gs-reveal" id="team-filters">
@@ -420,29 +421,29 @@
                     <div class="text-center mb-10 md:mb-16 gs-reveal">
                         <h2 class="text-xs md:text-sm font-bold tracking-widest text-theme-hotpink mb-2 uppercase">Help Us Improve</h2>
                         <h3 class="text-3xl md:text-5xl font-bold tracking-tight text-theme-text">ข้อเสนอแนะ / แจ้งปัญหา</h3>
-                        <p class="text-sm md:text-base text-theme-muted mt-3 md:mt-4 px-4">ความเห็นของคุณสำคัญต่อเรา เพื่อพัฒนาคณะสีให้ดียิ่งขึ้น</p>
+                        <p class="text-sm md:text-base text-gray-500 font-light mt-3 md:mt-4 px-4">ความเห็นของคุณสำคัญต่อเรา เพื่อพัฒนาคณะสีให้ดียิ่งขึ้น</p>
                     </div>
 
                     <div class="bg-white p-6 md:p-10 rounded-3xl shadow-xl border border-gray-100 gs-reveal">
                         <form id="public-feedback-form" onsubmit="window.submitFeedback(event)" class="space-y-6">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">หมวดหมู่ <span class="text-red-500">*</span></label>
+                                    <label class="block text-sm font-normal text-gray-700 mb-2">หมวดหมู่ <span class="text-red-500">*</span></label>
                                     <select id="fdb-category" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-theme-hotpink focus:ring-1 focus:ring-theme-hotpink transition-all hover-target" required>
                                         <!-- Options injected by JS -->
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">ชื่อ-นามสกุล (ไม่บังคับ)</label>
+                                    <label class="block text-sm font-normal text-gray-700 mb-2">ชื่อ-นามสกุล (ไม่บังคับ)</label>
                                     <input type="text" id="fdb-name" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-theme-hotpink focus:ring-1 focus:ring-theme-hotpink transition-all hover-target" placeholder="ไม่ต้องระบุก็ได้">
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">หัวข้อ / เรื่องที่ต้องการแจ้ง <span class="text-red-500">*</span></label>
+                                <label class="block text-sm font-normal text-gray-700 mb-2">หัวข้อ / เรื่องที่ต้องการแจ้ง <span class="text-red-500">*</span></label>
                                 <input type="text" id="fdb-title" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-theme-hotpink focus:ring-1 focus:ring-theme-hotpink transition-all hover-target" placeholder="อธิบายหัวข้อสั้นๆ" required>
                             </div>
                             <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">รายละเอียด <span class="text-red-500">*</span></label>
+                                <label class="block text-sm font-normal text-gray-700 mb-2">รายละเอียด <span class="text-red-500">*</span></label>
                                 <textarea id="fdb-details" rows="5" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-theme-hotpink focus:ring-1 focus:ring-theme-hotpink transition-all resize-none hover-target" placeholder="อธิบายรายละเอียดปัญหา..." required></textarea>
                             </div>
                             <div class="text-center pt-4">
@@ -456,7 +457,7 @@
             </section>
         </main>
 
-        <footer class="py-8 text-center text-xs md:text-sm text-theme-muted bg-white border-t border-gray-100 relative z-20">
+        <footer class="py-8 text-center text-xs md:text-sm text-gray-400 bg-white border-t border-gray-100 relative z-20 font-light">
             <p>&copy; <span id="year"></span> คณะสีสุโขทัย (สีชมพู). All rights reserved.</p>
         </footer>
     </div>
@@ -474,43 +475,41 @@
                     <i class="ph-fill ph-lock-key text-xl md:text-2xl text-theme-hotpink"></i>
                 </div>
                 <h2 id="auth-title" class="text-lg md:text-xl font-bold text-theme-text">ผู้ดูแลระบบ</h2>
-                <p id="auth-subtitle" class="text-[10px] md:text-xs text-theme-muted mt-1">กรุณาเข้าสู่ระบบเพื่อจัดการข้อมูล</p>
+                <p id="auth-subtitle" class="text-[10px] md:text-xs text-gray-500 font-light mt-1">กรุณาเข้าสู่ระบบเพื่อจัดการข้อมูล</p>
             </div>
             
-            <!-- ปรับลดช่องว่าง (space-y) ให้ชิดกันขึ้น -->
             <form id="login-form" onsubmit="handleAuth(event)" class="space-y-3 md:space-y-4">
                 <input type="hidden" id="auth-mode" value="login">
                 
                 <div id="signup-fields-group" class="hidden">
-                    <!-- จับ ชื่อและตำแหน่ง มาอยู่คู่กันในบรรทัดเดียว -->
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-[10px] md:text-xs font-bold text-gray-700 mb-1">ชื่อ-นามสกุล</label>
+                            <label class="block text-[10px] md:text-xs font-normal text-gray-700 mb-1">ชื่อ-นามสกุล</label>
                             <input type="text" id="auth-name" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-theme-hotpink focus:ring-1 focus:ring-theme-hotpink transition-all hover-target" placeholder="เช่น พี่เอ" autocomplete="off">
                         </div>
                         <div>
-                            <label class="block text-[10px] md:text-xs font-bold text-gray-700 mb-1">ตำแหน่งในสี</label>
+                            <label class="block text-[10px] md:text-xs font-normal text-gray-700 mb-1">ตำแหน่งในสี</label>
                             <input type="text" id="auth-role" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-theme-hotpink focus:ring-1 focus:ring-theme-hotpink transition-all hover-target" placeholder="เช่น สภาสี" autocomplete="off">
                         </div>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-[10px] md:text-xs font-bold text-gray-700 mb-1">Username</label>
+                    <label class="block text-[10px] md:text-xs font-normal text-gray-700 mb-1">Username</label>
                     <input type="text" id="username" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-theme-hotpink focus:ring-1 focus:ring-theme-hotpink transition-all hover-target" placeholder="ชื่อผู้ใช้งาน" required autocomplete="off">
                 </div>
                 <div>
-                    <label class="block text-[10px] md:text-xs font-bold text-gray-700 mb-1">Password</label>
+                    <label class="block text-[10px] md:text-xs font-normal text-gray-700 mb-1">Password</label>
                     <input type="password" id="password" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-theme-hotpink focus:ring-1 focus:ring-theme-hotpink transition-all hover-target" placeholder="รหัสผ่าน" required autocomplete="off">
                 </div>
                 
-                <div id="login-error" class="text-red-500 text-xs hidden font-bold text-center">ข้อมูลไม่ถูกต้อง</div>
+                <div id="login-error" class="text-red-500 text-xs hidden font-normal text-center">ข้อมูลไม่ถูกต้อง</div>
                 
                 <button type="submit" id="auth-submit-btn" class="w-full bg-theme-text text-white rounded-xl py-2.5 text-sm font-bold hover:bg-theme-hotpink transition-colors hover-target mt-2">
                     เข้าสู่ระบบ
                 </button>
                 <div class="text-center text-[10px] md:text-xs pt-1">
-                    <button type="button" id="auth-toggle-btn" onclick="toggleAuthMode()" class="text-theme-hotpink font-bold hover:underline hover-target">ขอสิทธิ์เข้าใช้งาน (สมัครสมาชิก)</button>
+                    <button type="button" id="auth-toggle-btn" onclick="toggleAuthMode()" class="text-theme-hotpink font-normal hover:underline hover-target">ขอสิทธิ์เข้าใช้งาน (สมัครสมาชิก)</button>
                 </div>
             </form>
         </div>
@@ -528,7 +527,7 @@
                     </div>
                     <div>
                         <h2 class="font-bold text-theme-text text-sm md:text-base">Admin Panel</h2>
-                        <p class="text-[10px] md:text-xs text-theme-hotpink font-medium">Sukhothai Control</p>
+                        <p class="text-[10px] md:text-xs text-theme-hotpink font-normal">Sukhothai Control</p>
                     </div>
                 </div>
                 <button onclick="logout()" class="md:hidden flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-500 hover-target">
@@ -537,31 +536,31 @@
             </div>
 
             <nav class="flex md:flex-col p-2 md:p-4 gap-2 md:gap-2 overflow-x-auto md:overflow-y-auto hide-scrollbar w-full flex-1">
-                <button onclick="switchAdminTab('overview')" id="tab-btn-overview" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl bg-theme-pink/10 text-theme-hotpink font-bold transition-colors hover-target text-left text-xs md:text-sm">
+                <button onclick="switchAdminTab('overview')" id="tab-btn-overview" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl bg-theme-pink/10 text-theme-hotpink font-normal transition-colors hover-target text-left text-xs md:text-sm">
                     <i class="ph ph-squares-four text-lg"></i><span class="whitespace-nowrap">ภาพรวม & คะแนน</span>
                 </button>
-                <button onclick="switchAdminTab('events')" id="tab-btn-events" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-bold transition-colors hover-target text-left text-xs md:text-sm">
+                <button onclick="switchAdminTab('events')" id="tab-btn-events" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-normal transition-colors hover-target text-left text-xs md:text-sm">
                     <i class="ph ph-calendar text-lg"></i><span class="whitespace-nowrap">ตารางกิจกรรม</span>
                 </button>
-                <button onclick="switchAdminTab('news')" id="tab-btn-news" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-bold transition-colors hover-target text-left text-xs md:text-sm">
+                <button onclick="switchAdminTab('news')" id="tab-btn-news" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-normal transition-colors hover-target text-left text-xs md:text-sm">
                     <i class="ph ph-newspaper text-lg"></i><span class="whitespace-nowrap">ข่าวสาร</span>
                 </button>
-                <button onclick="switchAdminTab('resources')" id="tab-btn-resources" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-bold transition-colors hover-target text-left text-xs md:text-sm">
+                <button onclick="switchAdminTab('resources')" id="tab-btn-resources" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-normal transition-colors hover-target text-left text-xs md:text-sm">
                     <i class="ph ph-folder text-lg"></i><span class="whitespace-nowrap">สื่อฝึกซ้อม/ไฟล์</span>
                 </button>
-                <button onclick="switchAdminTab('team')" id="tab-btn-team" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-bold transition-colors hover-target text-left text-xs md:text-sm">
+                <button onclick="switchAdminTab('team')" id="tab-btn-team" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-normal transition-colors hover-target text-left text-xs md:text-sm">
                     <i class="ph ph-users-three text-lg"></i><span class="whitespace-nowrap">ทำเนียบทีมงาน</span>
                 </button>
-                <button onclick="switchAdminTab('announcements')" id="tab-btn-announcements" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-bold transition-colors hover-target text-left text-xs md:text-sm">
+                <button onclick="switchAdminTab('announcements')" id="tab-btn-announcements" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-normal transition-colors hover-target text-left text-xs md:text-sm">
                     <i class="ph ph-bell-ringing text-lg"></i><span class="whitespace-nowrap">ประกาศด่วน</span>
                 </button>
-                <button onclick="switchAdminTab('recruitments')" id="tab-btn-recruitments" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-bold transition-colors hover-target text-left text-xs md:text-sm">
+                <button onclick="switchAdminTab('recruitments')" id="tab-btn-recruitments" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-normal transition-colors hover-target text-left text-xs md:text-sm">
                     <i class="ph ph-address-book text-lg"></i><span class="whitespace-nowrap">ระบบรับสมัคร</span>
                 </button>
-                <button onclick="switchAdminTab('settings')" id="tab-btn-settings" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-bold transition-colors hover-target text-left text-xs md:text-sm">
+                <button onclick="switchAdminTab('settings')" id="tab-btn-settings" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-normal transition-colors hover-target text-left text-xs md:text-sm">
                     <i class="ph ph-text-t text-lg"></i><span class="whitespace-nowrap">ตั้งค่าข้อความเว็บ</span>
                 </button>
-                <button onclick="switchAdminTab('users')" id="tab-btn-users" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-bold transition-colors hover-target text-left text-xs md:text-sm">
+                <button onclick="switchAdminTab('users')" id="tab-btn-users" class="shrink-0 flex items-center space-x-2 md:space-x-3 px-4 py-2 md:py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-normal transition-colors hover-target text-left text-xs md:text-sm">
                     <i class="ph ph-user-gear text-lg"></i><span class="whitespace-nowrap">จัดการแอดมินย่อย</span>
                 </button>
             </nav>
@@ -587,26 +586,26 @@
                     </div>
 
                     <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-plus-circle mr-2 text-theme-hotpink"></i>เพิ่มผลการแข่งขัน / แจ้งคะแนน</h3>
+                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-plus-circle mr-2 text-theme-hotpink"></i>เพิ่ม/แก้ไข ผลการแข่งขัน</h3>
                         <form onsubmit="window.addMatchResult(event)" class="space-y-4">
                             <div>
-                                <label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">รายการกีฬา / การประกวด</label>
+                                <label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">รายการกีฬา / การประกวด</label>
                                 <input type="text" id="mr-title" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none font-bold" required>
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">ผลลัพธ์ที่ได้</label>
+                                    <label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">ผลลัพธ์ที่ได้</label>
                                     <select id="mr-type" onchange="window.toggleMrType()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none">
                                         <option value="score">ได้เป็นคะแนน</option>
                                         <option value="medal">ได้เป็นเหรียญรางวัล</option>
                                     </select>
                                 </div>
                                 <div id="mr-points-group">
-                                    <label class="block text-xs lg:text-sm font-bold text-blue-500 mb-1">จำนวนคะแนน</label>
+                                    <label class="block text-xs lg:text-sm font-normal text-blue-500 mb-1">จำนวนคะแนน</label>
                                     <input type="number" id="mr-points" class="w-full bg-blue-50 border border-blue-200 rounded-xl px-4 py-2 focus:border-blue-500 focus:outline-none text-blue-700 font-bold">
                                 </div>
                                 <div id="mr-medal-group" class="hidden">
-                                    <label class="block text-xs lg:text-sm font-bold text-yellow-600 mb-1">เหรียญที่ได้</label>
+                                    <label class="block text-xs lg:text-sm font-normal text-yellow-600 mb-1">เหรียญที่ได้</label>
                                     <select id="mr-medal" class="w-full bg-yellow-50 border border-yellow-200 rounded-xl px-4 py-2 focus:border-yellow-500 focus:outline-none font-bold text-yellow-700">
                                         <option value="gold">เหรียญทอง</option>
                                         <option value="silver">เหรียญเงิน</option>
@@ -614,7 +613,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="text-right pt-2"><button type="submit" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">บันทึกผล</button></div>
+                            <div class="text-right pt-2"><button type="submit" id="btn-submit-mr" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">บันทึกผล</button></div>
                         </form>
                         <div class="mt-6 border-t border-gray-100 pt-4">
                             <h4 class="font-bold text-xs text-gray-500 mb-3 uppercase tracking-wider">ผลการแข่งขันล่าสุด (3 อันดับแรก)</h4>
@@ -626,10 +625,10 @@
                         <h3 class="text-sm font-bold mb-4 flex items-center text-gray-500"><i class="ph ph-wrench mr-2"></i>แก้ไขยอดรวมแบบกำหนดเอง</h3>
                         <form onsubmit="window.saveManualTotals(event)" class="space-y-4">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div><label class="block text-xs font-bold text-gray-500 mb-1">คะแนนรวมทั้งหมด</label><input type="number" id="admin-score-total" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm font-bold"></div>
-                                <div><label class="block text-xs font-bold text-theme-gold mb-1">เหรียญทองรวม</label><input type="number" id="admin-gold" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm font-bold"></div>
-                                <div><label class="block text-xs font-bold text-theme-silver mb-1">เหรียญเงินรวม</label><input type="number" id="admin-silver" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm font-bold"></div>
-                                <div><label class="block text-xs font-bold text-theme-bronze mb-1">เหรียญทองแดงรวม</label><input type="number" id="admin-bronze" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm font-bold"></div>
+                                <div><label class="block text-xs font-normal text-gray-500 mb-1">คะแนนรวมทั้งหมด</label><input type="number" id="admin-score-total" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm font-bold"></div>
+                                <div><label class="block text-xs font-normal text-theme-gold mb-1">เหรียญทองรวม</label><input type="number" id="admin-gold" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm font-bold"></div>
+                                <div><label class="block text-xs font-normal text-theme-silver mb-1">เหรียญเงินรวม</label><input type="number" id="admin-silver" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm font-bold"></div>
+                                <div><label class="block text-xs font-normal text-theme-bronze mb-1">เหรียญทองแดงรวม</label><input type="number" id="admin-bronze" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm font-bold"></div>
                             </div>
                             <div class="text-right"><button type="submit" class="bg-gray-300 text-gray-700 px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-gray-400 transition">บังคับอัปเดต</button></div>
                         </form>
@@ -638,15 +637,15 @@
 
                 <div id="tab-events" class="admin-tab space-y-6 lg:space-y-8 hide">
                     <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-calendar-plus mr-2 text-theme-hotpink"></i>เพิ่มกิจกรรมใหม่</h3>
+                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-calendar-plus mr-2 text-theme-hotpink"></i>เพิ่ม/แก้ไข กิจกรรม</h3>
                         <form onsubmit="window.addEvent(event)" class="space-y-4">
                             <div class="grid grid-cols-2 gap-3 lg:gap-4">
-                                <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">วันที่ (เช่น 15 พ.ย. 69)</label><input type="text" id="ev-date" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
-                                <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">เวลา (เช่น 08:30)</label><input type="text" id="ev-time" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
+                                <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">วันที่ (เช่น 15 พ.ย. 69)</label><input type="text" id="ev-date" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
+                                <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">เวลา (เช่น 08:30)</label><input type="text" id="ev-time" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
                             </div>
-                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">ชื่อกิจกรรม</label><input type="text" id="ev-title" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none font-bold" required></div>
-                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">สถานที่</label><input type="text" id="ev-loc" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
-                            <div class="text-right"><button type="submit" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">เพิ่มกิจกรรม</button></div>
+                            <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">ชื่อกิจกรรม</label><input type="text" id="ev-title" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none font-bold" required></div>
+                            <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">สถานที่</label><input type="text" id="ev-loc" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
+                            <div class="text-right"><button type="submit" id="btn-submit-ev" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">เพิ่มกิจกรรม</button></div>
                         </form>
                     </div>
                     <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
@@ -657,13 +656,13 @@
 
                 <div id="tab-news" class="admin-tab space-y-6 lg:space-y-8 hide">
                     <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-newspaper mr-2 text-theme-hotpink"></i>เพิ่มข่าวสารใหม่</h3>
+                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-newspaper mr-2 text-theme-hotpink"></i>เพิ่ม/แก้ไข ข่าวสาร</h3>
                         <form onsubmit="window.addNews(event)" class="space-y-4">
-                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">หมวดหมู่</label><select id="nw-cat" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></select></div>
-                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">หัวข้อข่าว</label><input type="text" id="nw-title" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none font-bold" required></div>
-                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">เนื้อหาโดยย่อ</label><textarea id="nw-excerpt" rows="2" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none resize-none" required></textarea></div>
-                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">รูปภาพ</label><input type="file" id="nw-image-file" accept="image/*" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
-                            <div class="text-right"><button type="submit" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">โพสต์ข่าว</button></div>
+                            <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">หมวดหมู่</label><select id="nw-cat" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></select></div>
+                            <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">หัวข้อข่าว</label><input type="text" id="nw-title" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none font-bold" required></div>
+                            <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">เนื้อหาโดยย่อ</label><textarea id="nw-excerpt" rows="2" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none resize-none" required></textarea></div>
+                            <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">รูปภาพ (เว้นว่างหากใช้รูปเดิม)</label><input type="file" id="nw-image-file" accept="image/*" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none"></div>
+                            <div class="text-right"><button type="submit" id="btn-submit-nw" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">โพสต์ข่าว</button></div>
                         </form>
                     </div>
                     <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
@@ -674,14 +673,14 @@
 
                 <div id="tab-resources" class="admin-tab space-y-6 lg:space-y-8 hide">
                     <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-folder-plus mr-2 text-theme-hotpink"></i>เพิ่มสื่อฝึกซ้อม</h3>
+                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-folder-plus mr-2 text-theme-hotpink"></i>เพิ่ม/แก้ไข สื่อฝึกซ้อม</h3>
                         <form onsubmit="window.addResource(event)" class="space-y-4">
-                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">หมวดหมู่</label><select id="res-cat" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></select></div>
-                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">ชื่อสื่อ</label><input type="text" id="res-title" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none font-bold" required></div>
-                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">ประเภท</label><select id="res-type" onchange="window.toggleResourceInput()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required><option value="link">ลิงก์ภายนอก</option><option value="image">อัปโหลดรูปภาพ</option></select></div>
-                            <div id="res-link-group"><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">URL</label><input type="url" id="res-url" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none"></div>
-                            <div id="res-image-group" class="hidden"><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">ไฟล์</label><input type="file" id="res-file" accept="image/*" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none"></div>
-                            <div class="text-right pt-2"><button type="submit" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">บันทึก</button></div>
+                            <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">หมวดหมู่</label><select id="res-cat" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></select></div>
+                            <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">ชื่อสื่อ</label><input type="text" id="res-title" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none font-bold" required></div>
+                            <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">ประเภท</label><select id="res-type" onchange="window.toggleResourceInput()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required><option value="link">ลิงก์ภายนอก</option><option value="image">อัปโหลดรูปภาพ</option></select></div>
+                            <div id="res-link-group"><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">URL</label><input type="url" id="res-url" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none"></div>
+                            <div id="res-image-group" class="hidden"><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">ไฟล์ (เว้นว่างหากใช้รูปเดิม)</label><input type="file" id="res-file" accept="image/*" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none"></div>
+                            <div class="text-right pt-2"><button type="submit" id="btn-submit-res" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">บันทึกสื่อ</button></div>
                         </form>
                     </div>
                     <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
@@ -692,18 +691,18 @@
 
                 <div id="tab-team" class="admin-tab space-y-6 lg:space-y-8 hide">
                     <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-user-plus mr-2 text-theme-hotpink"></i>เพิ่มบุคลากร</h3>
+                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-user-plus mr-2 text-theme-hotpink"></i>เพิ่ม/แก้ไข บุคลากร</h3>
                         <form onsubmit="window.addTeamMember(event)" class="space-y-4">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">ฝ่าย</label><select id="team-dept" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></select></div>
-                                <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">ชื่อ</label><input type="text" id="team-name" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none font-bold" required></div>
+                                <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">ฝ่าย</label><select id="team-dept" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></select></div>
+                                <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">ชื่อ</label><input type="text" id="team-name" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none font-bold" required></div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">ตำแหน่ง</label><input type="text" id="team-role" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
-                                <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">IG / FB</label><input type="text" id="team-contact" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none"></div>
+                                <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">ตำแหน่ง</label><input type="text" id="team-role" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
+                                <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">IG / FB</label><input type="text" id="team-contact" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none"></div>
                             </div>
-                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">รูปโปรไฟล์</label><input type="file" id="team-image" accept="image/*" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
-                            <div class="text-right pt-2"><button type="submit" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">เพิ่มทีมงาน</button></div>
+                            <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">รูปโปรไฟล์ (เว้นว่างหากใช้รูปเดิม)</label><input type="file" id="team-image" accept="image/*" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none"></div>
+                            <div class="text-right pt-2"><button type="submit" id="btn-submit-team" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">บันทึกทีมงาน</button></div>
                         </form>
                     </div>
                     <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
@@ -714,11 +713,11 @@
 
                 <div id="tab-announcements" class="admin-tab space-y-6 lg:space-y-8 hide">
                     <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-bell-ringing mr-2 text-theme-hotpink"></i>เพิ่มประกาศด่วน</h3>
+                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-bell-ringing mr-2 text-theme-hotpink"></i>เพิ่ม/แก้ไข ประกาศด่วน</h3>
                         <form onsubmit="window.addAnnouncement(event)" class="space-y-4">
                             <input type="text" id="ann-title" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none font-bold" placeholder="หัวข้อประกาศ" required>
                             <textarea id="ann-content" rows="3" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none resize-none" placeholder="รายละเอียด..." required></textarea>
-                            <div class="text-right"><button type="submit" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">โพสต์ประกาศ</button></div>
+                            <div class="text-right"><button type="submit" id="btn-submit-ann" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">โพสต์ประกาศ</button></div>
                         </form>
                     </div>
                     <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
@@ -729,13 +728,13 @@
 
                 <div id="tab-recruitments" class="admin-tab space-y-6 lg:space-y-8 hide">
                     <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-address-book mr-2 text-theme-hotpink"></i>เพิ่มการรับสมัคร</h3>
+                        <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-address-book mr-2 text-theme-hotpink"></i>เพิ่ม/แก้ไข การรับสมัคร</h3>
                         <form onsubmit="window.addRecruitment(event)" class="space-y-4">
-                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">ไอคอน</label><select id="rec-icon" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none"><option value="ph-users-three">สตาฟ</option><option value="ph-crown">หัวหน้า</option><option value="ph-sneaker">นักกีฬา</option><option value="ph-star-four">เชียร์</option><option value="ph-megaphone">สแตนด์</option><option value="ph-flag-banner">พาเหรด</option></select></div>
-                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">หัวข้อ</label><input type="text" id="rec-title" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none font-bold" required></div>
-                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">รายละเอียด</label><textarea id="rec-desc" rows="2" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none resize-none" required></textarea></div>
-                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-1">ลิงก์ Form</label><input type="url" id="rec-link" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
-                            <div class="text-right"><button type="submit" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">บันทึก</button></div>
+                            <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">ไอคอน</label><select id="rec-icon" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none"><option value="ph-users-three">สตาฟ</option><option value="ph-crown">หัวหน้า</option><option value="ph-sneaker">นักกีฬา</option><option value="ph-star-four">เชียร์</option><option value="ph-megaphone">สแตนด์</option><option value="ph-flag-banner">พาเหรด</option></select></div>
+                            <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">หัวข้อ</label><input type="text" id="rec-title" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none font-bold" required></div>
+                            <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">รายละเอียด</label><textarea id="rec-desc" rows="2" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none resize-none" required></textarea></div>
+                            <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-1">ลิงก์ Form</label><input type="url" id="rec-link" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
+                            <div class="text-right"><button type="submit" id="btn-submit-rec" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">บันทึกระบบสมัคร</button></div>
                         </form>
                     </div>
                     <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
@@ -748,49 +747,49 @@
                     <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
                         <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-lock-key mr-2 text-theme-hotpink"></i>ตั้งค่าบัญชีแอดมินหลัก</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div><label class="block text-xs font-bold text-gray-700 mb-1">Admin Username</label><input type="text" id="set-admin-user" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" placeholder="admin"></div>
-                            <div><label class="block text-xs font-bold text-gray-700 mb-1">Admin Password</label><input type="password" id="set-admin-pass" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" placeholder="password"></div>
+                            <div><label class="block text-xs font-normal text-gray-700 mb-1">Admin Username</label><input type="text" id="set-admin-user" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" placeholder="admin"></div>
+                            <div><label class="block text-xs font-normal text-gray-700 mb-1">Admin Password</label><input type="password" id="set-admin-pass" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" placeholder="password"></div>
                         </div>
-                        <p class="text-[10px] text-gray-500 mt-2">ระวัง! หากเปลี่ยนแล้วต้องจำให้ได้เพื่อเข้าสู่ระบบครั้งต่อไป</p>
+                        <p class="text-[10px] text-gray-500 mt-2 font-light">ระวัง! หากเปลี่ยนแล้วต้องจำให้ได้เพื่อเข้าสู่ระบบครั้งต่อไป</p>
                     </div>
 
                     <div class="bg-white p-5 lg:p-6 rounded-2xl shadow-sm border border-gray-100">
                         <h3 class="text-base lg:text-lg font-bold mb-4 flex items-center"><i class="ph ph-text-t mr-2 text-theme-hotpink"></i>ตั้งค่าข้อความหน้าเว็บ</h3>
                         <form onsubmit="window.saveTexts(event)" class="space-y-4">
-                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-2">หัวข้อหลัก (Hero Title)</label><input type="text" id="set-hero-title" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none font-bold text-lg" required></div>
-                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-2">คำเชิญชวน (Hero Subtitle)</label><textarea id="set-hero-subtitle" rows="3" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none resize-none" required></textarea></div>
-                            <div><label class="block text-xs lg:text-sm font-bold text-gray-700 mb-2">คำอธิบายคณะสีมุมซ้ายบน</label><input type="text" id="set-team-desc" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
+                            <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-2">หัวข้อหลัก (Hero Title)</label><input type="text" id="set-hero-title" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none font-bold text-lg" required></div>
+                            <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-2">คำเชิญชวน (Hero Subtitle)</label><textarea id="set-hero-subtitle" rows="3" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none resize-none" required></textarea></div>
+                            <div><label class="block text-xs lg:text-sm font-normal text-gray-700 mb-2">คำอธิบายคณะสีมุมซ้ายบน</label><input type="text" id="set-team-desc" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none" required></div>
                             
                             <hr class="my-4 border-gray-100">
                             <h4 class="font-bold text-gray-700">ข้อความเลื่อน (Marquee)</h4>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div><label class="block text-xs font-bold text-theme-hotpink mb-1">ข้อความ 1</label><input type="text" id="set-mq-1" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
-                                <div><label class="block text-xs font-bold text-gray-400 mb-1">ข้อความ 2</label><input type="text" id="set-mq-2" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
-                                <div><label class="block text-xs font-bold text-gray-700 mb-1">ข้อความ 3</label><input type="text" id="set-mq-3" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
-                                <div><label class="block text-xs font-bold text-gray-400 mb-1">ข้อความ 4</label><input type="text" id="set-mq-4" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
+                                <div><label class="block text-xs font-normal text-theme-hotpink mb-1">ข้อความ 1</label><input type="text" id="set-mq-1" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
+                                <div><label class="block text-xs font-normal text-gray-400 mb-1">ข้อความ 2</label><input type="text" id="set-mq-2" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
+                                <div><label class="block text-xs font-normal text-gray-700 mb-1">ข้อความ 3</label><input type="text" id="set-mq-3" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
+                                <div><label class="block text-xs font-normal text-gray-400 mb-1">ข้อความ 4</label><input type="text" id="set-mq-4" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
                             </div>
 
                             <hr class="my-4 border-gray-100">
                             <h4 class="font-bold text-gray-700">การเชื่อมต่อแบบฟอร์มข้อเสนอแนะ</h4>
                             <div>
-                                <label class="block text-xs font-bold text-gray-700 mb-1">Google Apps Script URL</label>
+                                <label class="block text-xs font-normal text-gray-700 mb-1">Google Apps Script URL</label>
                                 <input type="url" id="set-gs-url" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" placeholder="https://script.google.com/macros/s/...">
                             </div>
 
                             <hr class="my-4 border-gray-100">
                             <h4 class="font-bold text-gray-700">Cloudinary อัปโหลดอัตโนมัติ</h4>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div><label class="block text-xs font-bold text-gray-700 mb-1">Cloud Name</label><input type="text" id="set-cld-name" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none"></div>
-                                <div><label class="block text-xs font-bold text-gray-700 mb-1">Upload Preset</label><input type="text" id="set-cld-preset" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none"></div>
+                                <div><label class="block text-xs font-normal text-gray-700 mb-1">Cloud Name</label><input type="text" id="set-cld-name" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none"></div>
+                                <div><label class="block text-xs font-normal text-gray-700 mb-1">Upload Preset</label><input type="text" id="set-cld-preset" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:border-theme-hotpink focus:outline-none"></div>
                             </div>
 
                             <hr class="my-4 border-gray-100">
                             <h4 class="font-bold text-gray-700">จัดการชื่อหมวดหมู่ (คั่นด้วยลูกน้ำ , )</h4>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
-                                <div><label class="block text-xs font-bold text-gray-700 mb-1">ข่าวสาร</label><input type="text" id="set-cat-news" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
-                                <div><label class="block text-xs font-bold text-gray-700 mb-1">สื่อฝึกซ้อม</label><input type="text" id="set-cat-res" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
-                                <div><label class="block text-xs font-bold text-gray-700 mb-1">ทีมงาน</label><input type="text" id="set-cat-team" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
-                                <div><label class="block text-xs font-bold text-gray-700 mb-1">ข้อเสนอแนะ</label><input type="text" id="set-cat-fdb" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
+                                <div><label class="block text-xs font-normal text-gray-700 mb-1">ข่าวสาร</label><input type="text" id="set-cat-news" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
+                                <div><label class="block text-xs font-normal text-gray-700 mb-1">สื่อฝึกซ้อม</label><input type="text" id="set-cat-res" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
+                                <div><label class="block text-xs font-normal text-gray-700 mb-1">ทีมงาน</label><input type="text" id="set-cat-team" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
+                                <div><label class="block text-xs font-normal text-gray-700 mb-1">ข้อเสนอแนะ</label><input type="text" id="set-cat-fdb" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-theme-hotpink focus:outline-none" required></div>
                             </div>
 
                             <div class="text-right pt-4"><button type="submit" class="w-full sm:w-auto bg-theme-text text-white px-8 py-3 rounded-xl font-bold hover:bg-theme-hotpink transition hover-target">บันทึกการตั้งค่าทั้งหมด</button></div>
@@ -848,8 +847,8 @@
             recruitments: [],
             resources: [],
             teamMembers: [],
-            users: [], // สำหรับเก็บข้อมูลแอดมินย่อยที่สมัครเข้ามา
-            auth: { user: "admin", pass: "sukhothai2569" }, // Default Initial Auth
+            users: [], 
+            auth: { user: "admin", pass: "sukhothai2569" }, 
             settings: { 
                 googleScriptUrl: "",
                 cloudinaryName: "",
@@ -870,6 +869,8 @@
         };
 
         let appState = { ...defaultState };
+        // สร้าง Object เพื่อเก็บสถานะว่ากำลัง "แก้ไข" ข้อมูล ID ไหนอยู่บ้าง
+        let editingState = { match: null, event: null, news: null, res: null, team: null, ann: null, rec: null };
 
         const userConfig = {
             apiKey: "AIzaSyAcWAIojT_gN9ybDolegZ6L9PJk5JYh0U0",
@@ -978,20 +979,16 @@
             if(document.getElementById('fdb-category')) document.getElementById('fdb-category').innerHTML = `<option value="" disabled selected>-- เลือกหมวดหมู่ --</option>` + fdbCats.map(c => `<option value="${c}">${c}</option>`).join('');
         };
 
+        // Navigation แบบหน้าเดียว (Single Page Smooth Scrolling)
         window.navigateTo = function(pageId) {
-            const mainContent = document.getElementById('main-content');
-            mainContent.classList.add('opacity-0');
             if (window.isMobileMenuOpen) window.toggleMobileMenu();
-            setTimeout(() => {
-                const allSections = ['hero', 'marquee', 'scores', 'announcements', 'calendar', 'resources', 'team', 'recruitment', 'feedback'];
-                allSections.forEach(s => { const el = document.getElementById(`section-${s}`); if(el) el.classList.add('hidden'); });
-                if (pageId === 'home') { allSections.forEach(s => { const el = document.getElementById(`section-${s}`); if(el) el.classList.remove('hidden'); }); } 
-                else { const section = document.getElementById(`section-${pageId === 'calendar-news' ? 'calendar' : pageId}`); if(section) { section.classList.remove('hidden'); section.classList.add('pt-32'); } }
-                if (pageId === 'home') { ['scores', 'announcements', 'calendar', 'resources', 'team', 'recruitment', 'feedback'].forEach(s => { const el = document.getElementById(`section-${s}`); if(el) el.classList.remove('pt-32'); }); }
-                window.scrollTo(0, 0);
-                mainContent.classList.remove('opacity-0');
-                setTimeout(() => initGsapTriggers(), 100);
-            }, 300);
+            const targetId = pageId === 'home' ? 'section-hero' : (pageId === 'calendar-news' ? 'section-calendar' : `section-${pageId}`);
+            const el = document.getElementById(targetId);
+            if (el) {
+                const navHeight = document.getElementById('navbar').offsetHeight || 80;
+                const y = el.getBoundingClientRect().top + window.scrollY - navHeight;
+                window.scrollTo({top: y, behavior: 'smooth'});
+            }
         };
 
         function renderPublicView() {
@@ -1013,7 +1010,8 @@
             renderDynamicCategories();
             renderEvents(); renderCalendar(); renderNews(currentNewsFilter); renderPublicAnnouncements(); renderPublicRecruitments(); renderResources(currentResFilter); renderTeam(currentTeamFilter); renderPublicMatchResults();
             startCountdown();
-            setTimeout(() => ScrollTrigger.refresh(), 100);
+            // แก้ไขปัญหา GSAP กระตุก
+            setTimeout(() => initGsapTriggers(), 100);
         }
 
         window.filterMatchResults = function(type) {
@@ -1027,7 +1025,7 @@
         function renderPublicMatchResults() {
             const grid = document.getElementById('pub-match-results-grid'); if(!grid) return; grid.innerHTML = '';
             let arr = (appState.matchResults || []).filter(r => r.type === window.currentMatchFilter);
-            if(arr.length === 0) { grid.innerHTML = `<div class="col-span-full text-center text-gray-400 py-8 bg-gray-50 rounded-2xl text-sm border border-gray-100">ยังไม่มีข้อมูลในหมวดหมู่นี้</div>`; return; }
+            if(arr.length === 0) { grid.innerHTML = `<div class="col-span-full text-center text-gray-400 py-8 bg-gray-50 rounded-2xl text-sm border border-gray-100"><i class="ph-fill ph-ghost text-4xl text-gray-300 mb-2 block"></i>ยังไม่มีข้อมูลในหมวดหมู่นี้</div>`; return; }
             arr.forEach(mr => {
                 let icon = '', text = '', color = '', bg = '';
                 if(mr.type === 'score') { icon = '<i class="ph-fill ph-star text-2xl text-blue-500"></i>'; text = `+${mr.reward} คะแนน`; color = 'text-blue-600'; bg = 'bg-blue-50 border-blue-100'; } 
@@ -1066,35 +1064,35 @@
                 list.innerHTML = ''; const titleEl = list.previousElementSibling;
                 if (titleEl) titleEl.innerHTML = currentEventDateFilter === 'all' ? '<i class="ph-fill ph-calendar-blank text-theme-hotpink mr-2"></i> กิจกรรมที่กำลังมาถึง' : `<i class="ph-fill ph-calendar-check text-theme-hotpink mr-2"></i> วันที่ ${currentEventDateFilter} <button onclick="window.filterEventsByDate('all')" class="ml-auto text-xs bg-theme-pink/20 text-theme-hotpink px-3 py-1 rounded-full">ดูทั้งหมด</button>`;
                 let evs = currentEventDateFilter === 'all' ? appState.events : appState.events.filter(e => e.date === currentEventDateFilter);
-                if(evs.length === 0) { list.innerHTML = '<div class="text-gray-400 py-4 text-sm">ไม่มีกิจกรรมในวันที่เลือก</div>'; return; }
-                evs.forEach(ev => { list.innerHTML += `<div class="relative hover:-translate-y-1 transition-transform duration-300 mb-6"><div class="absolute -left-[29px] bg-theme-hotpink w-4 h-4 rounded-full border-4 border-white shadow-sm"></div><div class="text-sm text-theme-hotpink font-bold">${ev.date} • ${ev.time}</div><div class="font-bold text-lg text-theme-text mt-1">${ev.title}</div><div class="text-sm text-gray-500 mt-1 flex items-center"><i class="ph-fill ph-map-pin mr-1 text-gray-400"></i> ${ev.location}</div></div>`; });
+                if(evs.length === 0) { list.innerHTML = '<div class="text-gray-400 py-8 text-center text-sm"><i class="ph-fill ph-ghost text-4xl text-gray-200 mb-2 block"></i>ไม่มีกิจกรรมในวันที่เลือก</div>'; return; }
+                evs.forEach(ev => { list.innerHTML += `<div class="relative hover:-translate-y-1 transition-transform duration-300 mb-6"><div class="absolute -left-[29px] bg-theme-hotpink w-4 h-4 rounded-full border-4 border-white shadow-sm"></div><div class="text-sm text-theme-hotpink font-bold">${ev.date} • ${ev.time}</div><div class="font-bold text-lg text-theme-text mt-1">${ev.title}</div><div class="text-sm text-gray-500 mt-1 flex items-center font-light"><i class="ph-fill ph-map-pin mr-1 text-gray-400"></i> ${ev.location}</div></div>`; });
             });
         }
 
         window.filterNews = function(cat) {
             currentNewsFilter = cat;
             document.querySelectorAll('.news-filter-btn').forEach(btn => btn.classList.toggle('active', (cat === 'all' && btn.textContent.trim() === 'ทั้งหมด') || btn.textContent.trim() === cat));
-            renderNews(cat); setTimeout(() => ScrollTrigger.refresh(), 100);
+            renderNews(cat); setTimeout(() => initGsapTriggers(), 100);
         };
         function renderNews(filter = 'all') {
             document.querySelectorAll('#pub-news-grid').forEach(grid => {
                 grid.innerHTML = ''; const news = filter === 'all' ? appState.news : appState.news.filter(n => n.category === filter);
-                if(news.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-white rounded-3xl border border-gray-100 text-sm">ยังไม่มีข่าวสาร</div>'; return; }
-                news.slice().reverse().forEach(n => { grid.innerHTML += `<div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group gs-stagger-item"><div class="h-40 md:h-48 bg-gray-100 relative overflow-hidden"><img src="${n.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"><div class="absolute top-3 left-3 bg-white/90 backdrop-blur text-theme-hotpink text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">${n.category}</div></div><div class="p-5 md:p-6"><h4 class="font-bold text-lg mb-2 text-theme-text line-clamp-2 group-hover:text-theme-hotpink transition-colors">${n.title}</h4><p class="text-sm text-gray-500 line-clamp-2">${n.excerpt}</p></div></div>`; });
+                if(news.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-white rounded-3xl border border-gray-100 text-sm"><i class="ph-fill ph-ghost text-4xl text-gray-200 mb-2 block"></i>ยังไม่มีข่าวสาร</div>'; return; }
+                news.slice().reverse().forEach(n => { grid.innerHTML += `<div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group gs-stagger-item"><div class="h-40 md:h-48 bg-gray-100 animate-pulse relative overflow-hidden"><img src="${n.image}" loading="lazy" onload="this.parentElement.classList.remove('animate-pulse')" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"><div class="absolute top-3 left-3 bg-white/90 backdrop-blur text-theme-hotpink text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">${n.category}</div></div><div class="p-5 md:p-6"><h4 class="font-bold text-lg mb-2 text-theme-text line-clamp-2 group-hover:text-theme-hotpink transition-colors">${n.title}</h4><p class="text-sm text-gray-500 font-light line-clamp-2">${n.excerpt}</p></div></div>`; });
             });
         }
 
         window.filterRes = function(cat) {
             currentResFilter = cat;
             document.querySelectorAll('.res-filter-btn').forEach(btn => btn.classList.toggle('active', (cat === 'all' && btn.textContent.trim() === 'ทั้งหมด') || btn.textContent.trim() === cat));
-            renderResources(cat); setTimeout(() => ScrollTrigger.refresh(), 100);
+            renderResources(cat); setTimeout(() => initGsapTriggers(), 100);
         };
         function renderResources(filter = 'all') {
             document.querySelectorAll('#pub-res-grid').forEach(grid => {
                 grid.innerHTML = ''; const resList = filter === 'all' ? appState.resources : appState.resources.filter(n => n.category === filter);
-                if(resList.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-white rounded-3xl border border-gray-100 text-sm">ยังไม่มีไฟล์</div>'; return; }
+                if(resList.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-white rounded-3xl border border-gray-100 text-sm"><i class="ph-fill ph-ghost text-4xl text-gray-200 mb-2 block"></i>ยังไม่มีไฟล์</div>'; return; }
                 resList.slice().reverse().forEach(res => {
-                    let media = res.type === 'image' ? `<div class="h-32 bg-gray-100 overflow-hidden"><img src="${res.url}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div>` : `<div class="h-32 bg-gray-50 flex flex-col items-center justify-center text-gray-300 group-hover:bg-theme-pink/10 transition-colors"><i class="ph-fill ph-link text-5xl mb-2"></i></div>`;
+                    let media = res.type === 'image' ? `<div class="h-32 bg-gray-100 animate-pulse overflow-hidden"><img src="${res.url}" loading="lazy" onload="this.parentElement.classList.remove('animate-pulse')" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div>` : `<div class="h-32 bg-gray-50 flex flex-col items-center justify-center text-gray-300 group-hover:bg-theme-pink/10 transition-colors"><i class="ph-fill ph-link text-5xl mb-2"></i></div>`;
                     grid.innerHTML += `<div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group gs-stagger-item flex flex-col">${media}<div class="p-5 flex flex-col flex-grow"><span class="text-xs font-bold text-theme-hotpink mb-2">${res.category}</span><h4 class="font-bold text-base mb-4 text-theme-text line-clamp-2 group-hover:text-theme-hotpink transition-colors">${res.title}</h4><a href="${res.url}" target="_blank" class="mt-auto inline-flex items-center space-x-2 text-theme-text text-sm font-bold bg-gray-50 py-2 px-4 rounded-xl hover:bg-theme-pink/20 w-fit"><span>${res.type === 'image' ? 'ดูรูป' : 'เปิดดู'}</span><i class="ph-bold ph-arrow-up-right"></i></a></div></div>`;
                 });
             });
@@ -1103,29 +1101,29 @@
         window.filterTeam = function(dept) {
             currentTeamFilter = dept;
             document.querySelectorAll('.team-filter-btn').forEach(btn => btn.classList.toggle('active', (dept === 'all' && btn.textContent.trim() === 'ทั้งหมด') || btn.textContent.trim() === dept));
-            renderTeam(dept); setTimeout(() => ScrollTrigger.refresh(), 100);
+            renderTeam(dept); setTimeout(() => initGsapTriggers(), 100);
         };
         function renderTeam(filter = 'all') {
             document.querySelectorAll('#pub-team-grid').forEach(grid => {
                 grid.innerHTML = ''; const list = filter === 'all' ? appState.teamMembers : appState.teamMembers.filter(n => n.department === filter);
-                if(list.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-white rounded-3xl border border-gray-100 text-sm">ยังไม่มีข้อมูล</div>'; return; }
+                if(list.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-white rounded-3xl border border-gray-100 text-sm"><i class="ph-fill ph-ghost text-4xl text-gray-200 mb-2 block"></i>ยังไม่มีข้อมูลทีมงาน</div>'; return; }
                 list.forEach(m => {
                     let contact = m.contact ? `<a href="#" class="inline-flex items-center text-theme-hotpink text-xs font-bold mt-2"><i class="ph-fill ph-instagram-logo mr-1"></i> ${m.contact}</a>` : '';
-                    grid.innerHTML += `<div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 gs-stagger-item group"><div class="aspect-square bg-gray-100 overflow-hidden"><img src="${m.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div><div class="p-3 text-center"><h4 class="font-bold text-sm text-theme-text truncate">${m.name}</h4><p class="text-xs text-gray-500 mt-1 truncate">${m.role}</p>${contact}</div></div>`;
+                    grid.innerHTML += `<div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 gs-stagger-item group"><div class="aspect-square bg-gray-100 animate-pulse overflow-hidden"><img src="${m.image}" loading="lazy" onload="this.parentElement.classList.remove('animate-pulse')" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div><div class="p-3 text-center"><h4 class="font-bold text-sm text-theme-text truncate">${m.name}</h4><p class="text-xs text-gray-500 mt-1 truncate">${m.role}</p>${contact}</div></div>`;
                 });
             });
         }
 
         function renderPublicRecruitments() {
             document.querySelectorAll('#pub-recruitment-grid').forEach(grid => {
-                grid.innerHTML = ''; if(appState.recruitments.length === 0) return;
-                appState.recruitments.forEach(rec => { grid.innerHTML += `<div class="bg-white p-6 md:p-8 rounded-3xl hover:-translate-y-1 hover:shadow-xl transition-all duration-300 gs-stagger-item group border border-gray-100 flex flex-col h-full"><div class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-theme-pink/20 transition-colors shrink-0"><i class="ph-fill ${rec.icon} text-2xl text-gray-700 group-hover:text-theme-hotpink transition-colors"></i></div><h4 class="text-xl font-bold text-theme-text mb-2">${rec.title}</h4><p class="text-gray-500 text-sm mb-4 line-clamp-2 flex-grow">${rec.desc}</p><a href="${rec.link}" target="_blank" class="mt-auto inline-flex items-center space-x-2 text-theme-text text-sm font-bold group-hover:text-theme-hotpink"><span>สมัคร</span><i class="ph-bold ph-arrow-right"></i></a></div>`; });
+                grid.innerHTML = ''; if(appState.recruitments.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10"><i class="ph-fill ph-ghost text-4xl text-gray-300 mb-2 block"></i>ยังไม่มีการรับสมัครในขณะนี้</div>'; return;}
+                appState.recruitments.forEach(rec => { grid.innerHTML += `<div class="bg-white p-6 md:p-8 rounded-3xl hover:-translate-y-1 hover:shadow-xl transition-all duration-300 gs-stagger-item group border border-gray-100 flex flex-col h-full"><div class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-theme-pink/20 transition-colors shrink-0"><i class="ph-fill ${rec.icon} text-2xl text-gray-700 group-hover:text-theme-hotpink transition-colors"></i></div><h4 class="text-xl font-bold text-theme-text mb-2">${rec.title}</h4><p class="text-gray-500 font-light text-sm mb-4 line-clamp-2 flex-grow">${rec.desc}</p><a href="${rec.link}" target="_blank" class="mt-auto inline-flex items-center space-x-2 text-theme-text text-sm font-bold group-hover:text-theme-hotpink"><span>สมัคร</span><i class="ph-bold ph-arrow-right"></i></a></div>`; });
             });
         }
 
         function renderPublicAnnouncements() {
             document.querySelectorAll('#pub-announcements-grid').forEach(grid => {
-                grid.innerHTML = ''; if(appState.announcements.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-gray-50 rounded-3xl text-sm">ไม่มีประกาศด่วน</div>'; return; }
+                grid.innerHTML = ''; if(appState.announcements.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-gray-50 rounded-3xl text-sm"><i class="ph-fill ph-ghost text-4xl text-gray-300 mb-2 block"></i>ไม่มีประกาศด่วน</div>'; return; }
                 appState.announcements.slice().reverse().forEach(ann => { grid.innerHTML += `<div class="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-200 hover:shadow-xl transition-all duration-300 gs-stagger-item"><div class="bg-red-50 text-red-500 text-xs font-bold px-2 py-1.5 rounded-md inline-flex items-center mb-3"><i class="ph-fill ph-warning-circle mr-1"></i> ${ann.date}</div><h4 class="text-lg font-bold text-theme-text mb-2">${ann.title}</h4><p class="text-theme-muted font-light text-sm leading-relaxed">${ann.content}</p></div>`; });
             });
         }
@@ -1178,8 +1176,6 @@
             modeInput.value = newMode;
             
             const isNewModeLogin = newMode === 'login';
-            
-            // ถ้าหน้าใหม่เป็นล็อกอิน ให้ซ่อนช่องกรอกชื่อ/ตำแหน่ง ถ้าเป็นสมัครให้โชว์
             document.getElementById('signup-fields-group').classList.toggle('hidden', isNewModeLogin);
             document.getElementById('auth-name').required = !isNewModeLogin;
             document.getElementById('auth-role').required = !isNewModeLogin;
@@ -1240,14 +1236,12 @@
 
         function openAdmin() { 
             pubView.classList.add('hide'); adminView.classList.remove('hide'); 
-            
             const allTabs = ['overview', 'events', 'news', 'resources', 'team', 'announcements', 'recruitments', 'settings', 'users'];
             let firstTab = null;
 
             allTabs.forEach(tab => {
                 const btn = document.getElementById(`tab-btn-${tab}`);
                 if(!btn) return;
-                
                 if(currentUser.role === 'master') {
                     btn.classList.remove('hidden');
                     if(!firstTab) firstTab = tab;
@@ -1263,11 +1257,8 @@
                 }
             });
 
-            if(firstTab) {
-                switchAdminTab(firstTab);
-            } else { 
-                showToast('คุณยังไม่มีสิทธิ์เข้าถึงเมนูใดๆ'); window.logout(); return; 
-            }
+            if(firstTab) { switchAdminTab(firstTab); } 
+            else { showToast('คุณยังไม่มีสิทธิ์เข้าถึงเมนูใดๆ'); window.logout(); return; }
 
             populateAdminForms(); 
             setTimeout(() => adminView.classList.replace('opacity-0', 'opacity-100'), 10); 
@@ -1277,7 +1268,7 @@
             currentUser = null;
             document.getElementById('login-form').reset();
             adminView.classList.replace('opacity-100', 'opacity-0'); 
-            setTimeout(() => { adminView.classList.add('hide'); pubView.classList.remove('hide'); navigateTo('home'); }, 300); 
+            setTimeout(() => { adminView.classList.add('hide'); pubView.classList.remove('hide'); navigateTo('home'); window.scrollTo(0,0); }, 300); 
         };
 
         window.switchAdminTab = function(tid) {
@@ -1325,102 +1316,120 @@
             const t = document.getElementById('mr-type').value;
             document.getElementById('mr-points-group').classList.toggle('hidden', t !== 'score'); document.getElementById('mr-medal-group').classList.toggle('hidden', t !== 'medal');
         };
+
+        // --- Safe Delete Helper ---
+        window.safeDelete = function(btn, type, id) {
+            if(btn.dataset.confirm === 'true') {
+                if(type === 'match') window.deleteMatchResult(id);
+                if(type === 'event') window.deleteEvent(id);
+                if(type === 'news') window.deleteNews(id);
+                if(type === 'res') window.deleteResource(id);
+                if(type === 'team') window.deleteTeamMember(id);
+                if(type === 'ann') window.deleteAnnouncement(id);
+                if(type === 'rec') window.deleteRecruitment(id);
+            } else {
+                btn.dataset.confirm = 'true';
+                const old = btn.innerHTML;
+                btn.innerHTML = '<i class="ph-bold ph-warning"></i> ยืนยัน';
+                btn.classList.replace('text-red-500', 'text-white');
+                btn.classList.replace('bg-red-50', 'bg-red-500');
+                setTimeout(() => { 
+                    btn.dataset.confirm = 'false'; 
+                    btn.innerHTML = old; 
+                    btn.classList.replace('text-white', 'text-red-500');
+                    btn.classList.replace('bg-red-500', 'bg-red-50');
+                }, 3000);
+            }
+        };
+
+        // --- MATCH RESULTS ---
+        window.editMatchResult = function(id) {
+            const item = appState.matchResults.find(i => String(i.id) === String(id));
+            if(!item) return;
+            editingState.match = id;
+            document.getElementById('mr-title').value = item.title;
+            document.getElementById('mr-type').value = item.type;
+            window.toggleMrType();
+            if(item.type === 'score') document.getElementById('mr-points').value = item.reward;
+            else document.getElementById('mr-medal').value = item.reward;
+            document.getElementById('btn-submit-mr').innerHTML = '<i class="ph-bold ph-check mr-2"></i>อัปเดตผล';
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        };
         window.addMatchResult = function(e) {
             e.preventDefault(); const type = document.getElementById('mr-type').value, reward = type === 'score' ? document.getElementById('mr-points').value : document.getElementById('mr-medal').value;
+            
+            if (editingState.match) {
+                const item = appState.matchResults.find(i => String(i.id) === editingState.match);
+                if (item) {
+                    if (item.type === 'score') appState.score.total = parseInt(appState.score.total) - parseInt(item.reward);
+                    else appState.medals[item.reward]--;
+                    item.title = document.getElementById('mr-title').value; item.type = type; item.reward = reward;
+                }
+                editingState.match = null;
+                document.getElementById('btn-submit-mr').innerHTML = 'บันทึกผล';
+            } else {
+                appState.matchResults.unshift({ id: Date.now().toString(), title: document.getElementById('mr-title').value, type, reward, date: new Date().toLocaleDateString('th-TH', {day:'numeric',month:'short'}) });
+            }
             if(type === 'score') appState.score.total = (parseInt(appState.score.total) || 0) + parseInt(reward);
             else { if(reward === 'gold') appState.medals.gold++; if(reward === 'silver') appState.medals.silver++; if(reward === 'bronze') appState.medals.bronze++; }
-            appState.matchResults.unshift({ id: Date.now().toString(), title: document.getElementById('mr-title').value, type, reward, date: new Date().toLocaleDateString('th-TH', {day:'numeric',month:'short'}) });
-            e.target.reset(); window.toggleMrType(); saveState();
+            e.target.reset(); window.toggleMrType(); saveState(); renderAdminMatchResults();
         };
-        window.deleteMatchResult = function(id) { appState.matchResults = appState.matchResults.filter(a => String(a.id) !== String(id)); saveState(); };
+        window.deleteMatchResult = function(id) { 
+            const item = appState.matchResults.find(a => String(a.id) === String(id));
+            if(item) {
+                if(item.type === 'score') appState.score.total = Math.max(0, parseInt(appState.score.total) - parseInt(item.reward));
+                else appState.medals[item.reward] = Math.max(0, appState.medals[item.reward] - 1);
+            }
+            appState.matchResults = appState.matchResults.filter(a => String(a.id) !== String(id)); saveState(); renderAdminMatchResults(); 
+        };
         function renderAdminMatchResults() {
             const list = document.getElementById('admin-mr-list'); if(!list) return; list.innerHTML = '';
             if(!appState.matchResults || appState.matchResults.length === 0) { list.innerHTML = '<div class="text-gray-400 text-sm py-2">ยังไม่มีประวัติ</div>'; return; }
             appState.matchResults.slice(0, 3).forEach(mr => {
                 let badge = mr.type === 'score' ? `<span class="bg-blue-100 text-blue-600 px-2 py-1 rounded text-[10px] font-bold">+${mr.reward}</span>` : `<span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-[10px] font-bold">${mr.reward}</span>`;
-                list.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100"><div><span class="font-bold text-sm truncate block max-w-[150px]">${mr.title}</span><span class="text-[10px] text-gray-400">${mr.date}</span></div><div class="flex items-center gap-3">${badge}<button type="button" onclick="window.deleteMatchResult('${mr.id}')" class="text-red-400 hover:text-red-600 transition"><i class="ph-fill ph-trash"></i></button></div></div>`;
+                list.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100"><div><span class="font-bold text-sm truncate block max-w-[150px]">${mr.title}</span><span class="text-[10px] text-gray-400">${mr.date}</span></div><div class="flex items-center gap-2">${badge}<button type="button" onclick="window.editMatchResult('${mr.id}')" class="text-blue-500 bg-blue-50 p-1.5 rounded hover:bg-blue-100 transition"><i class="ph ph-pencil-simple"></i></button><button type="button" onclick="window.safeDelete(this, 'match', '${mr.id}')" class="text-red-500 bg-red-50 p-1.5 rounded hover:bg-red-100 transition"><i class="ph ph-trash"></i></button></div></div>`;
             });
         }
         window.saveManualTotals = function(e) { e.preventDefault(); appState.score.total = parseInt(document.getElementById('admin-score-total').value); appState.medals.gold = parseInt(document.getElementById('admin-gold').value); appState.medals.silver = parseInt(document.getElementById('admin-silver').value); appState.medals.bronze = parseInt(document.getElementById('admin-bronze').value); saveState(); };
 
         window.saveTexts = function(e) { 
             e.preventDefault(); 
-            
             const newAdminUser = document.getElementById('set-admin-user').value || "admin";
-            
-            // ป้องกันแอดมินหลักเผลอตั้ง Username ตัวเองไปซ้ำกับแอดมินย่อย
             if ((appState.users || []).some(x => x.username === newAdminUser)) {
-                showToast('❌ บันทึกไม่ได้: Username นี้มีแอดมินย่อยใช้อยู่แล้ว!');
-                document.getElementById('set-admin-user').focus();
-                return; // หยุดการทำงาน ไม่ให้บันทึกข้อมูล
+                showToast('❌ บันทึกไม่ได้: Username นี้มีแอดมินย่อยใช้อยู่แล้ว!'); document.getElementById('set-admin-user').focus(); return;
             }
-
-            appState.texts.heroTitle = document.getElementById('set-hero-title').value; 
-            appState.texts.heroSubtitle = document.getElementById('set-hero-subtitle').value; 
-            appState.texts.teamDesc = document.getElementById('set-team-desc').value; 
-            appState.texts.marquee1 = document.getElementById('set-mq-1').value;
-            appState.texts.marquee2 = document.getElementById('set-mq-2').value;
-            appState.texts.marquee3 = document.getElementById('set-mq-3').value;
-            appState.texts.marquee4 = document.getElementById('set-mq-4').value;
-            appState.settings.googleScriptUrl = document.getElementById('set-gs-url').value;
-            appState.settings.cloudinaryName = document.getElementById('set-cld-name').value;
-            appState.settings.cloudinaryPreset = document.getElementById('set-cld-preset').value;
-            appState.settings.categories.news = document.getElementById('set-cat-news').value;
-            appState.settings.categories.resources = document.getElementById('set-cat-res').value;
-            appState.settings.categories.team = document.getElementById('set-cat-team').value;
-            appState.settings.categories.feedback = document.getElementById('set-cat-fdb').value;
-            
+            appState.texts.heroTitle = document.getElementById('set-hero-title').value; appState.texts.heroSubtitle = document.getElementById('set-hero-subtitle').value; appState.texts.teamDesc = document.getElementById('set-team-desc').value; appState.texts.marquee1 = document.getElementById('set-mq-1').value; appState.texts.marquee2 = document.getElementById('set-mq-2').value; appState.texts.marquee3 = document.getElementById('set-mq-3').value; appState.texts.marquee4 = document.getElementById('set-mq-4').value; appState.settings.googleScriptUrl = document.getElementById('set-gs-url').value; appState.settings.cloudinaryName = document.getElementById('set-cld-name').value; appState.settings.cloudinaryPreset = document.getElementById('set-cld-preset').value; appState.settings.categories.news = document.getElementById('set-cat-news').value; appState.settings.categories.resources = document.getElementById('set-cat-res').value; appState.settings.categories.team = document.getElementById('set-cat-team').value; appState.settings.categories.feedback = document.getElementById('set-cat-fdb').value;
             if(!appState.auth) appState.auth = {};
-            appState.auth.user = newAdminUser;
-            appState.auth.pass = document.getElementById('set-admin-pass').value || "sukhothai2569";
-            
+            appState.auth.user = newAdminUser; appState.auth.pass = document.getElementById('set-admin-pass').value || "sukhothai2569";
             saveState(); showToast('บันทึกการตั้งค่าสำเร็จ');
         };
 
-        // ====== USER MANAGEMENT LOGIC ======
+        // --- USER MANAGEMENT LOGIC ---
         window.approveUser = function(id) { const u = appState.users.find(x => x.id === id); if(u) { u.status = 'approved'; u.permissions = ['overview']; saveState(); renderAdminUsers(); showToast('อนุมัติบัญชีแล้ว'); } };
         window.rejectUser = function(id) { appState.users = appState.users.filter(x => x.id !== id); saveState(); renderAdminUsers(); showToast('ลบบัญชี/ปฏิเสธสำเร็จ'); };
         window.updatePermissions = function(id) {
             const u = appState.users.find(x => x.id === id);
-            if(u) {
-                const perms = [];
-                document.querySelectorAll(`.perm-${id}:checked`).forEach(cb => perms.push(cb.value));
-                u.permissions = perms; saveState(); showToast('บันทึกสิทธิ์สำเร็จ');
-            }
+            if(u) { const perms = []; document.querySelectorAll(`.perm-${id}:checked`).forEach(cb => perms.push(cb.value)); u.permissions = perms; saveState(); showToast('บันทึกสิทธิ์สำเร็จ'); }
         };
         
         function renderAdminUsers() {
-            const pendingList = document.getElementById('admin-pending-users-list');
-            const approvedList = document.getElementById('admin-approved-users-list');
+            const pendingList = document.getElementById('admin-pending-users-list'); const approvedList = document.getElementById('admin-approved-users-list');
             if(!pendingList || !approvedList) return;
             pendingList.innerHTML = ''; approvedList.innerHTML = '';
-            
-            const users = appState.users || [];
-            const pending = users.filter(x => x.status === 'pending');
-            const approved = users.filter(x => x.status === 'approved');
+            const users = appState.users || []; const pending = users.filter(x => x.status === 'pending'); const approved = users.filter(x => x.status === 'approved');
 
             if(pending.length === 0) pendingList.innerHTML = '<div class="text-sm text-gray-400 py-2">ไม่มีคำขอใหม่</div>';
-            pending.forEach(u => {
-                pendingList.innerHTML += `<div class="bg-gray-50 p-4 rounded-xl border border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4"><div class="overflow-hidden"><div class="font-bold text-sm text-theme-text">${u.name} <span class="text-xs font-normal text-theme-hotpink bg-theme-pink/10 px-2 py-0.5 rounded ml-1">${u.position || '-'}</span></div><div class="text-xs text-gray-500 mt-1 flex flex-wrap gap-x-3 gap-y-1"><span>User: <strong class="text-gray-700">${u.username}</strong></span><span>Pass: <strong class="text-gray-700">${u.password}</strong></span></div></div><div class="flex gap-2 shrink-0"><button onclick="approveUser('${u.id}')" class="bg-green-100 text-green-600 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-green-200 transition shadow-sm">อนุมัติ</button><button onclick="rejectUser('${u.id}')" class="bg-red-100 text-red-600 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-red-200 transition shadow-sm">ปฏิเสธ</button></div></div>`;
-            });
+            pending.forEach(u => { pendingList.innerHTML += `<div class="bg-gray-50 p-4 rounded-xl border border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4"><div class="overflow-hidden"><div class="font-bold text-sm text-theme-text">${u.name} <span class="text-xs font-normal text-theme-hotpink bg-theme-pink/10 px-2 py-0.5 rounded ml-1">${u.position || '-'}</span></div><div class="text-xs text-gray-500 mt-1 flex flex-wrap gap-x-3 gap-y-1"><span>User: <strong class="text-gray-700">${u.username}</strong></span><span>Pass: <strong class="text-gray-700">${u.password}</strong></span></div></div><div class="flex gap-2 shrink-0"><button onclick="approveUser('${u.id}')" class="bg-green-100 text-green-600 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-green-200 transition shadow-sm">อนุมัติ</button><button onclick="rejectUser('${u.id}')" class="bg-red-100 text-red-600 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-red-200 transition shadow-sm">ปฏิเสธ</button></div></div>`; });
 
             if(approved.length === 0) approvedList.innerHTML = '<div class="text-sm text-gray-400 py-2">ยังไม่มีแอดมินย่อยในระบบ</div>';
-            const availableTabs = [
-                {id: 'overview', name: 'ภาพรวม&คะแนน'}, {id: 'events', name: 'ตารางกิจกรรม'}, {id: 'news', name: 'ข่าวสาร'}, 
-                {id: 'resources', name: 'สื่อฝึกซ้อม'}, {id: 'team', name: 'ทำเนียบทีม'}, {id: 'announcements', name: 'ประกาศด่วน'}, {id: 'recruitments', name: 'รับสมัคร'}
-            ];
-            
+            const availableTabs = [ {id: 'overview', name: 'ภาพรวม&คะแนน'}, {id: 'events', name: 'ตารางกิจกรรม'}, {id: 'news', name: 'ข่าวสาร'}, {id: 'resources', name: 'สื่อฝึกซ้อม'}, {id: 'team', name: 'ทำเนียบทีม'}, {id: 'announcements', name: 'ประกาศด่วน'}, {id: 'recruitments', name: 'รับสมัคร'} ];
             approved.forEach(u => {
-                let cbHtml = '';
-                availableTabs.forEach(t => {
-                    const isChecked = (u.permissions || []).includes(t.id) ? 'checked' : '';
-                    cbHtml += `<label class="flex items-center space-x-2"><input type="checkbox" class="perm-${u.id} accent-theme-hotpink w-4 h-4" value="${t.id}" ${isChecked}><span class="text-xs text-gray-600">${t.name}</span></label>`;
-                });
-                
+                let cbHtml = ''; availableTabs.forEach(t => { const isChecked = (u.permissions || []).includes(t.id) ? 'checked' : ''; cbHtml += `<label class="flex items-center space-x-2"><input type="checkbox" class="perm-${u.id} accent-theme-hotpink w-4 h-4" value="${t.id}" ${isChecked}><span class="text-xs text-gray-600">${t.name}</span></label>`; });
                 approvedList.innerHTML += `<div class="bg-gray-50 p-4 lg:p-5 rounded-xl border border-gray-200 flex flex-col gap-3"><div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-200 pb-3 gap-3"><div><div class="font-bold text-sm text-theme-text">${u.name} <span class="text-xs font-normal text-theme-hotpink bg-theme-pink/10 px-2 py-0.5 rounded ml-1">${u.position || '-'}</span></div><div class="text-xs text-gray-500 mt-1 flex flex-wrap gap-x-3 gap-y-1"><span>User: <strong class="text-gray-700">${u.username}</strong></span><span>Pass: <strong class="text-gray-700">${u.password}</strong></span></div></div><button onclick="rejectUser('${u.id}')" class="text-red-400 hover:text-red-600 transition text-xs font-bold bg-white px-3 py-1.5 border border-gray-100 rounded-lg shadow-sm shrink-0">ลบบัญชี</button></div><div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 py-1">${cbHtml}</div><div class="text-right mt-1"><button onclick="updatePermissions('${u.id}')" class="bg-theme-text text-white text-xs font-bold px-5 py-2.5 rounded-lg hover:bg-theme-hotpink transition shadow-sm">บันทึกสิทธิ์</button></div></div>`;
             });
         }
 
+        // --- IMAGE HELPER (PNG SUPPORT) ---
         async function uploadImageHelper(file, maxSize = 1200) {
             const cn = appState.settings?.cloudinaryName, cp = appState.settings?.cloudinaryPreset;
             if (cn && cp) {
@@ -1431,77 +1440,206 @@
                 const r = new FileReader(); r.readAsDataURL(file); r.onload = ev => {
                     const i = new Image(); i.src = ev.target.result; i.onload = () => {
                         const c = document.createElement('canvas'); let w = i.width, h = i.height; if (w > maxSize) { h *= (maxSize / w); w = maxSize; }
-                        c.width = w; c.height = h; c.getContext('2d').drawImage(i, 0, 0, w, h); res(c.toDataURL('image/jpeg', 0.8));
+                        c.width = w; c.height = h; c.getContext('2d').drawImage(i, 0, 0, w, h); 
+                        const mimeType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+                        res(c.toDataURL(mimeType, 0.8));
                     };
                 };
             });
         }
 
-        window.addEvent = function(e) { e.preventDefault(); appState.events.push({ id: Date.now().toString(), date: document.getElementById('ev-date').value, time: document.getElementById('ev-time').value, title: document.getElementById('ev-title').value, location: document.getElementById('ev-loc').value }); e.target.reset(); saveState(); renderAdminEvents(); };
+        // --- EVENTS ---
+        window.editEvent = function(id) {
+            const item = appState.events.find(i => String(i.id) === String(id)); if(!item) return; editingState.event = id;
+            document.getElementById('ev-date').value = item.date; document.getElementById('ev-time').value = item.time;
+            document.getElementById('ev-title').value = item.title; document.getElementById('ev-loc').value = item.location;
+            document.getElementById('btn-submit-ev').innerHTML = '<i class="ph-bold ph-check mr-2"></i>อัปเดตกิจกรรม'; window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+        window.addEvent = function(e) { 
+            e.preventDefault(); 
+            if(editingState.event) {
+                const item = appState.events.find(i => String(i.id) === editingState.event);
+                if(item) { item.date = document.getElementById('ev-date').value; item.time = document.getElementById('ev-time').value; item.title = document.getElementById('ev-title').value; item.location = document.getElementById('ev-loc').value; }
+                editingState.event = null; document.getElementById('btn-submit-ev').innerHTML = 'เพิ่มกิจกรรม';
+            } else {
+                appState.events.push({ id: Date.now().toString(), date: document.getElementById('ev-date').value, time: document.getElementById('ev-time').value, title: document.getElementById('ev-title').value, location: document.getElementById('ev-loc').value }); 
+            }
+            e.target.reset(); saveState(); renderAdminEvents(); 
+        };
         window.deleteEvent = function(id) { appState.events = appState.events.filter(a => String(a.id) !== String(id)); saveState(); renderAdminEvents(); };
         function renderAdminEvents() {
             const l = document.getElementById('admin-events-list'); l.innerHTML = '';
-            appState.events.forEach(ev => { l.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100"><div><div class="font-bold text-sm">${ev.title}</div><div class="text-[10px] text-gray-500">${ev.date} • ${ev.time}</div></div><button onclick="window.deleteEvent('${ev.id}')" class="text-red-500 transition"><i class="ph ph-trash"></i></button></div>`; });
+            appState.events.forEach(ev => { l.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100"><div><div class="font-bold text-sm">${ev.title}</div><div class="text-[10px] text-gray-500">${ev.date} • ${ev.time}</div></div><div class="flex gap-2"><button type="button" onclick="window.editEvent('${ev.id}')" class="text-blue-500 bg-blue-50 p-1.5 rounded hover:bg-blue-100 transition"><i class="ph ph-pencil-simple"></i></button><button type="button" onclick="window.safeDelete(this, 'event', '${ev.id}')" class="text-red-500 bg-red-50 p-1.5 rounded hover:bg-red-100 transition"><i class="ph ph-trash"></i></button></div></div>`; });
         }
 
+        // --- NEWS ---
+        window.editNews = function(id) {
+            const item = appState.news.find(i => String(i.id) === String(id)); if(!item) return; editingState.news = id;
+            document.getElementById('nw-cat').value = item.category; document.getElementById('nw-title').value = item.title; document.getElementById('nw-excerpt').value = item.excerpt;
+            document.getElementById('btn-submit-nw').innerHTML = '<i class="ph-bold ph-check mr-2"></i>อัปเดตข่าวสาร'; window.scrollTo({top: 0, behavior: 'smooth'});
+        }
         window.addNews = async function(e) {
-            e.preventDefault(); const b = e.target.querySelector('button[type="submit"]'), f = document.getElementById('nw-image-file').files[0];
-            if (f) { b.disabled = true; b.innerHTML = 'กำลังอัปโหลด...'; const url = await uploadImageHelper(f, 1200); appState.news.push({ id: Date.now().toString(), category: document.getElementById('nw-cat').value, title: document.getElementById('nw-title').value, excerpt: document.getElementById('nw-excerpt').value, image: url }); e.target.reset(); saveState(); b.disabled = false; b.innerHTML = 'โพสต์ข่าว'; }
+            e.preventDefault(); const b = document.getElementById('btn-submit-nw'), f = document.getElementById('nw-image-file').files[0];
+            b.disabled = true; b.innerHTML = 'กำลังประมวลผล...'; let url = null;
+            if (f) url = await uploadImageHelper(f, 1200);
+            
+            if (editingState.news) {
+                const item = appState.news.find(i => String(i.id) === editingState.news);
+                if(item) { item.category = document.getElementById('nw-cat').value; item.title = document.getElementById('nw-title').value; item.excerpt = document.getElementById('nw-excerpt').value; if(url) item.image = url; }
+                editingState.news = null; b.innerHTML = 'โพสต์ข่าว';
+            } else {
+                if(!url) { b.disabled=false; b.innerHTML='โพสต์ข่าว'; showToast('กรุณาอัปโหลดรูปภาพ'); return; }
+                appState.news.push({ id: Date.now().toString(), category: document.getElementById('nw-cat').value, title: document.getElementById('nw-title').value, excerpt: document.getElementById('nw-excerpt').value, image: url }); 
+            }
+            e.target.reset(); saveState(); b.disabled = false; renderAdminNews();
         };
-        window.deleteNews = function(id) { appState.news = appState.news.filter(a => String(a.id) !== String(id)); saveState(); };
+        window.deleteNews = function(id) { appState.news = appState.news.filter(a => String(a.id) !== String(id)); saveState(); renderAdminNews(); };
         function renderAdminNews() {
             const l = document.getElementById('admin-news-list'); l.innerHTML = '';
-            appState.news.slice().reverse().forEach(nw => { l.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100 gap-2 overflow-hidden"><div class="flex items-center space-x-3 overflow-hidden"><img src="${nw.image}" class="w-10 h-10 rounded object-cover shrink-0"><div class="truncate text-xs font-bold">${nw.title}</div></div><button onclick="window.deleteNews('${nw.id}')" class="text-red-500 transition shrink-0"><i class="ph ph-trash"></i></button></div>`; });
+            appState.news.slice().reverse().forEach(nw => { l.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100 gap-2 overflow-hidden"><div class="flex items-center space-x-3 overflow-hidden"><img src="${nw.image}" class="w-10 h-10 rounded object-cover shrink-0"><div class="truncate text-xs font-bold">${nw.title}</div></div><div class="flex gap-2 shrink-0"><button type="button" onclick="window.editNews('${nw.id}')" class="text-blue-500 bg-blue-50 p-1.5 rounded hover:bg-blue-100 transition"><i class="ph ph-pencil-simple"></i></button><button type="button" onclick="window.safeDelete(this, 'news', '${nw.id}')" class="text-red-500 bg-red-50 p-1.5 rounded hover:bg-red-100 transition"><i class="ph ph-trash"></i></button></div></div>`; });
         }
 
+        // --- RESOURCES ---
+        window.editResource = function(id) {
+            const item = appState.resources.find(i => String(i.id) === String(id)); if(!item) return; editingState.res = id;
+            document.getElementById('res-cat').value = item.category; document.getElementById('res-title').value = item.title; document.getElementById('res-type').value = item.type; window.toggleResourceInput();
+            if(item.type === 'link') document.getElementById('res-url').value = item.url;
+            document.getElementById('btn-submit-res').innerHTML = '<i class="ph-bold ph-check mr-2"></i>อัปเดตสื่อ'; window.scrollTo({top: 0, behavior: 'smooth'});
+        }
         window.toggleResourceInput = function() { const t = document.getElementById('res-type').value; document.getElementById('res-link-group').classList.toggle('hidden', t !== 'link'); document.getElementById('res-image-group').classList.toggle('hidden', t !== 'image'); };
         window.addResource = async function(e) {
-            e.preventDefault(); const b = e.target.querySelector('button[type="submit"]'), t = document.getElementById('res-type').value, f = document.getElementById('res-file').files[0];
-            let url = t === 'link' ? document.getElementById('res-url').value : null;
-            if(t === 'image' && f) { b.disabled = true; b.innerHTML = 'อัปโหลด...'; url = await uploadImageHelper(f, 1600); }
-            if(url) { appState.resources.push({ id: Date.now().toString(), category: document.getElementById('res-cat').value, title: document.getElementById('res-title').value, type: t, url }); e.target.reset(); window.toggleResourceInput(); saveState(); b.disabled = false; b.innerHTML = 'บันทึก'; }
+            e.preventDefault(); const b = document.getElementById('btn-submit-res'), t = document.getElementById('res-type').value, f = document.getElementById('res-file').files[0];
+            b.disabled = true; b.innerHTML = 'กำลังประมวลผล...'; let url = t === 'link' ? document.getElementById('res-url').value : null;
+            if(t === 'image' && f) { url = await uploadImageHelper(f, 1600); }
+
+            if(editingState.res) {
+                const item = appState.resources.find(i => String(i.id) === editingState.res);
+                if(item) { item.category = document.getElementById('res-cat').value; item.title = document.getElementById('res-title').value; item.type = t; if(url) item.url = url; }
+                editingState.res = null; b.innerHTML = 'บันทึกสื่อ';
+            } else {
+                if(t === 'image' && !url) { b.disabled=false; b.innerHTML='บันทึกสื่อ'; showToast('กรุณาอัปโหลดรูปภาพ'); return; }
+                appState.resources.push({ id: Date.now().toString(), category: document.getElementById('res-cat').value, title: document.getElementById('res-title').value, type: t, url }); 
+            }
+            e.target.reset(); window.toggleResourceInput(); saveState(); b.disabled = false; renderAdminResources();
         };
-        window.deleteResource = function(id) { appState.resources = appState.resources.filter(a => String(a.id) !== String(id)); saveState(); };
+        window.deleteResource = function(id) { appState.resources = appState.resources.filter(a => String(a.id) !== String(id)); saveState(); renderAdminResources(); };
         function renderAdminResources() {
             const l = document.getElementById('admin-res-list'); l.innerHTML = '';
-            appState.resources.slice().reverse().forEach(res => { l.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100 gap-2"><div class="truncate text-xs font-bold">${res.title}</div><button onclick="window.deleteResource('${res.id}')" class="text-red-500"><i class="ph ph-trash"></i></button></div>`; });
+            appState.resources.slice().reverse().forEach(res => { l.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100 gap-2"><div class="truncate text-xs font-bold">${res.title}</div><div class="flex gap-2 shrink-0"><button type="button" onclick="window.editResource('${res.id}')" class="text-blue-500 bg-blue-50 p-1.5 rounded hover:bg-blue-100 transition"><i class="ph ph-pencil-simple"></i></button><button type="button" onclick="window.safeDelete(this, 'res', '${res.id}')" class="text-red-500 bg-red-50 p-1.5 rounded hover:bg-red-100 transition"><i class="ph ph-trash"></i></button></div></div>`; });
         }
 
+        // --- TEAM ---
+        window.editTeamMember = function(id) {
+            const item = appState.teamMembers.find(i => String(i.id) === String(id)); if(!item) return; editingState.team = id;
+            document.getElementById('team-dept').value = item.department; document.getElementById('team-name').value = item.name; document.getElementById('team-role').value = item.role; document.getElementById('team-contact').value = item.contact || '';
+            document.getElementById('btn-submit-team').innerHTML = '<i class="ph-bold ph-check mr-2"></i>อัปเดตทีมงาน'; window.scrollTo({top: 0, behavior: 'smooth'});
+        }
         window.addTeamMember = async function(e) {
-            e.preventDefault(); const b = e.target.querySelector('button[type="submit"]'), f = document.getElementById('team-image').files[0];
-            if (f) { b.disabled = true; b.innerHTML = 'อัปโหลด...'; const url = await uploadImageHelper(f, 600); appState.teamMembers.push({ id: Date.now().toString(), department: document.getElementById('team-dept').value, name: document.getElementById('team-name').value, role: document.getElementById('team-role').value, contact: document.getElementById('team-contact').value, image: url }); e.target.reset(); saveState(); b.disabled = false; b.innerHTML = 'เพิ่มทีมงาน'; }
+            e.preventDefault(); const b = document.getElementById('btn-submit-team'), f = document.getElementById('team-image').files[0];
+            b.disabled = true; b.innerHTML = 'กำลังประมวลผล...'; let url = null;
+            if (f) url = await uploadImageHelper(f, 600); 
+
+            if(editingState.team) {
+                const item = appState.teamMembers.find(i => String(i.id) === editingState.team);
+                if(item) { item.department = document.getElementById('team-dept').value; item.name = document.getElementById('team-name').value; item.role = document.getElementById('team-role').value; item.contact = document.getElementById('team-contact').value; if(url) item.image = url; }
+                editingState.team = null; b.innerHTML = 'บันทึกทีมงาน';
+            } else {
+                if(!url) { b.disabled=false; b.innerHTML='บันทึกทีมงาน'; showToast('กรุณาอัปโหลดรูปภาพ'); return; }
+                appState.teamMembers.push({ id: Date.now().toString(), department: document.getElementById('team-dept').value, name: document.getElementById('team-name').value, role: document.getElementById('team-role').value, contact: document.getElementById('team-contact').value, image: url }); 
+            }
+            e.target.reset(); saveState(); b.disabled = false; renderAdminTeam();
         };
-        window.deleteTeamMember = function(id) { appState.teamMembers = appState.teamMembers.filter(a => String(a.id) !== String(id)); saveState(); };
+        window.deleteTeamMember = function(id) { appState.teamMembers = appState.teamMembers.filter(a => String(a.id) !== String(id)); saveState(); renderAdminTeam(); };
         function renderAdminTeam() {
             const l = document.getElementById('admin-team-list'); l.innerHTML = '';
-            appState.teamMembers.forEach(m => { l.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100 gap-2"><div class="flex items-center space-x-2 truncate"><img src="${m.image}" class="w-8 h-8 rounded-full object-cover shrink-0"><span class="text-xs truncate">${m.name}</span></div><button onclick="window.deleteTeamMember('${m.id}')" class="text-red-500"><i class="ph ph-trash"></i></button></div>`; });
+            appState.teamMembers.forEach(m => { l.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100 gap-2"><div class="flex items-center space-x-2 truncate"><img src="${m.image}" class="w-8 h-8 rounded-full object-cover shrink-0"><span class="text-xs truncate">${m.name}</span></div><div class="flex gap-2 shrink-0"><button type="button" onclick="window.editTeamMember('${m.id}')" class="text-blue-500 bg-blue-50 p-1.5 rounded hover:bg-blue-100 transition"><i class="ph ph-pencil-simple"></i></button><button type="button" onclick="window.safeDelete(this, 'team', '${m.id}')" class="text-red-500 bg-red-50 p-1.5 rounded hover:bg-red-100 transition"><i class="ph ph-trash"></i></button></div></div>`; });
         }
 
-        window.addAnnouncement = function(e) { e.preventDefault(); appState.announcements.push({ id: Date.now().toString(), title: document.getElementById('ann-title').value, content: document.getElementById('ann-content').value, date: new Date().toLocaleDateString('th-TH') }); e.target.reset(); saveState(); };
-        window.deleteAnnouncement = function(id) { appState.announcements = appState.announcements.filter(a => String(a.id) !== String(id)); saveState(); };
+        // --- ANNOUNCEMENTS ---
+        window.editAnnouncement = function(id) {
+            const item = appState.announcements.find(i => String(i.id) === String(id)); if(!item) return; editingState.ann = id;
+            document.getElementById('ann-title').value = item.title; document.getElementById('ann-content').value = item.content;
+            document.getElementById('btn-submit-ann').innerHTML = '<i class="ph-bold ph-check mr-2"></i>อัปเดตประกาศ'; window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+        window.addAnnouncement = function(e) { 
+            e.preventDefault(); 
+            if(editingState.ann) {
+                const item = appState.announcements.find(i => String(i.id) === editingState.ann);
+                if(item) { item.title = document.getElementById('ann-title').value; item.content = document.getElementById('ann-content').value; }
+                editingState.ann = null; document.getElementById('btn-submit-ann').innerHTML = 'โพสต์ประกาศ';
+            } else {
+                appState.announcements.push({ id: Date.now().toString(), title: document.getElementById('ann-title').value, content: document.getElementById('ann-content').value, date: new Date().toLocaleDateString('th-TH') }); 
+            }
+            e.target.reset(); saveState(); renderAdminAnnouncements(); 
+        };
+        window.deleteAnnouncement = function(id) { appState.announcements = appState.announcements.filter(a => String(a.id) !== String(id)); saveState(); renderAdminAnnouncements(); };
         function renderAdminAnnouncements() {
             const l = document.getElementById('admin-ann-list'); l.innerHTML = '';
-            appState.announcements.slice().reverse().forEach(ann => { l.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100"><div><div class="font-bold text-xs">${ann.title}</div></div><button onclick="window.deleteAnnouncement('${ann.id}')" class="text-red-500"><i class="ph ph-trash"></i></button></div>`; });
+            appState.announcements.slice().reverse().forEach(ann => { l.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100"><div><div class="font-bold text-xs">${ann.title}</div></div><div class="flex gap-2"><button type="button" onclick="window.editAnnouncement('${ann.id}')" class="text-blue-500 bg-blue-50 p-1.5 rounded hover:bg-blue-100 transition"><i class="ph ph-pencil-simple"></i></button><button type="button" onclick="window.safeDelete(this, 'ann', '${ann.id}')" class="text-red-500 bg-red-50 p-1.5 rounded hover:bg-red-100 transition"><i class="ph ph-trash"></i></button></div></div>`; });
         }
 
-        window.addRecruitment = function(e) { e.preventDefault(); appState.recruitments.push({ id: Date.now().toString(), icon: document.getElementById('rec-icon').value, title: document.getElementById('rec-title').value, desc: document.getElementById('rec-desc').value, link: document.getElementById('rec-link').value }); e.target.reset(); saveState(); };
-        window.deleteRecruitment = function(id) { appState.recruitments = appState.recruitments.filter(a => String(a.id) !== String(id)); saveState(); };
+        // --- RECRUITMENTS ---
+        window.editRecruitment = function(id) {
+            const item = appState.recruitments.find(i => String(i.id) === String(id)); if(!item) return; editingState.rec = id;
+            document.getElementById('rec-icon').value = item.icon; document.getElementById('rec-title').value = item.title; document.getElementById('rec-desc').value = item.desc; document.getElementById('rec-link').value = item.link;
+            document.getElementById('btn-submit-rec').innerHTML = '<i class="ph-bold ph-check mr-2"></i>อัปเดตระบบสมัคร'; window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+        window.addRecruitment = function(e) { 
+            e.preventDefault(); 
+            if(editingState.rec) {
+                const item = appState.recruitments.find(i => String(i.id) === editingState.rec);
+                if(item) { item.icon = document.getElementById('rec-icon').value; item.title = document.getElementById('rec-title').value; item.desc = document.getElementById('rec-desc').value; item.link = document.getElementById('rec-link').value; }
+                editingState.rec = null; document.getElementById('btn-submit-rec').innerHTML = 'บันทึกระบบสมัคร';
+            } else {
+                appState.recruitments.push({ id: Date.now().toString(), icon: document.getElementById('rec-icon').value, title: document.getElementById('rec-title').value, desc: document.getElementById('rec-desc').value, link: document.getElementById('rec-link').value }); 
+            }
+            e.target.reset(); saveState(); renderAdminRecruitments(); 
+        };
+        window.deleteRecruitment = function(id) { appState.recruitments = appState.recruitments.filter(a => String(a.id) !== String(id)); saveState(); renderAdminRecruitments(); };
         function renderAdminRecruitments() {
             const l = document.getElementById('admin-rec-list'); l.innerHTML = '';
-            appState.recruitments.forEach(rec => { l.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100"><div><div class="font-bold text-xs">${rec.title}</div></div><button onclick="window.deleteRecruitment('${rec.id}')" class="text-red-500"><i class="ph ph-trash"></i></button></div>`; });
+            appState.recruitments.forEach(rec => { l.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100"><div><div class="font-bold text-xs">${rec.title}</div></div><div class="flex gap-2"><button type="button" onclick="window.editRecruitment('${rec.id}')" class="text-blue-500 bg-blue-50 p-1.5 rounded hover:bg-blue-100 transition"><i class="ph ph-pencil-simple"></i></button><button type="button" onclick="window.safeDelete(this, 'rec', '${rec.id}')" class="text-red-500 bg-red-50 p-1.5 rounded hover:bg-red-100 transition"><i class="ph ph-trash"></i></button></div></div>`; });
         }
 
-        function showToast(m = 'บันทึกสำเร็จ') { const t = document.getElementById('toast'); document.getElementById('toast-msg').textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
+        // --- SMARTER TOAST NOTIFICATION ---
+        let toastTimeout;
+        function showToast(m = 'บันทึกสำเร็จ') { 
+            const t = document.getElementById('toast'); 
+            document.getElementById('toast-msg').textContent = m; 
+            t.classList.add('show'); 
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => t.classList.remove('show'), 3000); 
+        }
 
         function initGsapTriggers() {
+            // ล้างข้อมูลแอนิเมชันเก่าทั้งหมด
             ScrollTrigger.getAll().forEach(t => t.kill());
+            
             setTimeout(() => {
+                // เคลียร์ inline style เก่าที่ค้างอยู่จากการ Scroll คราวก่อน
+                gsap.set('.gs-reveal, .gs-stagger-item', { clearProps: "all" });
+
                 const reveals = gsap.utils.toArray('section:not(.hidden) .gs-reveal');
-                reveals.forEach(el => { gsap.set(el, { clearProps: "all" }); gsap.fromTo(el, { y: 30, autoAlpha: 0 }, { scrollTrigger: { trigger: el, start: "top 90%" }, y: 0, autoAlpha: 1, duration: 0.8, ease: "power3.out", overwrite: "auto" }); });
+                reveals.forEach(el => { 
+                    gsap.fromTo(el, 
+                        { y: 30, autoAlpha: 0 }, 
+                        { scrollTrigger: { trigger: el, start: "top 90%" }, y: 0, autoAlpha: 1, duration: 0.8, ease: "power3.out", overwrite: "auto" }
+                    ); 
+                });
+
                 const groups = gsap.utils.toArray('section:not(.hidden) .gs-stagger-group');
-                groups.forEach(g => { const items = g.querySelectorAll('.gs-stagger-item'); if(items.length) { gsap.set(items, { clearProps: "all" }); gsap.fromTo(items, { y: 40, autoAlpha: 0, scale: 0.95 }, { scrollTrigger: { trigger: g, start: "top 85%" }, y: 0, autoAlpha: 1, scale: 1, stagger: 0.15, duration: 1, ease: "power4.out", overwrite: "auto" }); } });
+                groups.forEach(g => { 
+                    const items = g.querySelectorAll('.gs-stagger-item'); 
+                    if(items.length) { 
+                        gsap.fromTo(items, 
+                            { y: 40, autoAlpha: 0, scale: 0.95 }, 
+                            { scrollTrigger: { trigger: g, start: "top 85%" }, y: 0, autoAlpha: 1, scale: 1, stagger: 0.15, duration: 1, ease: "power4.out", overwrite: "auto" }
+                        ); 
+                    } 
+                });
+                
                 ScrollTrigger.refresh();
-            }, 50);
+            }, 100); 
         }
 
         window.addEventListener('load', () => {
@@ -1524,4 +1662,3 @@
     </script>
 </body>
 </html>
- 
