@@ -869,8 +869,7 @@
         };
 
         let appState = { ...defaultState };
-        // สร้าง Object เพื่อเก็บสถานะว่ากำลัง "แก้ไข" ข้อมูล ID ไหนอยู่บ้าง
-        let editingState = { match: null, event: null, news: null, res: null, team: null, ann: null, rec: null };
+        let lastRenderedState = {}; // เพิ่มตัวแปรเก็บสถานะการ Render ล่าสุด ป้องกันการวาดทับของเดิม
 
         const userConfig = {
             apiKey: "AIzaSyAcWAIojT_gN9ybDolegZ6L9PJk5JYh0U0",
@@ -1010,7 +1009,6 @@
             renderDynamicCategories();
             renderEvents(); renderCalendar(); renderNews(currentNewsFilter); renderPublicAnnouncements(); renderPublicRecruitments(); renderResources(currentResFilter); renderTeam(currentTeamFilter); renderPublicMatchResults();
             startCountdown();
-            // แก้ไขปัญหา GSAP กระตุก
             setTimeout(() => initGsapTriggers(), 100);
         }
 
@@ -1023,9 +1021,16 @@
         }
 
         function renderPublicMatchResults() {
-            const grid = document.getElementById('pub-match-results-grid'); if(!grid) return; grid.innerHTML = '';
+            const stateKey = JSON.stringify(appState.matchResults) + window.currentMatchFilter;
+            if (lastRenderedState.mr === stateKey) return; // ถ้าข้อมูลไม่เปลี่ยน ข้ามการวาดใหม่
+            lastRenderedState.mr = stateKey;
+
+            const grid = document.getElementById('pub-match-results-grid'); if(!grid) return; 
+            grid.classList.remove('gs-animated'); // ลบป้ายบอกสถานะ เพื่อให้ GSAP จับของใหม่
+            grid.innerHTML = '';
             let arr = (appState.matchResults || []).filter(r => r.type === window.currentMatchFilter);
-            if(arr.length === 0) { grid.innerHTML = `<div class="col-span-full text-center text-gray-400 py-8 bg-gray-50 rounded-2xl text-sm border border-gray-100"><i class="ph-fill ph-ghost text-4xl text-gray-300 mb-2 block"></i>ยังไม่มีข้อมูลในหมวดหมู่นี้</div>`; return; }
+            if(arr.length === 0) { grid.innerHTML = `<div class="col-span-full text-center text-gray-400 py-8 bg-gray-50 rounded-2xl text-sm border border-gray-100">ยังไม่มีข้อมูลในหมวดหมู่นี้</div>`; return; }
+            
             arr.forEach(mr => {
                 let icon = '', text = '', color = '', bg = '';
                 if(mr.type === 'score') { icon = '<i class="ph-fill ph-star text-2xl text-blue-500"></i>'; text = `+${mr.reward} คะแนน`; color = 'text-blue-600'; bg = 'bg-blue-50 border-blue-100'; } 
@@ -1035,6 +1040,10 @@
         }
 
         window.renderCalendar = function() {
+            const stateKey = JSON.stringify(appState.events) + currentEventDateFilter + currentCalDate.getMonth();
+            if (lastRenderedState.cal === stateKey) return;
+            lastRenderedState.cal = stateKey;
+
             const grids = document.querySelectorAll('#cal-days-grid'), monthYears = document.querySelectorAll('#cal-month-year');
             grids.forEach((grid, idx) => {
                 grid.innerHTML = ''; const year = currentCalDate.getFullYear(), month = currentCalDate.getMonth();
@@ -1060,7 +1069,12 @@
         window.filterEventsByDate = function(d) { currentEventDateFilter = (currentEventDateFilter === d) ? 'all' : d; renderCalendar(); renderEvents(); };
 
         function renderEvents() {
+            const stateKey = JSON.stringify(appState.events) + currentEventDateFilter;
+            if (lastRenderedState.ev === stateKey) return;
+            lastRenderedState.ev = stateKey;
+
             document.querySelectorAll('#pub-events-list').forEach(list => {
+                list.classList.remove('gs-animated');
                 list.innerHTML = ''; const titleEl = list.previousElementSibling;
                 if (titleEl) titleEl.innerHTML = currentEventDateFilter === 'all' ? '<i class="ph-fill ph-calendar-blank text-theme-hotpink mr-2"></i> กิจกรรมที่กำลังมาถึง' : `<i class="ph-fill ph-calendar-check text-theme-hotpink mr-2"></i> วันที่ ${currentEventDateFilter} <button onclick="window.filterEventsByDate('all')" class="ml-auto text-xs bg-theme-pink/20 text-theme-hotpink px-3 py-1 rounded-full">ดูทั้งหมด</button>`;
                 let evs = currentEventDateFilter === 'all' ? appState.events : appState.events.filter(e => e.date === currentEventDateFilter);
@@ -1075,10 +1089,15 @@
             renderNews(cat); setTimeout(() => initGsapTriggers(), 100);
         };
         function renderNews(filter = 'all') {
+            const stateKey = JSON.stringify(appState.news) + filter;
+            if (lastRenderedState.news === stateKey) return;
+            lastRenderedState.news = stateKey;
+
             document.querySelectorAll('#pub-news-grid').forEach(grid => {
+                grid.classList.remove('gs-animated');
                 grid.innerHTML = ''; const news = filter === 'all' ? appState.news : appState.news.filter(n => n.category === filter);
-                if(news.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-white rounded-3xl border border-gray-100 text-sm"><i class="ph-fill ph-ghost text-4xl text-gray-200 mb-2 block"></i>ยังไม่มีข่าวสาร</div>'; return; }
-                news.slice().reverse().forEach(n => { grid.innerHTML += `<div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group gs-stagger-item"><div class="h-40 md:h-48 bg-gray-100 animate-pulse relative overflow-hidden"><img src="${n.image}" loading="lazy" onload="this.parentElement.classList.remove('animate-pulse')" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"><div class="absolute top-3 left-3 bg-white/90 backdrop-blur text-theme-hotpink text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">${n.category}</div></div><div class="p-5 md:p-6"><h4 class="font-bold text-lg mb-2 text-theme-text line-clamp-2 group-hover:text-theme-hotpink transition-colors">${n.title}</h4><p class="text-sm text-gray-500 font-light line-clamp-2">${n.excerpt}</p></div></div>`; });
+                if(news.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-white rounded-3xl border border-gray-100 text-sm">ยังไม่มีข่าวสาร</div>'; return; }
+                news.slice().reverse().forEach(n => { grid.innerHTML += `<div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group gs-stagger-item"><div class="aspect-video bg-gray-100 relative overflow-hidden"><img src="${n.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"><div class="absolute top-3 left-3 bg-white/90 backdrop-blur text-theme-hotpink text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">${n.category}</div></div><div class="p-5 md:p-6"><h4 class="font-bold text-lg mb-2 text-theme-text line-clamp-2 group-hover:text-theme-hotpink transition-colors">${n.title}</h4><p class="text-sm text-gray-500 line-clamp-2">${n.excerpt}</p></div></div>`; });
             });
         }
 
@@ -1088,11 +1107,16 @@
             renderResources(cat); setTimeout(() => initGsapTriggers(), 100);
         };
         function renderResources(filter = 'all') {
+            const stateKey = JSON.stringify(appState.resources) + filter;
+            if (lastRenderedState.res === stateKey) return;
+            lastRenderedState.res = stateKey;
+
             document.querySelectorAll('#pub-res-grid').forEach(grid => {
+                grid.classList.remove('gs-animated');
                 grid.innerHTML = ''; const resList = filter === 'all' ? appState.resources : appState.resources.filter(n => n.category === filter);
-                if(resList.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-white rounded-3xl border border-gray-100 text-sm"><i class="ph-fill ph-ghost text-4xl text-gray-200 mb-2 block"></i>ยังไม่มีไฟล์</div>'; return; }
+                if(resList.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-white rounded-3xl border border-gray-100 text-sm">ยังไม่มีไฟล์</div>'; return; }
                 resList.slice().reverse().forEach(res => {
-                    let media = res.type === 'image' ? `<div class="h-32 bg-gray-100 animate-pulse overflow-hidden"><img src="${res.url}" loading="lazy" onload="this.parentElement.classList.remove('animate-pulse')" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div>` : `<div class="h-32 bg-gray-50 flex flex-col items-center justify-center text-gray-300 group-hover:bg-theme-pink/10 transition-colors"><i class="ph-fill ph-link text-5xl mb-2"></i></div>`;
+                    let media = res.type === 'image' ? `<div class="aspect-video bg-gray-100 overflow-hidden"><img src="${res.url}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div>` : `<div class="aspect-video bg-gray-50 flex flex-col items-center justify-center text-gray-300 group-hover:bg-theme-pink/10 transition-colors"><i class="ph-fill ph-link text-5xl mb-2"></i></div>`;
                     grid.innerHTML += `<div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group gs-stagger-item flex flex-col">${media}<div class="p-5 flex flex-col flex-grow"><span class="text-xs font-bold text-theme-hotpink mb-2">${res.category}</span><h4 class="font-bold text-base mb-4 text-theme-text line-clamp-2 group-hover:text-theme-hotpink transition-colors">${res.title}</h4><a href="${res.url}" target="_blank" class="mt-auto inline-flex items-center space-x-2 text-theme-text text-sm font-bold bg-gray-50 py-2 px-4 rounded-xl hover:bg-theme-pink/20 w-fit"><span>${res.type === 'image' ? 'ดูรูป' : 'เปิดดู'}</span><i class="ph-bold ph-arrow-up-right"></i></a></div></div>`;
                 });
             });
@@ -1104,9 +1128,14 @@
             renderTeam(dept); setTimeout(() => initGsapTriggers(), 100);
         };
         function renderTeam(filter = 'all') {
+            const stateKey = JSON.stringify(appState.teamMembers) + filter;
+            if (lastRenderedState.team === stateKey) return;
+            lastRenderedState.team = stateKey;
+
             document.querySelectorAll('#pub-team-grid').forEach(grid => {
+                grid.classList.remove('gs-animated');
                 grid.innerHTML = ''; const list = filter === 'all' ? appState.teamMembers : appState.teamMembers.filter(n => n.department === filter);
-                if(list.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-white rounded-3xl border border-gray-100 text-sm"><i class="ph-fill ph-ghost text-4xl text-gray-200 mb-2 block"></i>ยังไม่มีข้อมูลทีมงาน</div>'; return; }
+                if(list.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-white rounded-3xl border border-gray-100 text-sm">ยังไม่มีข้อมูล</div>'; return; }
                 list.forEach(m => {
                     let contact = m.contact ? `<a href="#" class="inline-flex items-center text-theme-hotpink text-xs font-bold mt-2"><i class="ph-fill ph-instagram-logo mr-1"></i> ${m.contact}</a>` : '';
                     grid.innerHTML += `<div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 gs-stagger-item group"><div class="aspect-square bg-gray-100 animate-pulse overflow-hidden"><img src="${m.image}" loading="lazy" onload="this.parentElement.classList.remove('animate-pulse')" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div><div class="p-3 text-center"><h4 class="font-bold text-sm text-theme-text truncate">${m.name}</h4><p class="text-xs text-gray-500 mt-1 truncate">${m.role}</p>${contact}</div></div>`;
@@ -1115,15 +1144,25 @@
         }
 
         function renderPublicRecruitments() {
+            const stateKey = JSON.stringify(appState.recruitments);
+            if (lastRenderedState.rec === stateKey) return;
+            lastRenderedState.rec = stateKey;
+
             document.querySelectorAll('#pub-recruitment-grid').forEach(grid => {
-                grid.innerHTML = ''; if(appState.recruitments.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10"><i class="ph-fill ph-ghost text-4xl text-gray-300 mb-2 block"></i>ยังไม่มีการรับสมัครในขณะนี้</div>'; return;}
-                appState.recruitments.forEach(rec => { grid.innerHTML += `<div class="bg-white p-6 md:p-8 rounded-3xl hover:-translate-y-1 hover:shadow-xl transition-all duration-300 gs-stagger-item group border border-gray-100 flex flex-col h-full"><div class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-theme-pink/20 transition-colors shrink-0"><i class="ph-fill ${rec.icon} text-2xl text-gray-700 group-hover:text-theme-hotpink transition-colors"></i></div><h4 class="text-xl font-bold text-theme-text mb-2">${rec.title}</h4><p class="text-gray-500 font-light text-sm mb-4 line-clamp-2 flex-grow">${rec.desc}</p><a href="${rec.link}" target="_blank" class="mt-auto inline-flex items-center space-x-2 text-theme-text text-sm font-bold group-hover:text-theme-hotpink"><span>สมัคร</span><i class="ph-bold ph-arrow-right"></i></a></div>`; });
+                grid.classList.remove('gs-animated');
+                grid.innerHTML = ''; if(appState.recruitments.length === 0) return;
+                appState.recruitments.forEach(rec => { grid.innerHTML += `<div class="bg-white p-6 md:p-8 rounded-3xl hover:-translate-y-1 hover:shadow-xl transition-all duration-300 gs-stagger-item group border border-gray-100 flex flex-col h-full"><div class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-theme-pink/20 transition-colors shrink-0"><i class="ph-fill ${rec.icon} text-2xl text-gray-700 group-hover:text-theme-hotpink transition-colors"></i></div><h4 class="text-xl font-bold text-theme-text mb-2">${rec.title}</h4><p class="text-gray-500 text-sm mb-4 line-clamp-2 flex-grow">${rec.desc}</p><a href="${rec.link}" target="_blank" class="mt-auto inline-flex items-center space-x-2 text-theme-text text-sm font-bold group-hover:text-theme-hotpink"><span>สมัคร</span><i class="ph-bold ph-arrow-right"></i></a></div>`; });
             });
         }
 
         function renderPublicAnnouncements() {
+            const stateKey = JSON.stringify(appState.announcements);
+            if (lastRenderedState.ann === stateKey) return;
+            lastRenderedState.ann = stateKey;
+
             document.querySelectorAll('#pub-announcements-grid').forEach(grid => {
-                grid.innerHTML = ''; if(appState.announcements.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-gray-50 rounded-3xl text-sm"><i class="ph-fill ph-ghost text-4xl text-gray-300 mb-2 block"></i>ไม่มีประกาศด่วน</div>'; return; }
+                grid.classList.remove('gs-animated');
+                grid.innerHTML = ''; if(appState.announcements.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-400 py-10 bg-gray-50 rounded-3xl text-sm">ไม่มีประกาศด่วน</div>'; return; }
                 appState.announcements.slice().reverse().forEach(ann => { grid.innerHTML += `<div class="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-200 hover:shadow-xl transition-all duration-300 gs-stagger-item"><div class="bg-red-50 text-red-500 text-xs font-bold px-2 py-1.5 rounded-md inline-flex items-center mb-3"><i class="ph-fill ph-warning-circle mr-1"></i> ${ann.date}</div><h4 class="text-lg font-bold text-theme-text mb-2">${ann.title}</h4><p class="text-theme-muted font-light text-sm leading-relaxed">${ann.content}</p></div>`; });
             });
         }
@@ -1612,34 +1651,27 @@
         }
 
         function initGsapTriggers() {
-            // ล้างข้อมูลแอนิเมชันเก่าทั้งหมด
-            ScrollTrigger.getAll().forEach(t => t.kill());
-            
+            // ไม่ต้อง kill() ทั้งหมดแล้ว เพื่อรักษาแอนิเมชันของส่วนที่ไม่ได้อัปเดต
             setTimeout(() => {
-                // เคลียร์ inline style เก่าที่ค้างอยู่จากการ Scroll คราวก่อน
-                gsap.set('.gs-reveal, .gs-stagger-item', { clearProps: "all" });
-
-                const reveals = gsap.utils.toArray('section:not(.hidden) .gs-reveal');
+                // หาเฉพาะ elements ที่ยังไม่เคยโดนทำแอนิเมชัน (ไม่มีคลาส gs-animated)
+                const reveals = gsap.utils.toArray('section:not(.hidden) .gs-reveal:not(.gs-animated)');
                 reveals.forEach(el => { 
-                    gsap.fromTo(el, 
-                        { y: 30, autoAlpha: 0 }, 
-                        { scrollTrigger: { trigger: el, start: "top 90%" }, y: 0, autoAlpha: 1, duration: 0.8, ease: "power3.out", overwrite: "auto" }
-                    ); 
-                });
-
-                const groups = gsap.utils.toArray('section:not(.hidden) .gs-stagger-group');
-                groups.forEach(g => { 
-                    const items = g.querySelectorAll('.gs-stagger-item'); 
-                    if(items.length) { 
-                        gsap.fromTo(items, 
-                            { y: 40, autoAlpha: 0, scale: 0.95 }, 
-                            { scrollTrigger: { trigger: g, start: "top 85%" }, y: 0, autoAlpha: 1, scale: 1, stagger: 0.15, duration: 1, ease: "power4.out", overwrite: "auto" }
-                        ); 
-                    } 
+                    el.classList.add('gs-animated'); // แปะป้ายว่าโดนแล้ว
+                    gsap.set(el, { clearProps: "all" }); 
+                    gsap.fromTo(el, { y: 30, autoAlpha: 0 }, { scrollTrigger: { trigger: el, start: "top 90%" }, y: 0, autoAlpha: 1, duration: 0.8, ease: "power3.out", overwrite: "auto" }); 
                 });
                 
-                ScrollTrigger.refresh();
-            }, 100); 
+                const groups = gsap.utils.toArray('section:not(.hidden) .gs-stagger-group:not(.gs-animated)');
+                groups.forEach(g => { 
+                    g.classList.add('gs-animated'); // แปะป้ายที่กล่องแม่
+                    const items = g.querySelectorAll('.gs-stagger-item'); 
+                    if(items.length) { 
+                        gsap.set(items, { clearProps: "all" }); 
+                        gsap.fromTo(items, { y: 40, autoAlpha: 0, scale: 0.95 }, { scrollTrigger: { trigger: g, start: "top 85%" }, y: 0, autoAlpha: 1, scale: 1, stagger: 0.1, duration: 0.8, ease: "power4.out", overwrite: "auto" }); 
+                    } 
+                });
+                ScrollTrigger.refresh(); // ให้ GSAP คำนวณความสูงใหม่
+            }, 50);
         }
 
         window.addEventListener('load', () => {
